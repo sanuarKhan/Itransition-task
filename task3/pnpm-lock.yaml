@@ -11,6 +11,9 @@ importers:
       cli-table3:
         specifier: ^0.6.5
         version: 0.6.5
+      readline-sync:
+        specifier: ^1.4.10
+        version: 1.4.10
 
 packages:
 
@@ -32,6 +35,10 @@ packages:
   is-fullwidth-code-point@3.0.0:
     resolution: {integrity: sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==}
     engines: {node: '>=8'}
+
+  readline-sync@1.4.10:
+    resolution: {integrity: sha512-gNva8/6UAe8QYepIQH/jQ2qn91Qj0B9sYjMBBs3QOB8F2CXcKgLxQaJRP76sWVRQt+QU+8fAkCbCvjjMFu7Ycw==}
+    engines: {node: '>= 0.8.0'}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -57,6 +64,8 @@ snapshots:
   emoji-regex@8.0.0: {}
 
   is-fullwidth-code-point@3.0.0: {}
+
+  readline-sync@1.4.10: {}
 
   string-width@4.2.3:
     dependencies:

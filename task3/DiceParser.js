@@ -14,7 +14,7 @@ class DiceParser {
     for (let i = 0; i < argStrings.length; i++) {
       const diceStrings = argStrings[i];
       const faceNumbers = diceStrings.split(",").map(Number);
-      if (faceNumbers.some(isNaN) || faceNumbers.every(Number.isInteger)) {
+      if (faceNumbers.some(isNaN) || !faceNumbers.every(Number.isInteger)) {
         throw new InvalidDiceFormatError(`Invalid dice format: ${diceStrings}`);
       }
       if (faceNumbers.length !== 6) {

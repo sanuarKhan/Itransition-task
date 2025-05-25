@@ -1,6 +1,6 @@
 const EXIT_SUCCESS = 0;
 const EXIT_INVALID_ARGUMENT = 1;
-const MENU_EXIT = "x";
+const MENU_EXIT = "X";
 const MENU_HELP = "?";
 const HMAC_ALGORITHM = "sha3-256";
 

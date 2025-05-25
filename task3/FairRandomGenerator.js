@@ -1,20 +1,20 @@
 const crypto = require("crypto");
-const readline = require("readline");
 
 class FairRandomGenerator {
-  constructor(cryptoUtils) {
+  constructor(cryptoUtils, rl) {
     this.cryptoUtils = cryptoUtils;
+    this.rl = rl;
   }
   getSecureRandomInt(max) {
     let randomInt;
     do {
       const bytes = crypto.randomBytes(4);
-      randomInt = randomBytes.readUInt32BE(0);
+      randomInt = bytes.readUInt32BE(0);
     } while (randomInt >= max);
     return randomInt;
   }
   async generateFairRandomNumber(rangeMax, promptMessage) {
-    console.log(promptMessage);
+    console.log(promptMessage,);
     //computer's choice
     const computerChoice = this.getSecureRandomInt(rangeMax);
     const secretKey = this.cryptoUtils.generateSecureRandomBytes(32);
@@ -55,10 +55,7 @@ class FairRandomGenerator {
     };
   }
   async getUserInput(rangeMax) {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
+    const rl = this.rl;
     while (true) {
       const input = await new Promise((resolve) =>
         rl.question("your move:", resolve)
