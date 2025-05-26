@@ -1,60 +1,47 @@
-const GameBoard = require("./GameBoard");
-const Dice = require("./Dice");
-const {
-  EXIT_SUCCESS,
-  EXIT_INVALID_ARGUMENT,
-  MENU_EXIT,
-  MENU_HELP,
-} = require("./constant");
-
-const TableRenderer = require("./TableRenderer");
-const ProbabilityCalculator = require("./ProbabilityCalculator");
-const FairRandomGenerator = require("./FairRandomGenerator");
-const CryptoUtils = require("./cryptoUtiles");
-const readline = require("readline-sync");
+const readline = require("readline");
 const {
   DiceParser,
   InvalidArgumentsError,
   InvalidDiceFormatError,
 } = require("./DiceParser");
+const CryptoUtils = require("./cryptoUtiles");
+const FairRandomGenerator = require("./FairRandomGenerator");
+const GameBoard = require("./GameBoard");
+const ProbabilityCalculator = require("./ProbabilityCalculator");
+const TableRenderer = require("./TableRenderer");
 
 async function main() {
-  const rl = readline;
   try {
     const args = process.argv.slice(2);
     const diceList = DiceParser.parseDiceString(args);
 
-    const cryptoUtils = new CryptoUtils();
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
 
+    const cryptoUtils = new CryptoUtils();
     const fairRandomGenerator = new FairRandomGenerator(cryptoUtils, rl);
-    const probabilityCalculator = new ProbabilityCalculator();
-    const tableRenderer = new TableRenderer();
     const gameBoard = new GameBoard(
       diceList,
       cryptoUtils,
       fairRandomGenerator,
-      probabilityCalculator,
-      tableRenderer,
+      ProbabilityCalculator,
+      TableRenderer,
       rl
     );
+
     await gameBoard.runGame();
   } catch (error) {
     if (
       error instanceof InvalidArgumentsError ||
       error instanceof InvalidDiceFormatError
     ) {
-      console.error(`\nError: ${error.message}`);
-      console.error("Usage: node index.js <dice1> <dice2> <dice3> ... <diceN>");
-      console.error(
-        "Example: node index.js 2,2,4,4,9,9 3,3,5,5,7,7 1,2,3,4,5,6"
-      );
+      console.error(`Error: ${error.message}`);
     } else {
-      console.error(`\nAn unexpected error occurred:`);
-      console.error(error.message);
+      console.error("An unexpected error occurred:", error);
     }
-    process.exit(EXIT_INVALID_ARGUMENT);
-  } finally {
-    rl.close();
+    process.exit(1);
   }
 }
 

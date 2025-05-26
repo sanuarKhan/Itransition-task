@@ -1,4 +1,4 @@
-const table = require("cli-table3");
+const Table = require("cli-table3");
 
 class TableRenderer {
   static displayProbabilityTable(diceList, probabilityCalculator) {
@@ -6,7 +6,7 @@ class TableRenderer {
 
     const headers = ["user dice"];
     diceList.forEach((_, i) => headers.push(`Computer ${i + 1}`));
-    const table = new table({ head: headers });
+    const displayTable = new Table({ head: headers });
 
     diceList.forEach((userDice, userIndex) => {
       const row = [userDice.toString()];
@@ -21,9 +21,9 @@ class TableRenderer {
           row.push(`${userWin}`);
         }
       });
-      table.push(row);
+      displayTable.push(row);
     });
-    console.log(table.toString());
+    console.log(displayTable.toString());
   }
 }
 

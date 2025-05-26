@@ -1,17 +1,14 @@
 {
-  "name": "task3",
+  "name": "dice-game",
   "version": "1.0.0",
-  "description": "",
+  "description": "A fair dice game implementation",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "cli-table3": "^0.6.5",
-    "readline-sync": "^1.4.10"
+    "cli-table3": "^0.6.3",
+    "crypto": "^1.0.1"
   }
 }

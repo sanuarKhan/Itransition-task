@@ -14,7 +14,7 @@ class FairRandomGenerator {
     return randomInt;
   }
   async generateFairRandomNumber(rangeMax, promptMessage) {
-    console.log(promptMessage,);
+    console.log(promptMessage);
     //computer's choice
     const computerChoice = this.getSecureRandomInt(rangeMax);
     const secretKey = this.cryptoUtils.generateSecureRandomBytes(32);
@@ -29,7 +29,7 @@ class FairRandomGenerator {
     );
     console.log("Now it is your turn to guess the value.");
     console.log(
-      `Availabe moves: ${Array.from({ length: rangeMax }, (_, i) => i).join(
+      `Available moves: ${Array.from({ length: rangeMax }, (_, i) => i).join(
         ", "
       )}, X(exit), ? (help)`
     );
@@ -48,33 +48,26 @@ class FairRandomGenerator {
       `the fair number generation is ${computerChoice} + ${userInput} = ${result} (mod ${rangeMax})`
     );
 
-    return {
-      result,
-      secretKey: secretKey.toString("hex"),
-      computerValue: computerChoice,
-    };
+    return { result };
   }
   async getUserInput(rangeMax) {
     const rl = this.rl;
     while (true) {
       const input = await new Promise((resolve) =>
-        rl.question("your move:", resolve)
+        rl.question("your move: ", resolve)
       );
       const trimmed = input.trim();
       if (trimmed.toUpperCase() === "X") {
-        rl.close();
         return "X";
       }
       if (trimmed === "?") {
-        rl.close();
         return "?";
       }
       const num = parseInt(trimmed);
       if (Number.isInteger(num) && num >= 0 && num < rangeMax) {
-        rl.close();
         return num;
       }
-      console.log(`Invakid input. Enter 0-${rangeMax - 1}, X, or ?.`);
+      console.log(`Invalid input. Enter 0-${rangeMax - 1}, X, or ?.`);
     }
   }
 }

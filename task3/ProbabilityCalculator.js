@@ -1,5 +1,5 @@
 class ProbabilityCalculator {
-  static calculateWinProbability(die1, die2) {
+  static calculateProbability(die1, die2) {
     let dieWins = 0,
       die2Wins = 0,
       ties = 0;
@@ -10,7 +10,7 @@ class ProbabilityCalculator {
         else ties++;
       }
     }
-    total = dei1.getFaceCount() * die2.getFaceCount();
+    const total = die1.getFaceCount() * die2.getFaceCount();
     return [
       (dieWins / total).toFixed(4),
       (die2Wins / total).toFixed(4),

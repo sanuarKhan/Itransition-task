@@ -17,13 +17,11 @@ class GameBoard {
   async determinedFirstPlayer() {
     const result = await this.fairRandomGenerator.generateFairRandomNumber(
       2,
-      "let's determine who make the first move"
+      "Let's determine who makes the first move"
     );
-    console.log(result);
-
     if (result.exit || result.help) return result;
 
-    const firstPlayer = result.result === 0 ? "Computer" : "User";
+    const firstPlayer = result.result === 0 ? "computer" : "user";
     console.log(
       `${
         firstPlayer === "computer" ? "Computer" : "You"
@@ -96,9 +94,10 @@ class GameBoard {
   }
   async runGame() {
     console.log("=== DICE GAME ===\n");
-    const firstPlayer = await this.determinedFirstPlayer();
-    if (firstPlayer.exit || firstPlayer.help) return;
+    const firstPlayerResult = await this.determinedFirstPlayer();
+    if (firstPlayerResult.exit || firstPlayerResult.help) return;
 
+    const firstPlayer = firstPlayerResult;
     const selectedDice1 = await this.selectDice(firstPlayer, this.diceList);
     if (selectedDice1.exit) return;
 

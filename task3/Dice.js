@@ -3,19 +3,22 @@ class Dice {
     if (!Array.isArray(faces)) {
       throw new Error("Faces must be an array");
     }
-    if (!faces.every((face) => Number.isInteger(face))) {
-      throw new Error("All faces must be integers");
-    }
-    this.faces = faces;
+    this.faces = [...faces].sort((a, b) => a - b);
   }
+
   getFaceCount() {
     return this.faces.length;
   }
+
   getFaceValue(index) {
+    if (index < 0 || index >= this.faces.length) {
+      throw new Error(`Invalid face index: ${index}`);
+    }
     return this.faces[index];
   }
+
   toString() {
-    return `${this.faces.join(", ")}`;
+    return `[${this.faces.join(",")}]`;
   }
 }
 
