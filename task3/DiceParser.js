@@ -1,33 +1,36 @@
 const Dice = require("./Dice.js");
 
-class InvalidArgumentsError extends Error {}
-class InvalidDiceFormatError extends Error {}
 class DiceParser {
-  static parseDiceString(argStrings) {
-    if (argStrings.length < 3) {
-      throw new InvalidArgumentsError(
-        "At least 3 arguments are required. Example: '1,2,3,4,5,6', '2,2,4,4,9,9', '3,3,5,5,7,7'"
-      );
+  static parse(args) {
+    if (args.length < 3) {
+      throw new Error("At least 3 dice are required");
     }
 
-    const diceArray = [];
-    for (let i = 0; i < argStrings.length; i++) {
-      const diceStrings = argStrings[i];
-      const faceNumbers = diceStrings.split(",").map(Number);
-      if (faceNumbers.some(isNaN) || !faceNumbers.every(Number.isInteger)) {
-        throw new InvalidDiceFormatError(`Invalid dice format: ${diceStrings}`);
+    const dice = [];
+    for (let i = 0; i < args.length; i++) {
+      try {
+        const faces = args[i].split(",").map((face) => {
+          const num = parseInt(face.trim());
+          if (isNaN(num)) {
+            throw new Error(`Invalid face value: ${face}`);
+          }
+          return num;
+        });
+
+        if (faces.length !== 6) {
+          throw new Error(
+            `Dice ${i + 1} must have exactly 6 faces, got ${faces.length}`
+          );
+        }
+
+        dice.push(new Dice(faces));
+      } catch (error) {
+        throw new Error(`Error parsing dice ${i + 1}: ${error.message}`);
       }
-      if (faceNumbers.length !== 6) {
-        throw new InvalidDiceFormatError(`Invalid dice format: ${diceStrings}`);
-      }
-      diceArray.push(new Dice(faceNumbers));
     }
-    return diceArray;
+
+    return dice;
   }
 }
 
-module.exports = {
-  DiceParser,
-  InvalidArgumentsError,
-  InvalidDiceFormatError,
-};
+module.exports = DiceParser;

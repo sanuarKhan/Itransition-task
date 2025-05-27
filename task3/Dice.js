@@ -1,22 +1,23 @@
 class Dice {
   constructor(faces) {
-    if (!Array.isArray(faces)) {
-      throw new Error("Faces must be an array");
+    if (!Array.isArray(faces) || faces.length !== 6) {
+      throw new Error("Dice must have exactly 6 faces");
     }
     if (!faces.every((face) => Number.isInteger(face))) {
-      throw new Error("All faces must be integers");
+      throw new Error("All face values must be integers");
     }
     this.faces = faces;
   }
-  getFaceCount() {
-    return this.faces.length;
-  }
-  getFaceValue(index) {
+
+  getFace(index) {
+    if (index < 0 || index >= 6) {
+      throw new Error("Face index must be between 0 and 5");
+    }
     return this.faces[index];
   }
+
   toString() {
-    return `${this.faces.join(", ")}`;
+    return this.faces.join(",");
   }
 }
-
 module.exports = Dice;

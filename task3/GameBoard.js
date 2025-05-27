@@ -1,155 +1,134 @@
+const TableRenderer = require("./TableRenderer.js");
+const FairRandomGenerator = require("./FairRandomGenerator.js");
+const readline = require("readline");
+
+const fairRanGen = new FairRandomGenerator();
+const tableRen = new TableRenderer();
 class GameBoard {
-  constructor(
-    diceList,
-    cryptoUtils,
-    fairRandomGenerator,
-    probabilityCalculator,
-    tableRenderer,
-    rl
-  ) {
-    this.diceList = diceList;
-    this.cryptoUtils = cryptoUtils;
-    this.fairRandomGenerator = fairRandomGenerator;
-    this.probabilityCalculator = probabilityCalculator;
-    this.tableRenderer = tableRenderer;
-    this.rl = rl;
+  constructor(dice) {
+    this.dice = dice;
+    this.computerDiceIndex = -1;
+    this.userDiceIndex = -1;
   }
-  async determinedFirstPlayer() {
-    const result = await this.fairRandomGenerator.generateFairRandomNumber(
-      2,
-      "let's determine who make the first move"
+  async play() {
+    console.log("Let's determine who makes the first move.");
+
+    // Determine first player
+    const firstMoveResult = await fairRanGen.generateFairRandom(
+      0,
+      1,
+      "Try to guess my selection."
     );
-    console.log(result);
+    const userGuess = firstMoveResult; // This comes from user input in generateFairRandom
 
-    if (result.exit || result.help) return result;
+    const computerFirst = firstMoveResult === 0;
 
-    const firstPlayer = result.result === 0 ? "Computer" : "User";
+    if (computerFirst) {
+      console.log("I make the first move.");
+      await this.computerSelectDice();
+      await this.userSelectDice();
+    } else {
+      console.log("You make the first move.");
+      await this.userSelectDice();
+      await this.computerSelectDice();
+    }
+
+    // Perform rolls
+    const computerRoll = await this.performComputerRoll();
+    const userRoll = await this.performUserRoll();
+
+    // Determine winner
+    this.announceWinner(computerRoll, userRoll);
+  }
+  async computerSelectDice() {
+    // Computer selects randomly from available dice
+    const availableDice = this.dice
+      .map((dice, index) => index)
+      .filter((index) => index !== this.userDiceIndex);
+
+    this.computerDiceIndex =
+      availableDice[Math.floor(Math.random() * availableDice.length)];
     console.log(
-      `${
-        firstPlayer === "computer" ? "Computer" : "You"
-      } will make the first move.`
+      `I choose the [${this.dice[this.computerDiceIndex].toString()}] dice.`
     );
-    return firstPlayer;
   }
-  async selectDice(playerType, availableDice, previouslySelectedDice = null) {
-    const rl = this.rl;
+  async userSelectDice() {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    console.log("Choose your dice:");
+
     while (true) {
-      console.log(
-        `\n${playerType === "user" ? "Your" : "Computer's"} dice selection:`
-      );
-      availableDice.forEach((dice, i) => {
-        if (dice === previouslySelectedDice) return;
-        console.log(`${i}: ${dice.toString()}`);
-      });
-      console.log("X - exit, ? - help");
-      if (playerType === "computer") {
-        const selected = availableDice.find(
-          (dice) => dice !== previouslySelectedDice
-        );
-        console.log(`computer selects: ${selected.toString()}`);
-        rl.close();
-        return selected;
-      }
-      const input = await new Promise((resolve) =>
-        rl.question("your move: ", resolve)
-      );
-      const trimmed = input.trim();
-      if (trimmed.toUpperCase() === "X") {
-        rl.close();
-        return { exit: true };
-      }
-      if (trimmed === "?") {
-        this.tableRenderer.displayProbabilityTable(
-          this.diceList,
-          this.probabilityCalculator
-        );
-        continue;
-      }
-      const index = parseInt(trimmed);
-      if (
-        Number.isInteger(index) &&
-        index >= 0 &&
-        index < availableDice.length
-      ) {
-        const selected = availableDice[index];
-        if (selected === previouslySelectedDice) {
-          console.log("That dice was already selected. Choose another one.");
-          continue;
+      // Show available dice
+      for (let i = 0; i < this.dice.length; i++) {
+        if (i !== this.computerDiceIndex) {
+          console.log(`${i} - ${this.dice[i].toString()}`);
         }
-        rl.close();
-        return selected;
       }
-      console.log("Invalid input. Try again.");
+      console.log("X - exit");
+      console.log("? - help");
+
+      const answer = await new Promise((resolve) => {
+        rl.question("Your selection: ", resolve);
+      });
+
+      if (answer.toUpperCase() === "X") {
+        rl.close();
+        process.exit(0);
+      }
+
+      if (answer === "?") {
+        rl.close();
+        tableRen.generateProbabilityTable(this.dice);
+        return this.userSelectDice();
+      }
+
+      const index = parseInt(answer);
+      if (
+        !isNaN(index) &&
+        index >= 0 &&
+        index < this.dice.length &&
+        index !== this.computerDiceIndex
+      ) {
+        this.userDiceIndex = index;
+        console.log(`You choose the [${this.dice[index].toString()}] dice.`);
+        rl.close();
+        return;
+      }
+
+      console.log("Invalid selection. Please try again.");
     }
   }
-  async playTurn(playerType, playerDice, opponentDice) {
-    const rollResult = await this.fairRandomGenerator.generateFairRandomNumber(
-      playerDice.getFaceCount(),
-      `It is time for ${playerType === "user" ? "your" : "computer's"} roll.`
+  async performComputerRoll() {
+    console.log("It's time for my roll.");
+    const faceIndex = await fairRanGen.generateFairRandom(
+      0,
+      5,
+      "Add your number modulo 6."
     );
-    if (rollResult.exit || rollResult.help) return rollResult;
-    const rollValue = playerDice.getFaceValue(rollResult.result);
-    console.log(
-      `${playerType === "user" ? "You" : "Computer"} rolled: ${rollValue}`
-    );
-    return rollValue;
+    const rollResult = this.dice[this.computerDiceIndex].getFace(faceIndex);
+    console.log(`My roll result is ${rollResult}.`);
+    return rollResult;
   }
-  async runGame() {
-    console.log("=== DICE GAME ===\n");
-    const firstPlayer = await this.determinedFirstPlayer();
-    if (firstPlayer.exit || firstPlayer.help) return;
-
-    const selectedDice1 = await this.selectDice(firstPlayer, this.diceList);
-    if (selectedDice1.exit) return;
-
-    const secondPlayer = firstPlayer === "user" ? "computer" : "user";
-    const selectedDice2 = await this.selectDice(
-      secondPlayer,
-      this.diceList,
-      selectedDice1
+  async performUserRoll() {
+    console.log("It's time for your roll.");
+    const faceIndex = await fairRanGen.generateFairRandom(
+      0,
+      5,
+      "Add your number modulo 6."
     );
-    if (selectedDice2.exit) return;
-
-    console.log(
-      `\n${
-        firstPlayer === "user" ? "You" : "Computer"
-      } : ${selectedDice1.toString()}`
-    );
-    console.log(
-      `${
-        secondPlayer === "user" ? "You" : "Computer"
-      } : ${selectedDice2.toString()}\n`
-    );
-
-    const player1Roll = await this.playTurn(
-      firstPlayer,
-      selectedDice1,
-      selectedDice2
-    );
-    if (player1Roll.exit || player1Roll.help) return;
-
-    const player2Roll = await this.playTurn(
-      secondPlayer,
-      selectedDice2,
-      selectedDice1
-    );
-    if (player2Roll.exit || player2Roll.help) return;
-
-    console.log("\n=== RESULTS ===\n");
-    if (player1Roll > player2Roll) {
-      console.log(
-        `${
-          firstPlayer === "user" ? "You" : "Computer"
-        } win! 🎉 (${player1Roll} > ${player2Roll})`
-      );
-    } else if (player1Roll < player2Roll) {
-      console.log(
-        `${
-          secondPlayer === "user" ? "You" : "Computer"
-        } win! 🎉 (${player2Roll} > ${player1Roll})`
-      );
+    const rollResult = this.dice[this.userDiceIndex].getFace(faceIndex);
+    console.log(`Your roll result is ${rollResult}.`);
+    return rollResult;
+  }
+  announceWinner(computerRoll, userRoll) {
+    if (userRoll > computerRoll) {
+      console.log(`You win (${userRoll} > ${computerRoll})!`);
+    } else if (computerRoll > userRoll) {
+      console.log(`I win (${computerRoll} > ${userRoll})!`);
     } else {
-      console.log(`It's a tie! 🤝 (${player1Roll} = ${player2Roll})`);
+      console.log(`It's a tie (${computerRoll} = ${userRoll})!`);
     }
   }
 }
