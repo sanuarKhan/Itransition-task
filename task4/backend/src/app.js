@@ -1,0 +1,26 @@
+const express = require("express");
+const cors = require("cors");
+const userRoutes = require("./routes/user.routes");
+
+const app = express();
+
+// middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// test route
+app.get("/test", (req, res) => {
+  res.send("Hello World!");
+});
+
+// routes
+app.use("/api/v1/user", userRoutes);
+
+// error handling
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).send(error.message);
+});
+
+module.exports = app;
