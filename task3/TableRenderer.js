@@ -1,12 +1,16 @@
 const Table = require("cli-table3");
+<<<<<<< HEAD
 const ProbabilityCalculator = require("./ProbabilityCalculator.js");
 
 const probability = new ProbabilityCalculator();
+=======
+>>>>>>> 9908205f241dee524fbd5245df5b62e5938b8836
 
 class TableRenderer {
   async generateProbabilityTable(dice) {
     const probabilities = probability.calculateAllProbabilities(dice);
 
+<<<<<<< HEAD
     // Create headers with proper formatting
     const headers = ["User dice v \\ Computer dice >"].concat(
       dice.map((d) => d.toString())
@@ -55,6 +59,28 @@ class TableRenderer {
     console.log("=".repeat(60));
     console.log(table.toString());
     console.log("=".repeat(60) + "\n");
+=======
+    const headers = ["user dice"];
+    diceList.forEach((_, i) => headers.push(`Computer ${i + 1}`));
+    const displayTable = new Table({ head: headers });
+
+    diceList.forEach((userDice, userIndex) => {
+      const row = [userDice.toString()];
+
+      diceList.forEach((computerDice, computerIndex) => {
+        const [userWin, compWin, tie] =
+          probabilityCalculator.calculateProbability(userDice, computerDice);
+
+        if (userIndex === computerIndex) {
+          row.push(`- (${tie})`);
+        } else {
+          row.push(`${userWin}`);
+        }
+      });
+      displayTable.push(row);
+    });
+    console.log(displayTable.toString());
+>>>>>>> 9908205f241dee524fbd5245df5b62e5938b8836
   }
 }
 
