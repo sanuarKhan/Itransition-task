@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const {
   getUsersQuery,
   registerUserQuery,
@@ -7,6 +8,7 @@ const {
   unblockUserQuery,
   deleteUserQuery,
 } = require("../db/queries");
+const { genJWTToken } = require("../utilities/genToken");
 
 const getAllUsersCtrl = async (req, res) => {
   try {
@@ -22,8 +24,9 @@ const getAllUsersCtrl = async (req, res) => {
 
 const registerUserCtrl = async (req, res) => {
   const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    const newUser = await registerUserQuery(name, email, password);
+    const newUser = await registerUserQuery(name, email, hashedPassword);
     res.status(201).json({
       success: true,
       message: "User registered successfully",
@@ -41,20 +44,32 @@ const registerUserCtrl = async (req, res) => {
 
 const loginUserCtrl = async (req, res) => {
   const { email, password } = req.body;
+
   try {
-    const loggedUser = await loginUserQuery(email, password);
+    const loggedUser = await loginUserQuery(email);
+    const isPasswordValid = await bcrypt.compare(password, loggedUser.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
     await updateLastLoginTimeQuery(loggedUser.email);
+    loggedUser.password = undefined;
+    const token = genJWTToken(loggedUser);
+    res.cookie("token", token);
     res.status(200).json({
       success: true,
       message: "user logged successfully",
       data: loggedUser,
+      token,
     });
   } catch (error) {
     console.error("Error in login user", error);
     res.status(500).json({
       success: false,
       message: "Error in login user",
-      error: error,
+      error,
     });
   }
 };

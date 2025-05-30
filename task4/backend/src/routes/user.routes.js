@@ -9,12 +9,13 @@ const {
   unBlockUserCtrl,
   deleteUserCtrl,
 } = require("./../controllers/user.controllers");
+const authMiddleware = require("../middleware/auth.middleware");
 
 router.get("/all", getAllUsersCtrl);
 router.post("/register", registerUserCtrl);
 router.post("/login", loginUserCtrl);
-router.put("/block/:id", blockUserCtrl);
-router.put("/unblock/:id", unBlockUserCtrl);
-router.delete("/delete/:id", deleteUserCtrl);
+router.put("/block/:id", authMiddleware, blockUserCtrl);
+router.put("/unblock/:id", authMiddleware, unBlockUserCtrl);
+router.delete("/delete/:id", authMiddleware, deleteUserCtrl);
 
 module.exports = router;
