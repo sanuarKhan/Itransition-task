@@ -1,7 +1,7 @@
 const { Client } = require("pg");
 const { db_uri } = require("../constants");
 
-const CREATE_AND_POPULATE_SQL = `
+const SQL = `
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,    
@@ -9,7 +9,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(255) DEFAULT 'active',
-    selected BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -27,23 +26,9 @@ async function populateDatabase() {
   });
   try {
     await client.connect();
-
-    // Check if users table exists
-    const tableExists = await client.query(`
-      SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public' 
-        AND table_name = 'users'
-      );
-    `);
-
-    if (!tableExists.rows[0].exists) {
-      console.log("Users table not found. Creating and seeding database...");
-      await client.query(CREATE_AND_POPULATE_SQL);
-      console.log("Database seeding completed.");
-    } else {
-      console.log("Users table already exists. Skipping database seeding.");
-    }
+    console.log("seeding database...");
+    await client.query(SQL);
+    console.log("Database seeding completed.");
   } catch (error) {
     console.error("Error working with database:", error);
     throw error;
@@ -51,5 +36,5 @@ async function populateDatabase() {
     await client.end();
   }
 }
-
+populateDatabase();
 module.exports = populateDatabase;
