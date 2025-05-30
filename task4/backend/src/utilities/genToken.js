@@ -7,9 +7,9 @@ const genJWTToken = (user) => {
   return token;
 };
 
-const decoded = (token, secret) => {
+const decoded = (token) => {
   try {
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, jwt_secret);
     return decoded;
   } catch (err) {
     console.error(err);
