@@ -27,6 +27,7 @@ const registerUserCtrl = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const newUser = await registerUserQuery(name, email, hashedPassword);
+    newUser.password = undefined;
     res.status(201).json({
       success: true,
       message: "User registered successfully",

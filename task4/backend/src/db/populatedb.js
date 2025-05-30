@@ -12,9 +12,9 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (name, email, password, last_login, status, selected) VALUES
-('Sanuar', 'Y7y5o@example.com', 'password', '2022-01-01 00:00:00', 'active', true),
-('John Doe', 'i9dVb@example.com', 'password', '2022-02-01 00:00:00', 'inactive', false);
+INSERT INTO users (name, email, password, last_login, status) VALUES
+('Sanuar', 'Y7y5o@example.com', 'password', '2022-01-01 00:00:00', 'active'),
+('John Doe', 'i9dVb@example.com', 'password', '2022-02-01 00:00:00', 'inactive');
 `;
 
 async function populateDatabase() {
@@ -27,6 +27,17 @@ async function populateDatabase() {
   try {
     await client.connect();
     console.log("seeding database...");
+    const exist = await client.query(`
+      SELECT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_name = 'users'
+      )
+    `);
+    if (exist.rows[0].exists) {
+      console.log("Dropping table `users`...");
+      await client.query("DROP TABLE users");
+    }
     await client.query(SQL);
     console.log("Database seeding completed.");
   } catch (error) {

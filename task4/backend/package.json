@@ -4,7 +4,8 @@
   "description": " this is simple user management system",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "db": "node src/db/populatedb.js $(node -e \"require('./src/constants.js').db_uri\")"
   },
   "keywords": [],
   "author": "Sanuar khan",

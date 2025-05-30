@@ -41,11 +41,8 @@ const getUsersQuery = async () => {
 //block user
 const blockUserQuery = async (id) => {
   try {
-    const result = await pool.query(
-      "UPDATE users SET status = 'blocked' WHERE id = $1",
-      [id]
-    );
-    return result.rows[0];
+    await pool.query("UPDATE users SET status = 'blocked' WHERE id = $1", [id]);
+    return;
   } catch (error) {
     console.error("Error blocking user:", error);
     throw error;
