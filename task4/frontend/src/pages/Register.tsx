@@ -51,7 +51,7 @@ export default function Register() {
   };
 
   return loading ? (
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center w-100 min-vh-100 bg-info">
       <div className="spinner-border text-success" role="status">
         <span className="visually-hidden">Loading...</span>
       </div>

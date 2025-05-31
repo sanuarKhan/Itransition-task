@@ -66,7 +66,9 @@ export default function Table() {
     );
   };
 
-  return (
+  return loading ? (
+    <h1>Loading...</h1>
+  ) : (
     <div className="mt-4">
       <ToolBar
         selectedUsers={selectedUsers}
