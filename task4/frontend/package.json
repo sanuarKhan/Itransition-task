@@ -4,11 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "dev": "wrangler dev",
-    "build": "vite build",
-    "deploy": "wrangler publish"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
