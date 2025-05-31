@@ -7,6 +7,9 @@
     "config": "vite.config.ts",
     "dev_config": "vite.config.ts"
   },
+  "assets": {
+    "directory": "/dist"
+  },
   "site": {
     "bucket": "./dist"
   },
