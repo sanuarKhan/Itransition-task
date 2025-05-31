@@ -1,5 +1,5 @@
 {
-  "name": "task4-frontend",
+  "name": "usermanagement",
   "type": "webpack",
   "compatibility_date": "2025-06-01",
   "main": "src/main.tsx",
