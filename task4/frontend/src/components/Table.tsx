@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ToolBar from "./ToolBar";
+import moment from "moment";
 
 interface User {
   id: string;
@@ -25,21 +26,28 @@ export default function Table() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<User[]>("api/v1/user/all", {
+      const res = await axios.get<{
+        data: User[];
+        success: boolean;
+        message: string;
+      }>("api/v1/user/all", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       console.log(res);
-      setUsers(res.data);
-      console.log(res.token);
-      if (res.success) {
-        toast(res.message);
+      setUsers(res.data.data);
+
+      if (res.data.success) {
+        toast(res.data.message);
       }
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.success === false) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data?.success === false
+      ) {
         navigate("/login");
-        toast.error(error.response?.message);
+        toast.error(error.response?.data?.message);
       }
     } finally {
       setLoading(false);
@@ -49,8 +57,9 @@ export default function Table() {
   const handleSelectedAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedUsers(e.target.checked ? users.map((u) => u.id) : []);
   };
+
   const handleSelectUser = (userId: string) => {
-    selectedUsers((prev) =>
+    setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
         : [...prev, userId]
@@ -58,7 +67,7 @@ export default function Table() {
   };
 
   return (
-    <div className=" mt-4">
+    <div className="mt-4">
       <ToolBar
         selectedUsers={selectedUsers}
         onSuccess={() => {
@@ -73,9 +82,11 @@ export default function Table() {
               <th>
                 <div className="form-check">
                   <input
-                    type="checkbok"
+                    type="checkbox"
                     className="form-check-input"
-                    checked={selectedUsers.length === users.length}
+                    checked={
+                      selectedUsers.length === users.length && users.length > 0
+                    }
                     onChange={handleSelectedAll}
                   />
                 </div>
@@ -101,7 +112,7 @@ export default function Table() {
                 </td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.last_login}</td>
+                <td>{moment(user.last_login).startOf("hour").fromNow()}</td>
                 <td>
                   <span
                     className={`badge bg-${

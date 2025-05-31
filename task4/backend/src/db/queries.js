@@ -68,15 +68,15 @@ const deleteUserQuery = async (id) => {
   }
 };
 
-const updateLastLoginTimeQuery = async (email) => {
+const updateLastLoginTimeQuery = async (email, rememberme) => {
   try {
-    const result = await pool.query(
-      "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = $1",
-      [email]
+    await pool.query(
+      "UPDATE users SET last_login = CURRENT_TIMESTAMP, rememberme = $1 WHERE email = $2 RETURNING *",
+      [rememberme || false, email]
     );
     return;
   } catch (error) {
-    console.error("Error deleting selected users:", error);
+    console.error("Error updating last login time:", error);
     throw error;
   }
 };

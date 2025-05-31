@@ -13,12 +13,18 @@ const { genJWTToken } = require("../utilities/genToken");
 const getAllUsersCtrl = async (req, res) => {
   try {
     const users = await getUsersQuery();
-    res.status(200).json({ message: "All users", data: users });
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: users,
+    });
   } catch (error) {
     console.error("Error in getAllUsers controller:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "error in fechting users",
+      error: error.message,
+    });
   }
 };
 
@@ -44,7 +50,7 @@ const registerUserCtrl = async (req, res) => {
 };
 
 const loginUserCtrl = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, rememberme } = req.body;
 
   try {
     const loggedUser = await loginUserQuery(email);
@@ -55,7 +61,7 @@ const loginUserCtrl = async (req, res) => {
         message: "Invalid credentials",
       });
     }
-    await updateLastLoginTimeQuery(loggedUser.email);
+    await updateLastLoginTimeQuery(loggedUser.email, rememberme);
     loggedUser.password = undefined;
     const token = genJWTToken(loggedUser);
     res.cookie("token", token);
@@ -75,7 +81,8 @@ const loginUserCtrl = async (req, res) => {
   }
 };
 const blockUserCtrl = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.userIds;
+  console.log(id);
   try {
     await blockUserQuery(id);
     res.status(200).json({
@@ -93,6 +100,7 @@ const blockUserCtrl = async (req, res) => {
 };
 const unBlockUserCtrl = async (req, res) => {
   const { id } = req.params;
+  console.log(id)
   try {
     await unblockUserQuery(id);
     res.status(200).json({

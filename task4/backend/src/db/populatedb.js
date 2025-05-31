@@ -9,6 +9,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(255) DEFAULT 'active',
+    rememberme BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

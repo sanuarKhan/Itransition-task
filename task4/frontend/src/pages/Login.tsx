@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import image1 from "../assets/checking.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface FormData {
   email: string;
@@ -15,6 +18,8 @@ export default function Login() {
     password: "",
     rememberMe: false,
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -24,10 +29,39 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    try {
+      setLoading(true);
+      const res = await axios.post("api/v1/user/login", formData);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        localStorage.setItem("token", res.data.token);
+        navigate("/");
+      }
+    } catch (error) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data?.success === false
+      ) {
+        toast.error(error.response?.data?.message);
+      } else {
+        toast.error("An error occurred during login");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="d-flex min-vh-100">
@@ -43,7 +77,7 @@ export default function Login() {
               <h2 className="h3 text-dark">Sign In to The App</h2>
             </div>
 
-            <form className="mb-4">
+            <form className="mb-4" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label text-muted small">E-mail</label>
                 <input
@@ -53,6 +87,7 @@ export default function Login() {
                   onChange={handleChange}
                   placeholder="test@example.com"
                   className="form-control bg-light"
+                  required
                 />
               </div>
 
@@ -65,6 +100,7 @@ export default function Login() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   className="form-control bg-light"
+                  required
                 />
               </div>
 
@@ -86,11 +122,11 @@ export default function Login() {
               </div>
 
               <button
-                onClick={handleSubmit}
                 className="btn btn-primary w-100 py-2"
                 type="submit"
+                disabled={loading}
               >
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
               </button>
             </form>
           </main>

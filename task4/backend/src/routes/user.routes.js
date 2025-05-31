@@ -14,8 +14,8 @@ const authMiddleware = require("../middleware/auth.middleware");
 router.get("/all", getAllUsersCtrl);
 router.post("/register", registerUserCtrl);
 router.post("/login", loginUserCtrl);
-router.put("/block/:id", authMiddleware, blockUserCtrl);
-router.put("/unblock/:id", authMiddleware, unBlockUserCtrl);
+router.put("/block", authMiddleware, blockUserCtrl);
+router.put("/unblock", authMiddleware, unBlockUserCtrl);
 router.delete("/delete/:id", authMiddleware, deleteUserCtrl);
 
 module.exports = router;

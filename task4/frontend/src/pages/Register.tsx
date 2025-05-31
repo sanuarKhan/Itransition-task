@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface FormData {
   name: string;
@@ -14,21 +17,46 @@ export default function Register() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    try {
+      setLoading(true);
+      const res = await axios.post("api/v1/user/register", formData);
+
+      if (res.data.success) {
+        toast(res.data.message);
+      }
+      navigate("/login");
+    } catch (error) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data?.success === false
+      ) {
+        toast.error(error.response?.data?.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
+  return loading ? (
+    <div className="d-flex justify-content-center">
+      <div className="spinner-border text-success" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  ) : (
     <div className="d-flex min-vh-100">
       <div className="col-6 bg-white px-5">
         <div className="mx-auto d-flex flex-column min-vh-100">

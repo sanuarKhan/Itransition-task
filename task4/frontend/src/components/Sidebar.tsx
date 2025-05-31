@@ -4,9 +4,8 @@ const Sidebar = () => {
   const menuItems = [
     { icon: "🏠", label: "Home", active: true },
     { icon: "📊", label: "Dashboard", active: false },
-    { icon: "📋", label: "Orders", active: false },
-    { icon: "📦", label: "Products", active: false },
-    { icon: "👥", label: "Customers", active: false },
+    { icon: "👦", label: "Profile", active: false },
+    { icon: "⚙", label: "Settings", active: false },
   ];
 
   return (
@@ -66,6 +65,14 @@ const Sidebar = () => {
                 </Link>
               </li>
             ))}
+            <li
+              onClick={() => {
+                localStorage.removeItem("token");
+              }}
+              className="d-flex align-items-center px-3 py-2 text-decoration-none text-white position-relative"
+            >
+              <span className="me-3">📤</span> Logout
+            </li>
           </ul>
         </nav>
 

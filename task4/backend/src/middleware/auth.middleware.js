@@ -9,7 +9,6 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "access denied", success: false });
     }
     const user = decoded(token);
-    console.log(user);
     req.user = user;
     next();
   } catch (error) {
