@@ -1,18 +1,19 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import image1 from "../assets/checking.png";
 
 interface FormData {
-  name: string;
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
-export default function Register() {
+export default function Login() {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
     email: "",
     password: "",
+    rememberMe: false,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,21 +40,10 @@ export default function Register() {
           <main className="flex-grow-1 d-flex flex-column justify-content-center p-5 m-5">
             <div className="mb-4">
               <p className="text-muted small mb-2">Start your journey</p>
-              <h2 className="h3 text-dark">Sign Up to The App</h2>
+              <h2 className="h3 text-dark">Sign In to The App</h2>
             </div>
 
             <form className="mb-4">
-              <div className="mb-3">
-                <label className="form-label text-muted small">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="sanuar khan"
-                  className="form-control bg-light"
-                />
-              </div>
               <div className="mb-3">
                 <label className="form-label text-muted small">E-mail</label>
                 <input
@@ -78,12 +68,29 @@ export default function Register() {
                 />
               </div>
 
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  id="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                  className="form-check-input"
+                />
+                <label
+                  htmlFor="rememberMe"
+                  className="form-check-label text-muted small"
+                >
+                  Remember me
+                </label>
+              </div>
+
               <button
                 onClick={handleSubmit}
-                className="btn btn-primary w-100 py-2 my-3"
+                className="btn btn-primary w-100 py-2"
                 type="submit"
               >
-                Sign Up
+                Sign In
               </button>
             </form>
           </main>
@@ -91,15 +98,15 @@ export default function Register() {
           <footer className="py-4">
             <div className="d-flex justify-content-between align-items-center small">
               <p className="text-muted mb-0">
-                Already have an account?{" "}
-                <Link to="/login" className="text-primary text-decoration-none">
-                  Sign in
+                Don't have an account?{" "}
+                <Link
+                  to="/register"
+                  className="text-primary text-decoration-none"
+                >
+                  Sign Up
                 </Link>
               </p>
-              <Link
-                to="/forgot-password"
-                className="text-primary text-decoration-none"
-              >
+              <Link to="#" className="text-primary text-decoration-none">
                 Forgot password?
               </Link>
             </div>
@@ -113,8 +120,10 @@ export default function Register() {
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <div className="h-100 d-flex align-items-center justify-content-center opacity-25">
-          <div className="display-1">🚀</div>
+        <div className="h-100 d-flex align-items-center justify-content-center">
+          <div className="display-1">
+            <img src={image1} alt="checking" className="img-fluid w-100" />
+          </div>
         </div>
       </div>
     </div>
