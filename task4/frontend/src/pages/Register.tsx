@@ -52,7 +52,7 @@ export default function Register() {
   };
 
   return loading ? (
-    <div className="d-flex justify-content-center w-100 min-vh-100 bg-info">
+    <div className="d-flex justify-content-center align-items-center w-100 min-vh-100 bg-info">
       <div className="spinner-border text-success" role="status">
         <span className="visually-hidden">Loading...</span>
       </div>
@@ -142,7 +142,7 @@ export default function Register() {
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <div className="h-100 d-flex align-items-center justify-content-center opacity-25">
+        <div className="h-100 d-flex align-items-center justify-content-center">
           <div className="display-1">
             <img src={image1} alt="checking" className="img-fluid w-100" />
           </div>
