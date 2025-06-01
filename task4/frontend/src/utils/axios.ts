@@ -31,7 +31,7 @@ const register = async (name: string, email: string, password: string) => {
       email,
       password,
     });
-    return res.data.data;
+    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data?.success === false) {
       toast.error(error.response?.data?.message);

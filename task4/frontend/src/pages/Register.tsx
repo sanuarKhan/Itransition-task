@@ -4,6 +4,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { register } from "../utils/axios";
 
 interface FormData {
   name: string;
@@ -32,19 +33,19 @@ export default function Register() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post("api/v1/user/register", formData);
+      const res = await register(
+        formData.name,
+        formData.email,
+        formData.password
+      );
 
-      if (res.data.success) {
-        toast(res.data.message);
+      if (res.success) {
+        toast(res.message);
+        navigate("/login");
       }
-      navigate("/login");
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response?.data?.success === false
-      ) {
-        toast.error(error.response?.data?.message);
-      }
+      console.error(error);
+      toast.error("An error occurred during registration");
     } finally {
       setLoading(false);
     }
