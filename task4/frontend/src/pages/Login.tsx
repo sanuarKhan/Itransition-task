@@ -1,43 +1,22 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { FormEvent } from "react";
 import image1 from "../assets/checking.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../utils/axios";
 
-interface FormData {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
 export default function Login() {
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await login(
-        formData.email,
-        formData.password,
-        formData.rememberMe
-      );
+      const res = await login(email, password);
       if (res.success) {
         toast("Login successful");
         localStorage.setItem("token", res.token);
@@ -78,28 +57,34 @@ export default function Login() {
             <form className="mb-4" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label text-muted small">E-mail</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="test@example.com"
-                  className="form-control bg-light"
-                  required
-                />
+                <div className="position-relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="test@example.com"
+                    className="form-control bg-light "
+                    required
+                  />
+                  <i className="bi bi-envelope position-absolute end-0 top-0 py-2 me-2"></i>
+                </div>
               </div>
 
               <div className="mb-3">
                 <label className="form-label text-muted small">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="form-control bg-light"
-                  required
-                />
+                <div className="position-relative">
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="form-control bg-light relative"
+                    required
+                  />
+                  <i className="bi bi-eye-slash position-absolute end-0 top-0 py-2 me-2"></i>
+                </div>
               </div>
 
               <div className="mb-3 form-check">
@@ -107,8 +92,6 @@ export default function Login() {
                   type="checkbox"
                   name="rememberMe"
                   id="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
                   className="form-check-input"
                 />
                 <label

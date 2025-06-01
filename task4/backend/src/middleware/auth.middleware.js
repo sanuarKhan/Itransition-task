@@ -12,7 +12,6 @@ const authMiddleware = async (req, res, next) => {
     const user = decoded(token);
 
     const authUser = await getUserByIdQuery(user.id);
-    console.log(authUser, "auth user");
 
     if (!authUser) {
       return res

@@ -64,7 +64,7 @@ const registerUserCtrl = async (req, res) => {
 };
 
 const loginUserCtrl = async (req, res) => {
-  const { email, password, rememberme } = req.body;
+  const { email, password } = req.body;
 
   try {
     const loggedUser = await loginUserQuery(email);
@@ -81,10 +81,10 @@ const loginUserCtrl = async (req, res) => {
         message: "User is blocked",
       });
     }
-    await updateLastLoginTimeQuery(loggedUser.email, rememberme);
+    await updateLastLoginTimeQuery(loggedUser.email);
+    loggedUser.password = undefined;
     const token = genJWTToken(loggedUser);
     res.cookie("token", token);
-    loggedUser.password = undefined;
     res.status(200).json({
       success: true,
       message: "user logged successfully",
@@ -166,10 +166,11 @@ const deleteUserCtrl = async (req, res) => {
       message: "User Ids are required",
     });
   }
-  const ids = userIds.map((_, index) => `$${index + 1}`).join(",");
+  const placeholders = userIds.map((_, index) => `$${index + 1}`).join(",");
   try {
-    await deleteUserQuery(ids);
-    if (userIds.inclues(req.user.id)) {
+    await deleteUserQuery(placeholders, userIds);
+
+    if (userIds.includes(req.user.id)) {
       return res.status(200).json({
         redirectToLogin: true,
         message: "Users deleted successfully",

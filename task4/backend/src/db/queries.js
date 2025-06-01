@@ -14,7 +14,7 @@ const registerUserQuery = async (name, email, password) => {
   }
 };
 
-const loginUserQuery = async (email, password) => {
+const loginUserQuery = async (email) => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -76,9 +76,12 @@ const unblockUserQuery = async (ids) => {
   }
 };
 // delete user
-const deleteUserQuery = async (ids) => {
+const deleteUserQuery = async (placeholders, userIds) => {
   try {
-    await pool.query("DELETE FROM users WHERE id IN $1", [ids]);
+    await pool.query(
+      `DELETE FROM users WHERE id IN (${placeholders})`,
+      userIds
+    );
   } catch (error) {
     console.error("Error deleting user:", error);
     throw error;

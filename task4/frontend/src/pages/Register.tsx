@@ -1,63 +1,45 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { FormEvent } from "react";
+import image1 from "../assets/checking.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register } from "../utils/axios";
-import image1 from "../assets/checking.png";
-
-interface FormData {
-  name: string;
-  email: string;
-  password: string;
-}
-
 export default function Register() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await register(
-        formData.name,
-        formData.email,
-        formData.password
-      );
-
+      const res = await register(name, email, password);
       if (res.success) {
-        toast(res.message);
+        toast("Registration successful");
         navigate("/login");
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred during registration");
+      toast.error("An error occurred during login");
     } finally {
       setLoading(false);
     }
   };
 
-  return loading ? (
-    <div className="d-flex justify-content-center align-items-center w-100 min-vh-100 bg-info">
-      <div className="spinner-border text-success" role="status">
-        <span className="visually-hidden">Loading...</span>
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
-    </div>
-  ) : (
+    );
+  }
+
+  return (
     <div className="d-flex min-vh-100">
       <div className="col-6 bg-white px-5">
         <div className="mx-auto d-flex flex-column min-vh-100">
@@ -71,48 +53,75 @@ export default function Register() {
               <h2 className="h3 text-dark">Sign Up to The App</h2>
             </div>
 
-            <form className="mb-4">
+            <form className="mb-4" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label text-muted small">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="sanuar khan"
-                  className="form-control bg-light"
-                />
+                <div className="position-relative">
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Sanuar Khan"
+                    className="form-control bg-light "
+                    required
+                  />
+                  <i className="bi bi-person position-absolute end-0 top-0 py-2 me-2"></i>
+                </div>
               </div>
               <div className="mb-3">
                 <label className="form-label text-muted small">E-mail</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="test@example.com"
-                  className="form-control bg-light"
-                />
+                <div className="position-relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="test@example.com"
+                    className="form-control bg-light "
+                    required
+                  />
+                  <i className="bi bi-envelope position-absolute end-0 top-0 py-2 me-2"></i>
+                </div>
               </div>
 
               <div className="mb-3">
                 <label className="form-label text-muted small">Password</label>
+                <div className="position-relative">
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="form-control bg-light relative"
+                    required
+                  />
+                  <i className="bi bi-eye-slash position-absolute end-0 top-0 py-2 me-2"></i>
+                </div>
+              </div>
+
+              <div className="mb-3 form-check">
                 <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="form-control bg-light"
+                  type="checkbox"
+                  name="rememberMe"
+                  id="rememberMe"
+                  className="form-check-input"
                 />
+                <label
+                  htmlFor="rememberMe"
+                  className="form-check-label text-muted small"
+                >
+                  Remember me
+                </label>
               </div>
 
               <button
-                onClick={handleSubmit}
-                className="btn btn-primary w-100 py-2 my-3"
+                className="btn btn-primary w-100 py-2"
                 type="submit"
+                disabled={loading}
               >
-                Sign Up
+                {loading ? "Signing up..." : "Sign Up"}
               </button>
             </form>
           </main>
@@ -122,13 +131,10 @@ export default function Register() {
               <p className="text-muted mb-0">
                 Already have an account?{" "}
                 <Link to="/login" className="text-primary text-decoration-none">
-                  Sign in
+                  Sign In
                 </Link>
               </p>
-              <Link
-                to="/forgot-password"
-                className="text-primary text-decoration-none"
-              >
+              <Link to="#" className="text-primary text-decoration-none">
                 Forgot password?
               </Link>
             </div>

@@ -1,45 +1,39 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { deleteUser } from "../utils/axios";
 
 interface ToolBarProps {
-  selectedUsers: string[];
+  selectedUsers: number[];
   onSuccess: () => void;
 }
 
 export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
   const [filter, setFilter] = useState("");
   const navigate = useNavigate();
-  const handleAction = async (action: "block" | "unblock" | "delete") => {
-    if (!selectedUsers.length) {
-      toast.warning("Please select users first");
-      return;
-    }
+  const handleDelete = async () => {
     try {
-      await axios.put(
-        `/api/v1/user/${action}`,
-        {
-          userIds: selectedUsers,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      toast.success(`Users ${action}ed successfully`);
-      onSuccess();
-    } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response?.data?.success === false
-      ) {
+      const res = await deleteUser(selectedUsers);
+      if (res.success) {
+        toast(res.message);
+
+        onSuccess();
+      }
+      if (res.redirectToLogin) {
         navigate("/login");
       }
-      toast.error(`Failed to ${action} users`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete users");
     }
+  };
+  const handleUnblock = async () => {
+    console.log("unblock");
+  };
+  const handleBlock = async () => {
+    console.log("block");
   };
 
   return (
@@ -48,7 +42,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => handleAction("block")}
+          onClick={handleBlock}
           disabled={!selectedUsers.length}
           title="Block selected users"
         >
@@ -58,7 +52,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         <button
           type="button"
           className="btn btn-success"
-          onClick={() => handleAction("unblock")}
+          onClick={handleUnblock}
           disabled={!selectedUsers.length}
           title="Unblock selected users"
         >
@@ -68,7 +62,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => handleAction("delete")}
+          onClick={handleDelete}
           disabled={!selectedUsers.length}
           title="Delete selected users"
         >

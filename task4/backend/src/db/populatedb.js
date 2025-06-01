@@ -8,8 +8,7 @@ CREATE TABLE users (
     email TEXT UNIQUE,
     password VARCHAR(255) NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(255) DEFAULT 'active',
-    rememberme BOOLEAN DEFAULT FALSE,
+    status VARCHAR(255) DEFAULT 'active', 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -40,12 +40,11 @@ const register = async (name: string, email: string, password: string) => {
     }
   }
 };
-const login = async (email: string, password: string, rememberme: boolean) => {
+const login = async (email: string, password: string) => {
   try {
     const res = await api.post("/api/v1/user/login", {
       email,
       password,
-      rememberme,
     });
     return res.data;
   } catch (error) {
@@ -57,4 +56,14 @@ const login = async (email: string, password: string, rememberme: boolean) => {
   }
 };
 
-export { getUsers, register, login };
+const deleteUser = async (userIds: number[]) => {
+  const res = await api.delete("/api/v1/user/delete", {
+    data: { userIds },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  return res.data;
+};
+
+export { getUsers, register, login, deleteUser };
