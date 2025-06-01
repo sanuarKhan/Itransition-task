@@ -40,10 +40,12 @@ export default function Login() {
         formData.rememberMe
       );
 
-      if (res) {
+      console.log(res, "from login");
+      if (res.success) {
         toast("Login successful");
-        navigate("/");
+        localStorage.setItem("token", res.token);
       }
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred during login");
