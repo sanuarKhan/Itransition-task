@@ -100,7 +100,7 @@ export default function Table() {
                 </td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{moment(user.last_login).startOf("minute").fromNow()}</td>
+                <td>{moment(user.last_login).fromNow()}</td>
                 <td>
                   <span
                     className={`badge bg-${
