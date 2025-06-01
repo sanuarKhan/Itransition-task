@@ -15,7 +15,7 @@ interface User {
 
 export default function Table() {
   const [users, setUsers] = useState<User[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
@@ -41,10 +41,10 @@ export default function Table() {
   };
 
   const handleSelectedAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedUsers(e.target.checked ? users.map((u) => u.id) : []);
+    setSelectedUsers(e.target.checked ? users.map((u) => Number(u.id)) : []);
   };
 
-  const handleSelectUser = (userId: string) => {
+  const handleSelectUser = (userId: number) => {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
@@ -93,8 +93,8 @@ export default function Table() {
                     <input
                       type="checkbox"
                       className="form-check-input"
-                      checked={selectedUsers.includes(user.id)}
-                      onChange={() => handleSelectUser(user.id)}
+                      checked={selectedUsers.includes(Number(user.id))}
+                      onChange={() => handleSelectUser(Number(user.id))}
                     />
                   </div>
                 </td>
