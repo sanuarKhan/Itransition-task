@@ -37,6 +37,19 @@ const getUsersQuery = async () => {
     throw error;
   }
 };
+// get user by id
+const getUserByIdQuery = async (id) => {
+  try {
+    const result = await pool.query(
+      "SELECT id name, email, status FROM users WHERE id = $1",
+      [id]
+    );
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error getting user by id:", error);
+    throw error;
+  }
+};
 
 //block user
 const blockUserQuery = async (id) => {
@@ -83,6 +96,7 @@ const updateLastLoginTimeQuery = async (email, rememberme) => {
 
 module.exports = {
   getUsersQuery,
+  getUserByIdQuery,
   registerUserQuery,
   loginUserQuery,
   blockUserQuery,
