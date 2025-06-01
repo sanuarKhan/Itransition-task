@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { register } from "../utils/axios";
+import image1 from "../assets/checking.png";
 
 interface FormData {
   name: string;
@@ -143,7 +143,9 @@ export default function Register() {
         }}
       >
         <div className="h-100 d-flex align-items-center justify-content-center opacity-25">
-          <div className="display-1">🚀</div>
+          <div className="display-1">
+            <img src={image1} alt="checking" className="img-fluid w-100" />
+          </div>
         </div>
       </div>
     </div>
