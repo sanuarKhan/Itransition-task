@@ -65,15 +65,15 @@ const Sidebar = () => {
                 </Link>
               </li>
             ))}
-            <li
+            <Link
+              to="/login"
               onClick={() => {
                 localStorage.removeItem("token");
-                window.location.href = "/login";
               }}
-              className="d-flex align-items-center px-3 py-2 text-decoration-none text-white position-relative"
+              className="d-flex align-items-center px-3 py-2 text-decoration-none text-white position-relative pointer"
             >
               <span className="me-3">📤</span> Logout
-            </li>
+            </Link>
           </ul>
         </nav>
 

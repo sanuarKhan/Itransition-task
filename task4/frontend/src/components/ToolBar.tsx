@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { deleteUser } from "../utils/axios";
+import { blockUser, deleteUser, unBlockUser } from "../utils/axios";
 
 interface ToolBarProps {
   selectedUsers: number[];
@@ -16,6 +16,9 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
   const handleDelete = async () => {
     try {
       const res = await deleteUser(selectedUsers);
+      if (res.success === false) {
+        toast(res.message);
+      }
       if (res.success) {
         toast(res.message);
 
@@ -24,16 +27,41 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
       if (res.redirectToLogin) {
         navigate("/login");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Failed to delete users");
+      toast.error(error.response?.data?.message);
     }
   };
   const handleUnblock = async () => {
-    console.log("unblock");
+    try {
+      const res = await unBlockUser(selectedUsers);
+      if (res.success) {
+        toast(res.message);
+        onSuccess();
+      }
+      if (res.redirectToLogin) {
+        navigate("/login");
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message);
+    }
   };
   const handleBlock = async () => {
-    console.log("block");
+    try {
+      const res = await blockUser(selectedUsers);
+      if (res.success) {
+        toast(res.message);
+
+        onSuccess();
+      }
+      if (res.redirectToLogin) {
+        navigate("/login");
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message);
+    }
   };
 
   return (

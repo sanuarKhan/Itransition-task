@@ -55,15 +55,39 @@ const login = async (email: string, password: string) => {
     }
   }
 };
+const blockUser = async (userIds: number[]) => {
+  const res = await api.put(
+    "/api/v1/user/block",
+    { userIds },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+  return res.data;
+};
+const unBlockUser = async (userIds: number[]) => {
+  const res = await api.put(
+    "/api/v1/user/unblock",
+    { userIds },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+  return res.data;
+};
 
 const deleteUser = async (userIds: number[]) => {
   const res = await api.delete("/api/v1/user/delete", {
-    data: { userIds },
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
+    data: { userIds },
   });
   return res.data;
 };
 
-export { getUsers, register, login, deleteUser };
+export { getUsers, register, login, deleteUser, blockUser, unBlockUser };

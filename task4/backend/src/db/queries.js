@@ -52,11 +52,12 @@ const getUserByIdQuery = async (id) => {
 };
 
 //block user
-const blockUserQuery = async (id) => {
+const blockUserQuery = async (placeholders, userIds) => {
   try {
-    await pool.query("UPDATE users SET status = 'blocked' WHERE id IN $1", [
-      id,
-    ]);
+    await pool.query(
+      `UPDATE users SET status = 'blocked' WHERE id IN (${placeholders})`,
+      userIds
+    );
     return;
   } catch (error) {
     console.error("Error blocking user:", error);
@@ -64,11 +65,12 @@ const blockUserQuery = async (id) => {
   }
 };
 // unblock user
-const unblockUserQuery = async (ids) => {
+const unblockUserQuery = async (placeholders, userIds) => {
   try {
-    await pool.query("UPDATE users SET status = 'active' WHERE id IN $1", [
-      ids,
-    ]);
+    await pool.query(
+      `UPDATE users SET status = 'active' WHERE id IN (${placeholders})`,
+      userIds
+    );
     return;
   } catch (error) {
     console.error("Error unblocking user:", error);

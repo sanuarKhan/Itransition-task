@@ -102,19 +102,11 @@ const loginUserCtrl = async (req, res) => {
 };
 const blockUserCtrl = async (req, res) => {
   const { userIds } = req.body;
-  if (!userIds) {
-    return res.status(400).json({
-      success: false,
-      message: "User Ids are required",
-    });
-  }
-
+  const placeholders = userIds.map((_, index) => `$${index + 1}`).join(",");
   try {
-    const ids = userIds.map((_, index) => `$${index}`).join(",");
+    await blockUserQuery(placeholders, userIds);
 
-    await blockUserQuery(ids);
-
-    if (userIds.inclues(req.user.id)) {
+    if (userIds.includes(req.user.id)) {
       return res.status(200).json({
         redirectToLogin: true,
         message: "Users blocked successfully",
@@ -135,16 +127,9 @@ const blockUserCtrl = async (req, res) => {
 };
 const unBlockUserCtrl = async (req, res) => {
   const { userIds } = req.body;
-  if (!userIds) {
-    return res.status(400).json({
-      success: false,
-      message: "User Ids are required",
-    });
-  }
-  const ids = userIds.map((_, index) => `$${index + 1}`).join(",");
-
+  const placeholders = userIds.map((_, index) => `$${index + 1}`).join(",");
   try {
-    await unblockUserQuery(ids);
+    await unblockUserQuery(placeholders, userIds);
     res.status(200).json({
       success: true,
       message: "user unblocked successfully",
@@ -160,12 +145,6 @@ const unBlockUserCtrl = async (req, res) => {
 };
 const deleteUserCtrl = async (req, res) => {
   const { userIds } = req.body;
-  if (!userIds) {
-    return res.status(400).json({
-      success: false,
-      message: "User Ids are required",
-    });
-  }
   const placeholders = userIds.map((_, index) => `$${index + 1}`).join(",");
   try {
     await deleteUserQuery(placeholders, userIds);

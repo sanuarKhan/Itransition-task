@@ -48,4 +48,3 @@ async function populateDatabase() {
   }
 }
 populateDatabase();
-module.exports = populateDatabase;
