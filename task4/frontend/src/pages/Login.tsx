@@ -3,8 +3,9 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import image1 from "../assets/checking.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { toast } from "react-toastify";
+import { login } from "../utils/axios";
 
 interface FormData {
   email: string;
@@ -33,21 +34,19 @@ export default function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post("api/v1/user/login", formData);
-      if (res.data.success) {
-        toast.success(res.data.message);
-        localStorage.setItem("token", res.data.token);
+      const res = await login(
+        formData.email,
+        formData.password,
+        formData.rememberMe
+      );
+
+      if (res) {
+        toast("Login successful");
         navigate("/");
       }
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response?.data?.success === false
-      ) {
-        toast.error(error.response?.data?.message);
-      } else {
-        toast.error("An error occurred during login");
-      }
+      console.error(error);
+      toast.error("An error occurred during login");
     } finally {
       setLoading(false);
     }
