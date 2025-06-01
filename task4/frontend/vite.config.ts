@@ -9,7 +9,7 @@ export default defineConfig({
       "/api": {
         target:
           process.env.NODE_ENV === "production"
-            ? "https://usermangementb.sanuarkhan220.workers.dev"
+            ? "https://usermanagement-uzdn.onrender.com"
             : "http://localhost:8080",
         changeOrigin: true,
       },
