@@ -11,12 +11,14 @@ const {
 const { genJWTToken } = require("../utilities/genToken");
 
 const getAllUsersCtrl = async (req, res) => {
+  const { currentUserId } = req.user.id;
   try {
     const users = await getUsersQuery();
     res.status(200).json({
       success: true,
       message: "User fetched successfully",
       data: users,
+      currentUserId,
     });
   } catch (error) {
     console.error("Error in getAllUsers controller:", error);
@@ -30,6 +32,12 @@ const getAllUsersCtrl = async (req, res) => {
 
 const registerUserCtrl = async (req, res) => {
   const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required",
+    });
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const newUser = await registerUserQuery(name, email, hashedPassword);
@@ -40,6 +48,12 @@ const registerUserCtrl = async (req, res) => {
       data: newUser,
     });
   } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({
+        success: false,
+        message: "User already exists",
+      });
+    }
     console.error("Error in register user", error);
     res.status(500).json({
       success: false,
@@ -55,16 +69,22 @@ const loginUserCtrl = async (req, res) => {
   try {
     const loggedUser = await loginUserQuery(email);
     const isPasswordValid = await bcrypt.compare(password, loggedUser.password);
-    if (!isPasswordValid) {
+    if (!isPasswordValid || !loggedUser) {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
       });
     }
+    if (loggedUser.status === "blocked") {
+      return res.status(401).json({
+        success: false,
+        message: "User is blocked",
+      });
+    }
     await updateLastLoginTimeQuery(loggedUser.email, rememberme);
-    loggedUser.password = undefined;
     const token = genJWTToken(loggedUser);
     res.cookie("token", token);
+    loggedUser.password = undefined;
     res.status(200).json({
       success: true,
       message: "user logged successfully",
@@ -81,10 +101,25 @@ const loginUserCtrl = async (req, res) => {
   }
 };
 const blockUserCtrl = async (req, res) => {
-  const { id } = req.userIds;
-  console.log(id);
+  const { userIds } = req.body;
+  if (!userIds) {
+    return res.status(400).json({
+      success: false,
+      message: "User Ids are required",
+    });
+  }
+
   try {
-    await blockUserQuery(id);
+    const ids = userIds.map((_, index) => `$${index}`).join(",");
+
+    await blockUserQuery(ids);
+
+    if (userIds.inclues(req.user.id)) {
+      return res.status(200).json({
+        redirectToLogin: true,
+        message: "Users blocked successfully",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "user blocked successfully",
@@ -99,10 +134,17 @@ const blockUserCtrl = async (req, res) => {
   }
 };
 const unBlockUserCtrl = async (req, res) => {
-  const { id } = req.params;
-  console.log(id)
+  const { userIds } = req.body;
+  if (!userIds) {
+    return res.status(400).json({
+      success: false,
+      message: "User Ids are required",
+    });
+  }
+  const ids = userIds.map((_, index) => `$${index + 1}`).join(",");
+
   try {
-    await unblockUserQuery(id);
+    await unblockUserQuery(ids);
     res.status(200).json({
       success: true,
       message: "user unblocked successfully",
@@ -117,9 +159,22 @@ const unBlockUserCtrl = async (req, res) => {
   }
 };
 const deleteUserCtrl = async (req, res) => {
-  const { id } = req.params;
+  const { userIds } = req.body;
+  if (!userIds) {
+    return res.status(400).json({
+      success: false,
+      message: "User Ids are required",
+    });
+  }
+  const ids = userIds.map((_, index) => `$${index + 1}`).join(",");
   try {
-    await deleteUserQuery(id);
+    await deleteUserQuery(ids);
+    if (userIds.inclues(req.user.id)) {
+      return res.status(200).json({
+        redirectToLogin: true,
+        message: "Users deleted successfully",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "user deleted successfully",

@@ -16,6 +16,6 @@ router.post("/login", loginUserCtrl);
 router.get("/all", authMiddleware, getAllUsersCtrl);
 router.put("/block", authMiddleware, blockUserCtrl);
 router.put("/unblock", authMiddleware, unBlockUserCtrl);
-router.delete("/delete/:id", authMiddleware, deleteUserCtrl);
+router.delete("/delete", authMiddleware, deleteUserCtrl);
 
 module.exports = router;

@@ -54,7 +54,9 @@ const getUserByIdQuery = async (id) => {
 //block user
 const blockUserQuery = async (id) => {
   try {
-    await pool.query("UPDATE users SET status = 'blocked' WHERE id = $1", [id]);
+    await pool.query("UPDATE users SET status = 'blocked' WHERE id IN $1", [
+      id,
+    ]);
     return;
   } catch (error) {
     console.error("Error blocking user:", error);
@@ -62,9 +64,11 @@ const blockUserQuery = async (id) => {
   }
 };
 // unblock user
-const unblockUserQuery = async (id) => {
+const unblockUserQuery = async (ids) => {
   try {
-    await pool.query("UPDATE users SET status = 'active' WHERE id = $1", [id]);
+    await pool.query("UPDATE users SET status = 'active' WHERE id IN $1", [
+      ids,
+    ]);
     return;
   } catch (error) {
     console.error("Error unblocking user:", error);
@@ -72,20 +76,20 @@ const unblockUserQuery = async (id) => {
   }
 };
 // delete user
-const deleteUserQuery = async (id) => {
+const deleteUserQuery = async (ids) => {
   try {
-    await pool.query("DELETE FROM users WHERE id = $1", [id]);
+    await pool.query("DELETE FROM users WHERE id IN $1", [ids]);
   } catch (error) {
     console.error("Error deleting user:", error);
     throw error;
   }
 };
 
-const updateLastLoginTimeQuery = async (email, rememberme) => {
+const updateLastLoginTimeQuery = async (email) => {
   try {
     await pool.query(
-      "UPDATE users SET last_login = CURRENT_TIMESTAMP, rememberme = $1 WHERE email = $2 RETURNING *",
-      [rememberme || false, email]
+      "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = $1",
+      [email]
     );
     return;
   } catch (error) {
