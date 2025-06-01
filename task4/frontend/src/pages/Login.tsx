@@ -24,7 +24,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred during login");
+      toast.error(error.response?.data?.message);
     } finally {
       setLoading(false);
     }

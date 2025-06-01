@@ -18,6 +18,7 @@ export default function Table() {
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -32,9 +33,9 @@ export default function Table() {
         toast(res.message);
       }
     } catch (error) {
-      console.error("Error in getAllUsers controller:", error);
+      console.error("Error in fetching users", error);
       navigate("/login");
-      toast.error("An error occurred while fetching users");
+      toast.error("Error in fetching users");
     } finally {
       setLoading(false);
     }
