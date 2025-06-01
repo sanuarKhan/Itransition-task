@@ -68,6 +68,7 @@ const Sidebar = () => {
             <li
               onClick={() => {
                 localStorage.removeItem("token");
+                window.location.href = "/login";
               }}
               className="d-flex align-items-center px-3 py-2 text-decoration-none text-white position-relative"
             >
