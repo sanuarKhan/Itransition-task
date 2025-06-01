@@ -12,7 +12,6 @@ interface ToolBarProps {
 export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
   const [filter, setFilter] = useState("");
   const navigate = useNavigate();
-  console.log(selectedUsers);
   const handleAction = async (action: "block" | "unblock" | "delete") => {
     if (!selectedUsers.length) {
       toast.warning("Please select users first");

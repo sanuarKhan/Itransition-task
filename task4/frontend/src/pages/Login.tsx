@@ -39,13 +39,11 @@ export default function Login() {
         formData.password,
         formData.rememberMe
       );
-
-      console.log(res, "from login");
       if (res.success) {
         toast("Login successful");
         localStorage.setItem("token", res.token);
+        navigate("/");
       }
-      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred during login");

@@ -35,7 +35,7 @@ export default function Table() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(res);
+
       setUsers(res.data.data);
 
       if (res.data.success) {

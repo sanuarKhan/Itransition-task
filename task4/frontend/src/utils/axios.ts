@@ -47,8 +47,6 @@ const login = async (email: string, password: string, rememberme: boolean) => {
       password,
       rememberme,
     });
-    console.log(res, "from axios");
-    console.log(res.data, "from axios");
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data?.success === false) {
