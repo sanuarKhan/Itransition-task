@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import ToolBar from "./ToolBar";
 import moment from "moment";
+import { getUsers } from "../utils/axios";
 
 interface User {
   id: string;
@@ -18,7 +18,6 @@ export default function Table() {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -26,29 +25,16 @@ export default function Table() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<{
-        data: User[];
-        success: boolean;
-        message: string;
-      }>("api/v1/user/all", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await getUsers();
+      setUsers(res.data);
 
-      setUsers(res.data.data);
-
-      if (res.data.success) {
-        toast(res.data.message);
+      if (res.success) {
+        toast(res.message);
       }
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response?.data?.success === false
-      ) {
-        navigate("/login");
-        toast.error(error.response?.data?.message);
-      }
+      console.error("Error in getAllUsers controller:", error);
+      navigate("/login");
+      toast.error("An error occurred while fetching users");
     } finally {
       setLoading(false);
     }

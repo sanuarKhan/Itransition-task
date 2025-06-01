@@ -14,7 +14,7 @@ const getUsers = async () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    return res.data.data;
+    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data?.success === false) {
       toast.error(error.response?.data?.message);
