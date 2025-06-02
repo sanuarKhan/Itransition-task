@@ -1,4 +1,4 @@
-const args = process.argv.slice(2);
+const a = process.argv.slice(2);
 function lcs(s1, s2) {
   if (!s1 || !s2) return "";
   [s1, s2] = [s1, s2].sort((a, b) => a.length - b.length);

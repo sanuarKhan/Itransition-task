@@ -19,10 +19,6 @@ export default function Table() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -52,6 +48,10 @@ export default function Table() {
         : [...prev, userId]
     );
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return loading ? (
     <h1>Loading...</h1>
