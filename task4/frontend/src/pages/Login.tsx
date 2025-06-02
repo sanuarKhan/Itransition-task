@@ -32,7 +32,7 @@ export default function Login() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-info">
         <div className="spinner-border text-success" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <div className="d-flex min-vh-100">
-      <div className="col-6 bg-white px-5">
+      <div className="col-lg-6 col-12 bg-white px-5">
         <div className="mx-auto d-flex flex-column min-vh-100">
           <header className="py-4">
             <h1 className="display-6 text-primary mb-4">THE APP</h1>
