@@ -7,14 +7,12 @@ const Sidebar = () => {
     { icon: "👦", label: "Profile", active: false },
     { icon: "⚙", label: "Settings", active: false },
   ];
-
   return (
-    <div className="d-flex vh-100">
+    <div className="d-lg-flex vh-100 d-none">
       <div
         className="bg-dark text-white"
         style={{ width: "250px", minHeight: "100vh" }}
       >
-        {/* Header */}
         <div className="p-3 border-bottom border-secondary">
           <div className="d-flex align-items-center">
             <div

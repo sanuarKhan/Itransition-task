@@ -5,10 +5,10 @@ import Table from "../components/Table";
 export default function Home() {
   return (
     <div className="d-flex">
-      <div className="col-2">
+      <div className="col-lg-2 d-none d-lg-block">
         <Sidebar />
       </div>
-      <div className="col-10">
+      <div className="col-lg-10 col-12">
         <Header />
         <Table />
       </div>

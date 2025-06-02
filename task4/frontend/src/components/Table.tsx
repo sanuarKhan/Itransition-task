@@ -56,7 +56,7 @@ export default function Table() {
   return loading ? (
     <h1>Loading...</h1>
   ) : (
-    <div className="mt-4">
+    <div className="mt-4 w-100 mx-auto ">
       <ToolBar
         selectedUsers={selectedUsers}
         onSuccess={() => {
@@ -64,7 +64,7 @@ export default function Table() {
           setSelectedUsers([]);
         }}
       />
-      <div className="table-responsive">
+      <div className="table-responsive ">
         <table className="table table-striped table-hover">
           <thead>
             <tr>
@@ -81,7 +81,7 @@ export default function Table() {
                 </div>
               </th>
               <th>Name</th>
-              <th>Email</th>
+              <th className="d-none d-md-block d-lg-block">Email</th>
               <th>Last Login</th>
               <th>Status</th>
             </tr>
@@ -100,7 +100,7 @@ export default function Table() {
                   </div>
                 </td>
                 <td>{user.name}</td>
-                <td>{user.email}</td>
+                <td className="d-none d-md-block d-lg-block">{user.email}</td>
                 <td>{moment(user.last_login).fromNow()}</td>
                 <td>
                   <span

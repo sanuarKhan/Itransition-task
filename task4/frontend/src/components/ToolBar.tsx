@@ -65,11 +65,11 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-between bg-light p-2 border">
+    <div className="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-md-between bg-light p-2 border gap-2">
       <div className="d-flex gap-2">
         <button
           type="button"
-          className="btn btn-danger"
+          className="btn btn-danger btn-sm"
           onClick={handleBlock}
           disabled={!selectedUsers.length}
           title="Block selected users"
@@ -79,7 +79,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         </button>
         <button
           type="button"
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
           onClick={handleUnblock}
           disabled={!selectedUsers.length}
           title="Unblock selected users"
@@ -89,7 +89,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         </button>
         <button
           type="button"
-          className="btn btn-danger"
+          className="btn btn-danger btn-sm"
           onClick={handleDelete}
           disabled={!selectedUsers.length}
           title="Delete selected users"
@@ -102,7 +102,7 @@ export default function ToolBar({ selectedUsers, onSuccess }: ToolBarProps) {
         <input
           type="text"
           placeholder="Filter"
-          className="form-control"
+          className="form-control form-control-sm"
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value.toLowerCase());
