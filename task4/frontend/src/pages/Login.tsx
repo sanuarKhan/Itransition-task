@@ -42,21 +42,27 @@ export default function Login() {
 
   return (
     <div className="d-flex min-vh-100">
-      <div className="col-lg-6 col-12 bg-white px-5">
-        <div className="mx-auto d-flex flex-column min-vh-100">
-          <header className="py-4">
-            <h1 className="display-6 text-primary mb-4">THE APP</h1>
+      <div className="col-lg-6 bg-white px-3 px-md-4 px-lg-5">
+        <div className="mx-auto d-flex flex-column min-vh-100 max-width-sm">
+          <header className="py-3 py-md-4">
+            <h1 className="h4 h-md-3 h-lg-2 text-primary mb-0 fw-bold">
+              THE APP
+            </h1>
           </header>
 
-          <main className="flex-grow-1 d-flex flex-column justify-content-center p-5 m-5">
-            <div className="mb-4">
-              <p className="text-muted small mb-2">Start your journey</p>
-              <h2 className="h3 text-dark">Sign In to The App</h2>
+          <main className="flex-grow-1 d-flex flex-column justify-content-center  py-3 m-lg-5 p-lg-5">
+            <div className="mb-3 mb-md-4">
+              <p className="text-muted small mb-1 mb-md-2">
+                Start your journey
+              </p>
+              <h2 className="h4 h-md-3 text-dark mb-0">Sign In to The App</h2>
             </div>
 
-            <form className="mb-4" onSubmit={handleSubmit}>
+            <form className="mb-3 mb-md-4" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label text-muted small">E-mail</label>
+                <label className="form-label text-muted small mb-1">
+                  E-mail
+                </label>
                 <div className="position-relative">
                   <input
                     type="email"
@@ -64,15 +70,17 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="test@example.com"
-                    className="form-control bg-light "
+                    className="form-control bg-light pe-5"
                     required
                   />
-                  <i className="bi bi-envelope position-absolute end-0 top-0 py-2 me-2"></i>
+                  <i className="bi bi-envelope position-absolute end-0 top-50 translate-middle-y me-3 text-muted"></i>
                 </div>
               </div>
 
               <div className="mb-3">
-                <label className="form-label text-muted small">Password</label>
+                <label className="form-label text-muted small mb-1">
+                  Password
+                </label>
                 <div className="position-relative">
                   <input
                     type="password"
@@ -80,14 +88,14 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="form-control bg-light relative"
+                    className="form-control bg-light pe-5"
                     required
                   />
-                  <i className="bi bi-eye-slash position-absolute end-0 top-0 py-2 me-2"></i>
+                  <i className="bi bi-eye-slash position-absolute end-0 top-50 translate-middle-y me-3 text-muted"></i>
                 </div>
               </div>
 
-              <div className="mb-3 form-check">
+              <div className="mb-3 mb-md-4 form-check">
                 <input
                   type="checkbox"
                   name="rememberMe"
@@ -103,7 +111,7 @@ export default function Login() {
               </div>
 
               <button
-                className="btn btn-primary w-100 py-2"
+                className="btn btn-primary w-100 py-2 py-md-3 fw-medium"
                 type="submit"
                 disabled={loading}
               >
@@ -112,18 +120,21 @@ export default function Login() {
             </form>
           </main>
 
-          <footer className="py-4">
-            <div className="d-flex justify-content-between align-items-center small">
+          <footer className="py-3 py-md-4">
+            <div className="d-flex flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 small">
               <p className="text-muted mb-0">
                 Don't have an account?{" "}
                 <Link
                   to="/register"
-                  className="text-primary text-decoration-none"
+                  className="text-primary text-decoration-none fw-medium"
                 >
                   Sign Up
                 </Link>
               </p>
-              <Link to="#" className="text-primary text-decoration-none">
+              <Link
+                to="#"
+                className="text-primary text-decoration-none fw-medium"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -132,15 +143,18 @@ export default function Login() {
       </div>
 
       <div
-        className="col-6"
+        className="col-6 d-none d-md-block"
         style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <div className="h-100 d-flex align-items-center justify-content-center">
-          <div className="display-1">
-            <img src={image1} alt="checking" className="img-fluid w-100" />
-          </div>
+        <div className="h-100 d-flex align-items-center justify-content-center p-4">
+          <img
+            src={image1}
+            alt="checking"
+            className="img-fluid"
+            style={{ maxHeight: "80vh" }}
+          />
         </div>
       </div>
     </div>

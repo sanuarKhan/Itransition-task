@@ -41,13 +41,13 @@ export default function Register() {
 
   return (
     <div className="d-flex min-vh-100">
-      <div className="col-6 bg-white px-5">
+      <div className="col-lg-6 bg-white px-3 ">
         <div className="mx-auto d-flex flex-column min-vh-100">
           <header className="py-4">
             <h1 className="display-6 text-primary mb-4">THE APP</h1>
           </header>
 
-          <main className="flex-grow-1 d-flex flex-column justify-content-center p-5 m-5">
+          <main className="flex-grow-1 d-flex flex-column justify-content-center p-lg-5 py-3 m-lg-5">
             <div className="mb-4">
               <p className="text-muted small mb-2">Start your journey</p>
               <h2 className="h3 text-dark">Sign Up to The App</h2>
@@ -143,7 +143,7 @@ export default function Register() {
       </div>
 
       <div
-        className="col-6"
+        className="col-6 d-none d-md-block "
         style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
