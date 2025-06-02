@@ -4,6 +4,12 @@
 
 This project is a user management system with features for authentication, user registration, and administrative control over user accounts.
 
+## Links
+
+- [GitHub Repository](https://github.com/sanuarKhan/Itransition-task/tree/task4/task4)
+- [Live Demo](https://usermanagement-be4.pages.dev)
+- [Project Demo Video](https://youtu.be/YMqSsfpFLMA)
+
 ## Features
 
 - User registration and authentication
