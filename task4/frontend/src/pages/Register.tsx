@@ -23,7 +23,23 @@ export default function Register() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        toast.error(
+          axiosError.response?.data?.message ||
+            "An error occurred in register backend"
+        );
+      } else {
+        toast.error("An unexpected error occurred in register");
+      }
     } finally {
       setLoading(false);
     }
