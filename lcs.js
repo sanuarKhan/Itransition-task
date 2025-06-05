@@ -1,2 +1,0 @@
-const ar=process.argv.slice(2);if(!ar.length)return console.log("");var bs=ar.reduce((a,b)=>(a.length<=b.length?a:b));for(let l=bs.length;l>0;l--){for(let s=0;s<=bs.length-l;s++){let ss=bs.substring(s,s+l);if(ar.every((st)=>st.includes(ss))){console.log(ss);return}}}
-console.log("")

@@ -1,1 +1,0 @@
-const L=(s,f=s[0])=>s.length?[...f].map((_,i)=>[...Array(f.length-i+1)].map((_,j)=>f.slice(i,i+j)).filter((x)=>x&&s.slice(1).every((s)=>s.includes(x)))).flat().sort((a,b)=>b.length-a.length)[0]||"":"";console.log(L(process.argv.slice(2)))
