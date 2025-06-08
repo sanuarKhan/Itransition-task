@@ -80,13 +80,7 @@ async function generateBooks(
         : 0;
 
     // Handle async cover image generation
-    let imageUrl;
-    try {
-      imageUrl = await coverImage();
-    } catch (error) {
-      console.warn("Failed to generate cover image:", error);
-      imageUrl = faker.image.urlLoremFlickr({ category: "book" });
-    }
+    let imageUrl = await coverImage();
 
     books.push({
       index: page * BOOKS_PER_PAGE + i + 1,
@@ -98,7 +92,7 @@ async function generateBooks(
       title: faker.book.title(),
       authors,
       publisher: faker.book.publisher(),
-      coverImage: faker.image.urlLoremFlickr({ category: "book" }), //imageUrl,
+      coverImage: imageUrl,
       reviews,
       format: faker.book.format(),
       likes,

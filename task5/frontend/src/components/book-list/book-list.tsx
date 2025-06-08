@@ -15,10 +15,9 @@ const BookList = ({
   reviewsAvg,
 }: FetchBooksParams) => {
   const [selectedIsbn, setSelectedIsbn] = useState<string | null>(null);
-  const { data, isFetching } = useQuery({
-    queryKey: ["books"],
+  const { data, isLoading } = useQuery({
+    queryKey: ["books", seed, page, langCode, likesAvg, reviewsAvg],
     queryFn: () => fetchBooks(seed, page, langCode, likesAvg, reviewsAvg),
-    enabled: seed !== 0,
   });
 
   console.log(data);
@@ -26,8 +25,12 @@ const BookList = ({
   const handleShowTable = (isbn: string) => {
     setSelectedIsbn((prev) => (prev === isbn ? null : isbn));
   };
-  if (isFetching) {
-    return <div className="text-center py-4">Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="text-center py-4 w-full h-full flex items-center">
+        Loading...
+      </div>
+    );
   }
   return (
     <div className="w-full">

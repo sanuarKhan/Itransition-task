@@ -21,8 +21,9 @@ export function LanguageSelect({ value, onChange }: LanguageSelectProps) {
         </SelectTrigger>
         <SelectContent className=" bg-cyan-950 text-blue-300">
           <SelectItem value="en">English (USA)</SelectItem>
-          <SelectItem value="de">German (Germany)</SelectItem>
-          <SelectItem value="es">Spanish (Spain)</SelectItem>
+          <SelectItem value="zh">Chinese (CHINA)</SelectItem>
+          <SelectItem value="ru">Russian (Russia)</SelectItem>
+          <SelectItem value="bn">Bengali (Bangladesh)</SelectItem>
         </SelectContent>
       </Select>
     </div>

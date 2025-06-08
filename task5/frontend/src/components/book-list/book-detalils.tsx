@@ -12,7 +12,7 @@ export default function BookDetalils({ book }: Props) {
       <div className=" flex gap-10">
         <div className="relative">
           <img
-            className="max-w-[300px] h-auto rounded-2xl shadow-lg"
+            className="w-100 h-100 rounded-2xl shadow-lg"
             src={book.coverImage}
             alt={book.title}
           />
