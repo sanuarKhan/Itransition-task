@@ -11,10 +11,9 @@ export const fetchBooks = async (
   langCode: string,
   likesAvg: number,
   reviewsAvg: number
-): Promise<Book[]> => {
+) => {
   const res = await api.get<{ data: Book[] }>("/", {
-    params: { seed, page, langCode, likesAvg, reviewsAvg }
+    params: { seed, page, langCode, likesAvg, reviewsAvg },
   });
   return res.data.data;
 };
-
