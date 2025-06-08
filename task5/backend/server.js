@@ -6,12 +6,13 @@ const bookRoutes = require("./src/routes/bookRoutes");
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // routes
 app.get("/test", (req, res) => {
   res.send("Hello World!");
 });
-app.use("/", bookRoutes); // Use the router instead of controller directly
+app.use("/", bookRoutes);
 
 const port = 8000;
 app.listen(port, () => {

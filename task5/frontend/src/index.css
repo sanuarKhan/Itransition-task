@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+th,
+td {
+  @apply py-3;
+  @apply px-2;
+}
+label {
+  @apply block mb-3 text-sm font-medium text-gray-900 dark:text-white;
+}
