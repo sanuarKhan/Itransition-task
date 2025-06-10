@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import BookList from "./components/book-list/book-list";
 import { LanguageSelect } from "./components/controls/language-select";
 import { Sliders } from "./components/controls/sliders";
@@ -11,9 +11,6 @@ function App() {
   const [langCode, setLangCode] = useState("en");
   const [likesAvg, setLikesAvg] = useState(0);
   const [reviewsAvg, setReviewsAvg] = useState(0);
-  const [page, setPage] = useState(0);
-
-  console.log(seed, langCode, likesAvg, reviewsAvg);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -31,7 +28,6 @@ function App() {
 
         <BookList
           seed={seed}
-          page={page}
           langCode={langCode}
           likesAvg={likesAvg}
           reviewsAvg={reviewsAvg}

@@ -12,11 +12,11 @@ export interface Book {
   likes?: number;
   publishDate?: string;
   genre?: string;
+  coverImage?: string;
 }
 
 export interface FetchBooksParams {
   seed: number;
-  page: number;
   likesAvg: number;
   reviewsAvg: number;
   langCode: string;

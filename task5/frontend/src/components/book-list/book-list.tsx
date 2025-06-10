@@ -10,7 +10,6 @@ const even = (i: number) => i % 2 === 0;
 
 const BookList = ({
   seed,
-  page,
   langCode,
   likesAvg,
   reviewsAvg,
