@@ -1,6 +1,5 @@
 const { Router } = require("express");
-const db = require("../db/config");
-const users = require("../db/schema");
+
 const { getAllUsers, newUser } = require("../controllers/user.controllers");
 
 const router = Router();

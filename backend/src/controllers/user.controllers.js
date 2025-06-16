@@ -1,9 +1,9 @@
-const { db } = require("../db/config");
-const { users } = require("../db/schema");
+const db = require("../db/db");
+// console.log(db);
 
 const getAllUsers = async (req, res) => {
   try {
-    const allUsers = await db.select().from(users);
+    const allUsers = await db.users.findMany();
     res.json(allUsers);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -13,7 +13,12 @@ const getAllUsers = async (req, res) => {
 const newUser = async (req, res) => {
   try {
     const { email, name } = req.body;
-    const newUser = await db.insert(users).values({ email, name }).returning();
+    const newUser = await db.users.create({
+      data: {
+        email,
+        name,
+      },
+    });
     res.status(201).json(newUser[0]);
   } catch (error) {
     console.error("Error creating user:", error);

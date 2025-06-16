@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "nodemon --env-file=.env src/index.js",
     "start": "node  src/index.js",
-    "db:generate": "npx drizzle-kit generate:pg",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio:pg"
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
