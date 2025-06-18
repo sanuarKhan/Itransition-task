@@ -1,29 +1,72 @@
 const db = require("../db/db");
-// console.log(db);
+const bcrypt = require("bcryptjs");
 
-const getAllUsers = async (req, res) => {
+const register = async (req, res) => {
   try {
-    const allUsers = await db.user.findMany();
-    res.json(allUsers);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ error: "Failed to fetch users" });
-  }
-};
-const newUser = async (req, res) => {
-  try {
-    const { email, name } = req.body;
+    const { email, name, pass } = req.body;
+
+    const hashedPassword = await bcrypt.hash(pass, 10);
+
     const newUser = await db.user.create({
       data: {
         email,
         name,
+        pass: hashedPassword,
       },
     });
-    res.status(201).json(newUser);
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: newUser,
+    });
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(400).json({ error: "Failed to create user" });
+    res.status(400).json({
+      success: false,
+      message: "Error creating user",
+    });
   }
 };
 
-module.exports = { newUser, getAllUsers };
+//login controller
+const login = async (req, res) => {
+  try {
+    const { email, pass } = req.body;
+
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const validPass = await bcrypt.compare(pass, user.pass);
+
+    if (!validPass) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+    user.pass = undefined;
+    res.status(201).json({
+      success: true,
+      message: "User logged successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error("Error logging user:", error);
+    res.status(400).json({
+      success: false,
+      message: "Error logging user",
+    });
+  }
+};
+
+module.exports = { register, login };
