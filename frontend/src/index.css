@@ -1,0 +1,80 @@
+:root {
+  --background-color: #181a1b;
+  --surface-color: #23272a;
+  --primary-text: #f5f6fa;
+  --secondary-text: #b9bbbe;
+  --accent-color: #7289da;
+  --border-color: #2c2f33;
+  --input-bg: #2c2f33;
+  --input-border: #40444b;
+}
+
+body {
+  background: var(--background-color);
+  color: var(--primary-text);
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+header,
+footer,
+nav,
+.card,
+.surface {
+  background: var(--surface-color);
+  color: var(--primary-text);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+input,
+textarea,
+select,
+button {
+  background: var(--input-bg);
+  color: var(--primary-text);
+  border: 1px solid var(--input-border);
+  /* border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 1rem; */
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 2rem 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent-color);
+  color: #fff;
+}

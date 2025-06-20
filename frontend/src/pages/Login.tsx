@@ -5,11 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/user";
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import type { z } from "zod";
+import useAuthStore from "../hooks/useAuthStore";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 export default function Login() {
+  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const {
     register,
@@ -21,7 +24,11 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: loginApi,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      login(data.data);
+      localStorage.setItem("token", data.data.token);
+      console.log(data.data, "from login mutation");
       navigate("/");
     },
     onError: (err) => {

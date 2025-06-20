@@ -1,5 +1,6 @@
 const db = require("../db/db");
 const bcrypt = require("bcryptjs");
+const { genJWTToken } = require("../utils/tokenGen");
 
 const register = async (req, res) => {
   try {
@@ -54,11 +55,14 @@ const login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
+    // Generate JWT token
+    const token = genJWTToken(user);
     user.pass = undefined;
     res.status(201).json({
       success: true,
       message: "User logged successfully",
       data: user,
+      token,
     });
   } catch (error) {
     console.error("Error logging user:", error);
