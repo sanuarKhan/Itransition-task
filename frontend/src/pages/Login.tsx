@@ -27,8 +27,7 @@ export default function Login() {
     onSuccess: (data) => {
       toast.success(data.message);
       login(data.data);
-      localStorage.setItem("token", data.data.token);
-      console.log(data.data, "from login mutation");
+      localStorage.setItem("token", data.token);
       navigate("/");
     },
     onError: (err) => {

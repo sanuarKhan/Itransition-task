@@ -10,7 +10,7 @@ export default function Header() {
   const logout = useAuthStore((state) => state.logout);
   console.log(user, "from header");
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-dark">
       <Container className="">
         <div className="d-flex justify-content-between w-100">
           <Navbar.Brand href="#home">Doogle Torm</Navbar.Brand>
@@ -24,10 +24,10 @@ export default function Header() {
                     Logout
                   </Nav.Link>
                   <Nav.Link href="/profile">
-                    {user?.name}
+                    <span>{user?.name}</span>
                     <img
                       src={user?.img}
-                      className="rounded-circle"
+                      className="rounded-circle mx-2"
                       width="30"
                       height="30"
                     />

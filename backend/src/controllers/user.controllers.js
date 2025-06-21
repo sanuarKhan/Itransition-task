@@ -55,9 +55,9 @@ const login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
+    user.pass = undefined;
     // Generate JWT token
     const token = genJWTToken(user);
-    user.pass = undefined;
     res.status(201).json({
       success: true,
       message: "User logged successfully",

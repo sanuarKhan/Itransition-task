@@ -31,12 +31,12 @@ model User {
 model Template {
   id            String     @id  @default(uuid())
   title         String
-  description   String  //TODO: markdown support
+  description   String  
   topic         Topic
   thumbnail     String?
   isPublic      Boolean         @default(true)
-  ownderId      String
-  owner         User      @relation(fields: [ownderId], references: [id], onDelete: Cascade)
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   allowedUsers  TemplateAccess[]
   questions     Question[]
   forms         Form[]
@@ -64,7 +64,7 @@ model Tag {
 model TagOnTemplate {
   templateId    String
   tagId         String
-  templete      Template   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  template      Template   @relation(fields: [templateId], references: [id], onDelete: Cascade)
   tag           Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([templateId, tagId])
