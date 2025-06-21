@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 // const { testConnection } = require()"./db/config";
 const userRoutes = require("./routes/user.routes");
+const templateRoutes = require("./routes/template.routes");
 const { port } = require("./constants");
 
 const app = express();
@@ -24,6 +25,7 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/api/user", userRoutes);
+app.use("/api/template", templateRoutes);
 
 // 404 handler
 app.use("*", (req, res) => {
