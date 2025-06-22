@@ -58,6 +58,7 @@ const login = async (req, res) => {
     user.pass = undefined;
     // Generate JWT token
     const token = genJWTToken(user);
+    res.cookie("token", token);
     res.status(201).json({
       success: true,
       message: "User logged successfully",

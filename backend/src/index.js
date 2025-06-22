@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const userRoutes = require("./routes/user.routes");
 const templateRoutes = require("./routes/template.routes");
 const { port } = require("./constants");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(helmet()); // Security headers
 app.use(cors()); // Enable CORS
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(cookieParser()); // Parse cookies
 
 // Health check endpoint
 app.get("/health", (req, res) => {
