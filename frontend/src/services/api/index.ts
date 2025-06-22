@@ -1,5 +1,6 @@
 import axios from "axios";
 import { registerSchema, loginSchema } from "../../schemas/user";
+import { FormTemplate, CreateFormTemplate } from "../../types";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -20,4 +21,11 @@ export const loginApi = async (fromData: any) => {
   const { email, pass } = loginSchema.parse(fromData);
   const res = await api.post("/api/user/login", { email, pass });
   return res.data;
+};
+
+export const createForm = async (data: CreateFormTemplate) => {
+  return api.post<FormTemplate>("/api/template/create", data);
+};
+export const uploadThumbnail = async (file: File) => {
+  return api.post<{ url: string }>("/api/template/upload-thumbnail", file);
 };
