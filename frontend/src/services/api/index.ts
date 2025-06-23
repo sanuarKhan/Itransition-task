@@ -1,6 +1,6 @@
 import axios from "axios";
 import { registerSchema, loginSchema } from "../../schemas/user";
-import { FormTemplate, CreateFormTemplate } from "../../types";
+import type { FormTemplate, CreateFormTemplate } from "../../types";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
