@@ -12,7 +12,7 @@ datasource db {
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
-  pass      String
+  password  String
   name      String
   img       String?
   lang      Language @default(EN)
@@ -26,6 +26,8 @@ model User {
   accessTo  TemplateAccess[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
 
 model Template {
@@ -43,6 +45,10 @@ model Template {
   comments      Comment[]
   likes         Like[]
   tags          TagOnTemplate[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("templates")
 }
 
 model TemplateAccess {
@@ -53,12 +59,16 @@ model TemplateAccess {
   user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([templateId, userId])
+  @@map("template_access")//TODO: need to study this
 }
 
 model Tag {
   id            String    @id   @default(uuid())
   name          String    @unique
   templates     TagOnTemplate[]
+  createdAt     DateTime  @default(now())
+
+  @@map("tags")
 }
 
 model TagOnTemplate {
@@ -68,6 +78,7 @@ model TagOnTemplate {
   tag           Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([templateId, tagId])
+  @@map("template_tags")
 }
 
 model Question {
@@ -81,6 +92,10 @@ model Question {
   isRequired    Boolean   @default(false)
   template      Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
   answers       Answer[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("questions")
 }
 
 model Answer {
@@ -94,6 +109,8 @@ model Answer {
   form          Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("answers")
 }
 
 model Form {
@@ -103,8 +120,11 @@ model Form {
   template      Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers       Answer[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@unique([templateId, userId])
+  @@map("forms")
 }
 
 model Comment {
@@ -116,6 +136,8 @@ model Comment {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@map("comments")
 }
 
 model Like {
@@ -128,6 +150,7 @@ model Like {
   updatedAt   DateTime  @updatedAt
 
   @@unique([templateId, userId])
+  @@map("likes")
 
 }
 

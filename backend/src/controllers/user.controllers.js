@@ -40,19 +40,25 @@ const login = async (req, res) => {
       },
     });
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
     const validPass = await bcrypt.compare(pass, user.pass);
 
     if (!validPass) {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "User is blocked",
       });
     }
     user.pass = undefined;

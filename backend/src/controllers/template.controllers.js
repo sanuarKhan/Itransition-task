@@ -8,60 +8,37 @@ const createTemplate = async (req, res) => {
       topic,
       thumbnail,
       isPublic,
-      questions = [],
-      tags = [],
+      tags,
+      allowedUsers,
     } = req.body;
-    const ownerId = req.user.id;
-
-    const validTopics = [
-      "EDUCATION",
-      "BUDGETS",
-      "QUIZZ",
-      "REPORTS",
-      "RESEARCH",
-      "SURVEY",
-      "PULL",
-      "OTHERS",
-    ];
-
-    if (!validTopics.includes(topic)) {
+    if (!title || !description || !topic) {
       return res.status(400).json({
         success: false,
-        message: "Invalid topic. must be one of: " + validTopics.join(", "),
+        message: "Title, description and topic are required fields",
       });
     }
-
+    const ownerId = req.user.id;
     const newTemplate = await db.template.create({
       data: {
         title,
         description,
         topic,
         thumbnail,
-        isPublic,
-        owner: {
-          connect: {
-            id: ownerId,
-          },
-        },
-        questions: {
-          create: questions.map((question, index) => ({
-            title: question.title,
-            description: question.description || "",
-            type: question.type,
-            showInTable: question.showInTable || false,
-            order: question.order !== undefined ? question.order : index,
-            isRequired: question.isRequired || false,
-          })),
-        },
+        isPublic: isPublic !== false,
+        ownerId,
         tags: {
-          create: tags.map((tagName) => ({
-            tag: {
-              connectOrCreate: {
-                where: { name: tagName },
-                create: { name: tagName },
+          create:
+            tags.map((tagName) => ({
+              tag: {
+                connectOrCreate: {
+                  where: { name: tagName },
+                  create: { name: tagName },
+                },
               },
-            },
-          })),
+            })) || [],
+        },
+        allowedUsers: {
+          create: allowedUsers.map((userId) => ({ userId })) || [],
         },
       },
       include: {
@@ -71,21 +48,19 @@ const createTemplate = async (req, res) => {
             name: true,
           },
         },
-        questions: {
-          orderBy: {
-            order: "asc",
-          },
-        },
         tags: {
           include: {
             tag: true,
           },
         },
-        _count: {
-          select: {
-            forms: true,
-            comments: true,
-            likes: true,
+        allowedUsers: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
