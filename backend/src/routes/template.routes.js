@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const auth = require("../middleware/auth.middleware");
+const { auth } = require("../middleware/auth.middleware");
 const { createTemplate } = require("../controllers/template.controllers");
 const upload = require("../service/imageUploader");
 

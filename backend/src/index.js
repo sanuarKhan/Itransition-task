@@ -1,61 +1,61 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-// const { testConnection } = require()"./db/config";
-const userRoutes = require("./routes/user.routes");
-const templateRoutes = require("./routes/template.routes");
-const { port } = require("./constants");
-const cookieParser = require("cookie-parser");
+// const express = require("express");
+// const cors = require("cors");
+// const helmet = require("helmet");
+// // const { testConnection } = require()"./db/config";
+// const userRoutes = require("./routes/user.routes");
+// const templateRoutes = require("./routes/template.routes");
+// const { port } = require("./constants");
+// const cookieParser = require("cookie-parser");
 
-const app = express();
+// const app = express();
 
-// Middleware
-app.use(helmet()); // Security headers
-app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
-app.use(cookieParser()); // Parse cookies
+// // Middleware
+// app.use(helmet()); // Security headers
+// app.use(cors()); // Enable CORS
+// app.use(express.json()); // Parse JSON bodies
+// app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+// app.use(cookieParser()); // Parse cookies
 
-// Health check endpoint
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-  });
-});
+// // Health check endpoint
+// app.get("/health", (req, res) => {
+//   res.json({
+//     status: "OK",
+//     timestamp: new Date().toISOString(),
+//     uptime: process.uptime(),
+//   });
+// });
 
-// API routes
-app.use("/api/user", userRoutes);
-app.use("/api/template", templateRoutes);
+// // API routes
+// app.use("/api/user", userRoutes);
+// app.use("/api/template", templateRoutes);
 
-// 404 handler
-app.use("*", (req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
+// // 404 handler
+// app.use("*", (req, res) => {
+//   res.status(404).json({ error: "Route not found" });
+// });
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error("Global error handler:", err);
-  res.status(500).json({
-    error: "Internal server error",
-    message:
-      process.env.NODE_ENV === "development"
-        ? err.message
-        : "Something went wrong",
-  });
-});
+// // Global error handler
+// app.use((err, req, res, next) => {
+//   console.error("Global error handler:", err);
+//   res.status(500).json({
+//     error: "Internal server error",
+//     message:
+//       process.env.NODE_ENV === "development"
+//         ? err.message
+//         : "Something went wrong",
+//   });
+// });
 
-// Start server
-async function startServer() {
-  try {
-    app.listen(port, () => {
-      console.log(`🚀 Server running on port ${port}`);
-    });
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  }
-}
+// // Start server
+// async function startServer() {
+//   try {
+//     app.listen(port, () => {
+//       console.log(`🚀 Server running on port ${port}`);
+//     });
+//   } catch (error) {
+//     console.error("Failed to start server:", error);
+//     process.exit(1);
+//   }
+// }
 
-startServer();
+// startServer();
