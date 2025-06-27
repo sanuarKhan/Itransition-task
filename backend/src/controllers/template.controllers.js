@@ -9,7 +9,7 @@ const createTemplate = async (req, res) => {
       thumbnail,
       isPublic,
       tags,
-      allowedUsers,
+      allowedUserIds,
     } = req.body;
     if (!title || !description || !topic) {
       return res.status(400).json({
@@ -28,7 +28,7 @@ const createTemplate = async (req, res) => {
         ownerId,
         tags: {
           create:
-            tags.map((tagName) => ({
+            tags?.map((tagName) => ({
               tag: {
                 connectOrCreate: {
                   where: { name: tagName },
@@ -38,7 +38,7 @@ const createTemplate = async (req, res) => {
             })) || [],
         },
         allowedUsers: {
-          create: allowedUsers.map((userId) => ({ userId })) || [],
+          create: allowedUserIds?.map((userId) => ({ userId })) || [],
         },
       },
       include: {

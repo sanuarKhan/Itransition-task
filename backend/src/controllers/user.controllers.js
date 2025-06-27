@@ -4,15 +4,15 @@ const { genJWTToken } = require("../utils/tokenGen");
 
 const register = async (req, res) => {
   try {
-    const { email, name, pass } = req.body;
+    const { email, name, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(pass, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await db.user.create({
       data: {
         email,
         name,
-        pass: hashedPassword,
+        password: hashedPassword,
       },
     });
     res.status(201).json({
@@ -32,7 +32,7 @@ const register = async (req, res) => {
 //login controller
 const login = async (req, res) => {
   try {
-    const { email, pass } = req.body;
+    const { email, password } = req.body;
 
     const user = await db.user.findUnique({
       where: {
@@ -40,7 +40,7 @@ const login = async (req, res) => {
       },
     });
 
-    const validPass = await bcrypt.compare(pass, user.pass);
+    const validPass = await bcrypt.compare(password, user.password);
 
     if (!validPass) {
       return res.status(401).json({
