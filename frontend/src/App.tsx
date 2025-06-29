@@ -1,32 +1,144 @@
-// import React { useEffect} from "react";
-// import { useTranslation } from "react-i18next";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useAuthStore, useUIStore } from "./store/index";
+import { Layout } from "./components/Layout/Layout";
 
-import "./App.css";
+// Pages
+import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/auth/LoginPage";
+import { RegisterPage } from "./pages/auth/RegisterPage";
+import { ProfilePage } from "./pages/auth/ProfilePage";
+import { DashboardPage } from "./pages/DashBoardPage";
+import { SearchPage } from "./pages/SearchPage";
 
-import Layout from "./components/Layout";
+// Template Pages
+import { TemplatesPage } from "./pages/Templates/TemplatesPage";
+import { TemplateViewPage } from "./pages/Templates/TemplateViewPage";
+import { TemplateCreatePage } from "./pages/Templates/TemplateCreatePage";
+import { TemplateEditPage } from "./pages/Templates/TemplateEditPage";
 
-//pages
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+// Form Pages
+import { FormsPage } from "./pages/forms/FormsPage";
+import { FormViewPage } from "./pages/forms/FormViewPage";
+import { FormFillPage } from "./pages/forms/FormFillPage";
 
-//template pages
-import { TemplateCreatePage } from "./pages/templates/TemplateCreatePage";
+// Admin Pages
+import { AdminPage } from "./pages/admin/AdminPage";
 
-const App: React.FC = () => {
+// Route Guards
+import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
+import { AdminRoute } from "./components/Auth/AdminRoute";
+
+function App() {
+  const { i18n } = useTranslation();
+  const { user, refreshUser } = useAuthStore();
+  const { theme, language, setTheme } = useUIStore();
+
+  // Initialize app
+  useEffect(() => {
+    // Set theme
+    document.documentElement.setAttribute("data-bs-theme", theme.toLowerCase());
+
+    // Set language
+    i18n.changeLanguage(language.toLowerCase());
+
+    // Refresh user data if token exists
+    const token = localStorage.getItem("token");
+    if (token && !user) {
+      refreshUser();
+    }
+  }, [theme, language, i18n, user, refreshUser]);
+
+  // Update theme when it changes
+  useEffect(() => {
+    document.documentElement.setAttribute("data-bs-theme", theme.toLowerCase());
+  }, [theme]);
+
   return (
-    <BrowserRouter>
+    <Layout>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* <Route path="/templates/create" element={<TemplateCreatePage />} /> */}
-        </Route>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/templates" element={<TemplatesPage />} />
+        <Route path="/templates/:id" element={<TemplateViewPage />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/templates/create"
+          element={
+            <ProtectedRoute>
+              <TemplateCreatePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/templates/:id/edit"
+          element={
+            <ProtectedRoute>
+              <TemplateEditPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/templates/:id/fill"
+          element={
+            <ProtectedRoute>
+              <FormFillPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forms"
+          element={
+            <ProtectedRoute>
+              <FormsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forms/:id"
+          element={
+            <ProtectedRoute>
+              <FormViewPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
+          }
+        />
+
+        {/* Catch all route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </Layout>
   );
-};
+}
 
 export default App;

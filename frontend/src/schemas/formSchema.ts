@@ -33,13 +33,10 @@ export const formTemplateSchema = z.object({
     "PULL",
     "OTHERS",
   ]),
-  thumbnail: z.instanceof(File).nullable(),
+  thumbnail: z.string().optional(),
   isPublic: z.boolean().default(true),
   tags: z.array(z.string()),
-  questions: z.array(questionSchema),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  userId: z.string().optional(),
+  allowUserIds: z.array(z.string()).optional(),
 });
 
 export type FormTemplateInput = z.infer<typeof formTemplateSchema>;
