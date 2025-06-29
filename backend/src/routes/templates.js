@@ -4,7 +4,7 @@ const {
   authenticateToken,
   optionalAuth,
   requireAdmin,
-} = require("../middleware/auth");
+} = require("../middleware/auth.middleware");
 
 const router = express.Router();
 const prisma = new PrismaClient();

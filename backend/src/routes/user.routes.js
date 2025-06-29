@@ -6,123 +6,123 @@ const router = Router();
 
 // POST /api/users - Create new user
 // Register
-router.post("/register", async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
+// router.post("/register", async (req, res) => {
+//   try {
+//     const { email, password, name } = req.body;
 
-    // Validation
-    if (!email || !password || !name) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
+//     // Validation
+//     if (!email || !password || !name) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
 
-    if (password.length < 5) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 5 characters" });
-    }
+//     if (password.length < 5) {
+//       return res
+//         .status(400)
+//         .json({ error: "Password must be at least 5 characters" });
+//     }
 
-    // Check if user exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+//     // Check if user exists
+//     const existingUser = await prisma.user.findUnique({
+//       where: { email },
+//     });
 
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
-    }
+//     if (existingUser) {
+//       return res.status(400).json({ error: "User already exists" });
+//     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
+//     // Hash password
+//     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        language: true,
-        theme: true,
-        avatar: true,
-        createdAt: true,
-      },
-    });
+//     // Create user
+//     const user = await prisma.user.create({
+//       data: {
+//         email,
+//         password: hashedPassword,
+//         name,
+//       },
+//       select: {
+//         id: true,
+//         email: true,
+//         name: true,
+//         role: true,
+//         language: true,
+//         theme: true,
+//         avatar: true,
+//         createdAt: true,
+//       },
+//     });
 
-    // Generate token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+//     // Generate token
+//     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
 
-    res.status(201).json({
-      message: "User created successfully",
-      user,
-      token,
-    });
-  } catch (error) {
-    console.error("Register error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     res.status(201).json({
+//       message: "User created successfully",
+//       user,
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Register error:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
-// Login
-router.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// // Login
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
+//     if (!email || !password) {
+//       return res.status(400).json({ error: "Email and password are required" });
+//     }
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+//     // Find user
+//     const user = await prisma.user.findUnique({
+//       where: { email },
+//     });
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
+//     if (!user) {
+//       return res.status(401).json({ error: "Invalid credentials" });
+//     }
 
-    if (user.isBlocked) {
-      return res.status(403).json({ error: "Account is blocked" });
-    }
+//     if (user.isBlocked) {
+//       return res.status(403).json({ error: "Account is blocked" });
+//     }
 
-    // Check password
-    const isValidPassword = await bcrypt.compare(password, user.password);
+//     // Check password
+//     const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isValidPassword) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
+//     if (!isValidPassword) {
+//       return res.status(401).json({ error: "Invalid credentials" });
+//     }
 
-    // Generate token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+//     // Generate token
+//     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
 
-    const userResponse = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      language: user.language,
-      theme: user.theme,
-      avatar: user.avatar,
-      createdAt: user.createdAt,
-    };
+//     const userResponse = {
+//       id: user.id,
+//       email: user.email,
+//       name: user.name,
+//       role: user.role,
+//       language: user.language,
+//       theme: user.theme,
+//       avatar: user.avatar,
+//       createdAt: user.createdAt,
+//     };
 
-    res.json({
-      message: "Login successful",
-      user: userResponse,
-      token,
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     res.json({
+//       message: "Login successful",
+//       user: userResponse,
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 // Get current user
 router.get("/me", authenticateToken, async (req, res) => {
