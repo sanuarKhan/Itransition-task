@@ -1,10 +1,12 @@
-const { Router } = require("express");
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { PrismaClient } = require("@prisma/client");
+const { authenticateToken } = require("../middleware/auth");
 
-const { register, login } = require("../controllers/user.controllers");
+const router = express.Router();
+const prisma = new PrismaClient();
 
-const router = Router();
-
-// POST /api/users - Create new user
 // Register
 router.post("/register", async (req, res) => {
   try {
@@ -171,8 +173,7 @@ router.put("/avatar", authenticateToken, async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id: req.user.id },
       data: { avatar },
-      select: {
-        //TODO: need to study
+      select: { //TODO: need to study
         id: true,
         email: true,
         name: true,

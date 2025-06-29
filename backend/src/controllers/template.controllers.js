@@ -95,6 +95,112 @@ const createTemplate = async (req, res) => {
   }
 };
 
+const getPublicTemplates = async (req, res) => {
+  try {
+    const { page = 1, limit = 12, search, topic, tag, userId } = req.query;
+    const offset = (page - 1) * limit;
+
+    let where = { isPublic: true };
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+        {
+          tags: {
+            some: {
+              tag: {
+                name: { contains: search, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    if (topic) {
+      where.topic = topic;
+    }
+
+    if (tag) {
+      where.tags = {
+        some: {
+          tag: { name: tag },
+        },
+      };
+    }
+
+    if (userId) {
+      where.ownerId = userId;
+    }
+
+    const templates = await db.template.findMany({
+      where,
+      include: {
+        owner: {
+          select: { id: true, name: true, avatar: true },
+        },
+        tags: {
+          include: { tag: true },
+        },
+        _count: {
+          select: { forms: true, likes: true, comments: true },
+        },
+        ...(req.user && {
+          likes: {
+            where: { userId: req.user.id },
+            select: { id: true },
+          },
+        }),
+      },
+      orderBy: { updatedAt: "desc" },
+      skip: offset,
+      take: parseInt(limit),
+    });
+
+    const total = await db.template.count({ where });
+
+    res.json({
+      templates,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Get templates error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+const getMyTemplates = async (req, res) => {
+  try {
+    const templates = await db.template.findMany({
+      where: { ownerId: req.user.id },
+      include: {
+        owner: {
+          select: { id: true, name: true, avatar: true },
+        },
+        tags: {
+          include: { tag: true },
+        },
+        questions: {
+          orderBy: { order: "asc" },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    res.json({ templates });
+  } catch (error) {
+    console.error("Get my templates error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   createTemplate,
+  getPublicTemplates,
+  getMyTemplates,
 };

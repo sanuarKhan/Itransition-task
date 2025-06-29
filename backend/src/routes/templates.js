@@ -1,26 +1,125 @@
-const { Router } = require("express");
-const { auth } = require("../middleware/auth.middleware");
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
 const {
-  createTemplate,
-  getMyTemplates,
-  getPublicTemplates,
-} = require("../controllers/template.controllers");
-const upload = require("../service/imageUploader");
+  authenticateToken,
+  optionalAuth,
+  requireAdmin,
+} = require("../middleware/auth");
 
-const router = Router();
-
-router.post("/create", auth, createTemplate);
+const router = express.Router();
+const prisma = new PrismaClient();
 
 // Get all public templates
-router.get("/", optionalAuth, getPublicTemplates);
+router.get("/", optionalAuth, async (req, res) => {
+  try {
+    const { page = 1, limit = 12, search, topic, tag, userId } = req.query;
+    const offset = (page - 1) * limit;
+
+    let where = { isPublic: true };
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+        {
+          tags: {
+            some: {
+              tag: {
+                name: { contains: search, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    if (topic) {
+      where.topic = topic;
+    }
+
+    if (tag) {
+      where.tags = {
+        some: {
+          tag: { name: tag },
+        },
+      };
+    }
+
+    if (userId) {
+      where.ownerId = userId;
+    }
+
+    const templates = await prisma.template.findMany({
+      where,
+      include: {
+        owner: {
+          select: { id: true, name: true, avatar: true },
+        },
+        tags: {
+          include: { tag: true },
+        },
+        _count: {
+          select: { forms: true, likes: true, comments: true },
+        },
+        ...(req.user && {
+          likes: {
+            where: { userId: req.user.id },
+            select: { id: true },
+          },
+        }),
+      },
+      orderBy: { updatedAt: "desc" },
+      skip: offset,
+      take: parseInt(limit),
+    });
+
+    const total = await prisma.template.count({ where });
+
+    res.json({
+      templates,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Get templates error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Get my templates
-router.get("/my", authenticateToken, getMyTemplates);
+router.get("/my", authenticateToken, async (req, res) => {
+  try {
+    const templates = await prisma.template.findMany({
+      where: { ownerId: req.user.id },
+      include: {
+        owner: {
+          select: { id: true, name: true, avatar: true },
+        },
+        tags: {
+          include: { tag: true },
+        },
+        questions: {
+          orderBy: { order: "asc" },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    res.json({ templates });
+  } catch (error) {
+    console.error("Get my templates error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Get single template with questions
 router.get("/:id", optionalAuth, async (req, res) => {
   try {
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
       include: {
         owner: {
@@ -97,7 +196,7 @@ router.post("/", authenticateToken, async (req, res) => {
       });
     }
 
-    const template = await db.template.create({
+    const template = await prisma.template.create({
       data: {
         title,
         description,
@@ -157,7 +256,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
       req.body;
 
     // Check if template exists and user has permission
-    const existingTemplate = await db.template.findUnique({
+    const existingTemplate = await prisma.template.findUnique({
       where: { id: req.params.id },
       include: {
         tags: { include: { tag: true } },
@@ -177,7 +276,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
     }
 
     // Update template in transaction to handle tags and allowed users properly
-    const template = await db.$transaction(async (tx) => {
+    const template = await prisma.$transaction(async (tx) => {
       // First, delete existing tags if new tags are provided
       if (tags) {
         await tx.tagOnTemplate.deleteMany({
@@ -260,7 +359,7 @@ router.put("/:id/questions", authenticateToken, async (req, res) => {
     }
 
     // Check if template exists and user has permission
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
       include: { questions: true },
     });
@@ -314,7 +413,7 @@ router.put("/:id/questions", authenticateToken, async (req, res) => {
     }
 
     // Update questions in transaction
-    await db.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       // Delete existing questions
       await tx.question.deleteMany({
         where: { templateId: req.params.id },
@@ -337,7 +436,7 @@ router.put("/:id/questions", authenticateToken, async (req, res) => {
     });
 
     // Return updated template with questions
-    const updatedTemplate = await db.template.findUnique({
+    const updatedTemplate = await prisma.template.findUnique({
       where: { id: req.params.id },
       include: {
         questions: { orderBy: { order: "asc" } },
@@ -359,7 +458,7 @@ router.put("/:id/questions", authenticateToken, async (req, res) => {
 // Delete template
 router.delete("/:id", authenticateToken, async (req, res) => {
   try {
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
     });
 
@@ -374,7 +473,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    await db.template.delete({
+    await prisma.template.delete({
       where: { id: req.params.id },
     });
 
@@ -388,7 +487,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 // Get template results (filled forms)
 router.get("/:id/results", authenticateToken, async (req, res) => {
   try {
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
     });
 
@@ -403,7 +502,7 @@ router.get("/:id/results", authenticateToken, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    const forms = await db.form.findMany({
+    const forms = await prisma.form.findMany({
       where: { templateId: req.params.id },
       include: {
         user: {
@@ -428,7 +527,7 @@ router.get("/:id/results", authenticateToken, async (req, res) => {
 // Get template analytics
 router.get("/:id/analytics", authenticateToken, async (req, res) => {
   try {
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
       include: { questions: true },
     });
@@ -445,7 +544,7 @@ router.get("/:id/analytics", authenticateToken, async (req, res) => {
     }
 
     // Get analytics data
-    const forms = await db.form.findMany({
+    const forms = await prisma.form.findMany({
       where: { templateId: req.params.id },
       include: {
         answers: {
@@ -517,7 +616,7 @@ router.post("/:id/like", authenticateToken, async (req, res) => {
     const userId = req.user.id;
 
     // Check if template exists
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: templateId },
     });
 
@@ -526,7 +625,7 @@ router.post("/:id/like", authenticateToken, async (req, res) => {
     }
 
     // Check if already liked
-    const existingLike = await db.like.findUnique({
+    const existingLike = await prisma.like.findUnique({
       where: {
         templateId_userId: { templateId, userId },
       },
@@ -534,13 +633,13 @@ router.post("/:id/like", authenticateToken, async (req, res) => {
 
     if (existingLike) {
       // Unlike
-      await db.like.delete({
+      await prisma.like.delete({
         where: { id: existingLike.id },
       });
       res.json({ message: "Template unliked", liked: false });
     } else {
       // Like
-      await db.like.create({
+      await prisma.like.create({
         data: { templateId, userId },
       });
       res.json({ message: "Template liked", liked: true });
@@ -560,7 +659,7 @@ router.post("/:id/comments", authenticateToken, async (req, res) => {
       return res.status(400).json({ error: "Comment content is required" });
     }
 
-    const template = await db.template.findUnique({
+    const template = await prisma.template.findUnique({
       where: { id: req.params.id },
     });
 
@@ -568,7 +667,7 @@ router.post("/:id/comments", authenticateToken, async (req, res) => {
       return res.status(404).json({ error: "Template not found" });
     }
 
-    const comment = await db.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         content: content.trim(),
         templateId: req.params.id,
@@ -597,7 +696,7 @@ router.get("/:id/comments", async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
 
-    const comments = await db.comment.findMany({
+    const comments = await prisma.comment.findMany({
       where: { templateId: req.params.id },
       include: {
         user: {
@@ -609,7 +708,7 @@ router.get("/:id/comments", async (req, res) => {
       take: parseInt(limit),
     });
 
-    const total = await db.comment.count({
+    const total = await prisma.comment.count({
       where: { templateId: req.params.id },
     });
 
