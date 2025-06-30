@@ -4,7 +4,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth.routes");
 const templateRoutes = require("./routes/templates");
 const formRoutes = require("./routes/forms");
 const userRoutes = require("./routes/users");

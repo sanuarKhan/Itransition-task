@@ -1,6 +1,7 @@
 // backend/src/middleware/auth.js
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
+const { decoded } = require("../utils/tokenGen");
 
 const prisma = new PrismaClient();
 
@@ -13,7 +14,7 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = decoded(token);
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: {

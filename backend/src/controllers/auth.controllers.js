@@ -1,14 +1,6 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { PrismaClient } = require("@prisma/client");
-const { authenticateToken } = require("../middleware/auth.middleware");
-
-const router = express.Router();
-const prisma = new PrismaClient();
-
-// Register
-router.post("/register", async (req, res) => {
+const db = require("../db/db");
+const { genJWTToken } = require("../utils/tokenGen");
+const registerCTRL = async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
@@ -24,7 +16,7 @@ router.post("/register", async (req, res) => {
     }
 
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await db.user.findUnique({
       where: { email },
     });
 
@@ -36,7 +28,7 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // Create user
-    const user = await prisma.user.create({
+    const user = await db.user.create({
       data: {
         email,
         password: hashedPassword,
@@ -55,9 +47,7 @@ router.post("/register", async (req, res) => {
     });
 
     // Generate token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = genJWTToken({ userId: user.id });
 
     res.status(201).json({
       message: "User created successfully",
@@ -68,10 +58,9 @@ router.post("/register", async (req, res) => {
     console.error("Register error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Login
-router.post("/login", async (req, res) => {
+const loginCTRL = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -80,7 +69,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Find user
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email },
     });
 
@@ -100,9 +89,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = genJWTToken({ userId: user.id });
 
     const userResponse = {
       id: user.id,
@@ -124,19 +111,17 @@ router.post("/login", async (req, res) => {
     console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get current user
-router.get("/me", authenticateToken, async (req, res) => {
+const currentUserCTRL = async (req, res) => {
   res.json({ user: req.user });
-});
+};
 
-// Update profile
-router.put("/profile", authenticateToken, async (req, res) => {
+const profileCTRL = async (req, res) => {
   try {
     const { name, language, theme } = req.body;
 
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await db.user.update({
       where: { id: req.user.id },
       data: {
         ...(name && { name }),
@@ -163,14 +148,13 @@ router.put("/profile", authenticateToken, async (req, res) => {
     console.error("Profile update error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Update avatar
-router.put("/avatar", authenticateToken, async (req, res) => {
+const avatarCTRL = async (req, res) => {
   try {
     const { avatar } = req.body;
 
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await db.user.update({
       where: { id: req.user.id },
       data: { avatar },
       select: {
@@ -194,6 +178,12 @@ router.put("/avatar", authenticateToken, async (req, res) => {
     console.error("Avatar update error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  registerCTRL,
+  loginCTRL,
+  currentUserCTRL,
+  profileCTRL,
+  avatarCTRL,
+};
