@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Download, User, Calendar, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
-import {  getTemplateResults } from "../../services/api";
+import { getTemplateResults } from "../../services/api";
 import { LoadingSpinner } from "../UI/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -183,7 +183,7 @@ export const TemplateResults: React.FC<TemplateResultsProps> = ({
                     <td>
                       <div className="d-flex gap-1">
                         <Button
-                          as={Link}
+                          as={Link as any}
                           to={`/forms/${form.id}`}
                           variant="outline-primary"
                           size="sm"
@@ -192,7 +192,7 @@ export const TemplateResults: React.FC<TemplateResultsProps> = ({
                           View
                         </Button>
                         <Button
-                          as={Link}
+                          as={Link as any}
                           to={`/forms/${form.id}/edit`}
                           variant="outline-secondary"
                           size="sm"

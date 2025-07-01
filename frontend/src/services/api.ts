@@ -388,7 +388,7 @@ export const uploadImage = async (
   return res.data;
 };
 
-export const uploadAvatar = async (
+export const UploadAvatar = async (
   file: File
 ): Promise<{ url: string; publicId: string; message: string }> => {
   const formData = new FormData();
@@ -402,7 +402,7 @@ export const uploadAvatar = async (
   return res.data;
 };
 
-export const uploadThumbnail = async (file: File): Promise<{ url: string }> => {
+export const UploadThumbnail = async (file: File): Promise<{ url: string }> => {
   const formData = new FormData();
   formData.append("thumbnail", file);
 
@@ -418,7 +418,7 @@ export const uploadThumbnail = async (file: File): Promise<{ url: string }> => {
   return res.data;
 };
 
-export const deleteImage = async (
+export const DeleteImage = async (
   publicId: string
 ): Promise<{ message: string }> => {
   const res = await api.delete(`/api/upload/image/${publicId}`);

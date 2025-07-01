@@ -60,7 +60,7 @@ export interface Template {
   title: string;
   description: string;
   topic: Topic;
-  image?: string;
+  thumbnail?: string;
   isPublic: boolean;
   createdAt: string;
   updatedAt: string;
@@ -68,7 +68,7 @@ export interface Template {
   owner: {
     id: string;
     name: string;
-    avatar?: string;
+    img?: string;
   };
   questions?: Question[];
   tags: {

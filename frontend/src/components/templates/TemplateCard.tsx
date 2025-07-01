@@ -141,7 +141,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
 
           {/* Action Buttons */}
           <div className="d-flex gap-2">
-            {/* FIXED: Use onClick instead of as={Link} */}
+            {/* FIXED: Use onClick instead of as={Link as any} */}
             <Button
               onClick={handleViewClick}
               variant="outline-primary"

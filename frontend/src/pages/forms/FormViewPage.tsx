@@ -69,14 +69,11 @@ export const FormViewPage: React.FC = () => {
 
     setIsDeleting(true);
     try {
-      await deleteForm(form.id);
-
-      // FIXED: Use toast instead of addNotification
+      await deleteForm(form.id); 
       toast.success("Form submission deleted successfully");
 
       navigate("/forms");
     } catch (error: any) {
-      // FIXED: Use toast instead of addNotification
       const errorMessage =
         error.response?.data?.error || "Failed to delete form submission";
       toast.error(errorMessage);
@@ -106,7 +103,7 @@ export const FormViewPage: React.FC = () => {
             The form submission you're looking for doesn't exist or has been
             deleted.
           </p>
-          <Button as={Link} to="/forms" variant="outline-primary">
+          <Button as={Link as any} to="/forms" variant="outline-primary">
             <ArrowLeft size={16} className="me-2" />
             Back to Forms
           </Button>
@@ -121,7 +118,7 @@ export const FormViewPage: React.FC = () => {
       <div className="d-flex justify-content-between align-items-start mb-4">
         <div className="d-flex align-items-center">
           <Button
-            as={Link}
+            as={Link as any}
             to="/forms"
             variant="outline-secondary"
             size="sm"
@@ -141,7 +138,7 @@ export const FormViewPage: React.FC = () => {
         <div className="d-flex gap-2">
           {canEdit && (
             <Button
-              as={Link}
+              as={Link as any}
               to={`/forms/${form.id}/edit`}
               variant="outline-primary"
               size="sm"

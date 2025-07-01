@@ -139,7 +139,7 @@ export const DashboardPage: React.FC = () => {
             </Card.Header>
             <Card.Body>
               <div className="d-grid gap-3">
-                {/* FIXED: Use onClick with navigate instead of as={Link} */}
+                {/* FIXED: Use onClick with navigate instead of as={Link as any} */}
                 <Button
                   onClick={handleCreateTemplate}
                   variant="primary"
@@ -168,7 +168,7 @@ export const DashboardPage: React.FC = () => {
           <Card className="h-100">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <h5 className="mb-0">{t("dashboard.recent.templates")}</h5>
-              {/* FIXED: Use Button with onClick instead of as={Link} */}
+              {/* FIXED: Use Button with onClick instead of as={Link as any} */}
               <Button
                 onClick={handleViewTemplates}
                 variant="outline-primary"

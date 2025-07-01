@@ -46,7 +46,7 @@ export const Navbar: React.FC = () => {
       sticky="top"
     >
       <Container>
-        <BSNavbar.Brand as={Link} to="/" className="fw-bold">
+        <BSNavbar.Brand as={Link as any} to="/" className="fw-bold">
           FormCraft
         </BSNavbar.Brand>
 
@@ -54,31 +54,39 @@ export const Navbar: React.FC = () => {
 
         <BSNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" active={isActive("/")}>
+            <Nav.Link as={Link as any} to="/" active={isActive("/")}>
               {t("nav.home")}
             </Nav.Link>
 
             {user && (
               <>
                 <Nav.Link
-                  as={Link}
+                  as={Link as any}
                   to="/dashboard"
                   active={isActive("/dashboard")}
                 >
                   {t("nav.dashboard")}
                 </Nav.Link>
                 <Nav.Link
-                  as={Link}
+                  as={Link as any}
                   to="/templates"
                   active={isActive("/templates")}
                 >
                   {t("nav.templates")}
                 </Nav.Link>
-                <Nav.Link as={Link} to="/forms" active={isActive("/forms")}>
+                <Nav.Link
+                  as={Link as any}
+                  to="/forms"
+                  active={isActive("/forms")}
+                >
                   {t("nav.forms")}
                 </Nav.Link>
                 {user.role === "ADMIN" && (
-                  <Nav.Link as={Link} to="/admin" active={isActive("/admin")}>
+                  <Nav.Link
+                    as={Link as any}
+                    to="/admin"
+                    active={isActive("/admin")}
+                  >
                     {t("nav.admin")}
                   </Nav.Link>
                 )}
@@ -144,7 +152,7 @@ export const Navbar: React.FC = () => {
                 }
                 id="user-dropdown"
               >
-                <NavDropdown.Item as={Link} to="/profile">
+                <NavDropdown.Item as={Link as any} to="/profile">
                   <Settings size={16} className="me-2" />
                   {t("nav.profile")}
                 </NavDropdown.Item>
@@ -156,10 +164,10 @@ export const Navbar: React.FC = () => {
               </NavDropdown>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login">
+                <Nav.Link as={Link as any} to="/login">
                   {t("nav.login")}
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register">
+                <Nav.Link as={Link as any} to="/register">
                   {t("nav.register")}
                 </Nav.Link>
               </>

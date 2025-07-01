@@ -27,11 +27,12 @@ import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import { ConfirmModal } from "../../components/UI/ConfirmModal";
 import { Form as FormType } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "react-toastify";
 
 export const FormsPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
-  const { addNotification } = useUIStore();
+
   const { forms, fetchMyForms, deleteForm } = useFormsStore();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,16 +64,11 @@ export const FormsPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await deleteForm(deleteFormId);
-      addNotification({
-        type: "success",
-        title: "Form submission deleted successfully",
-      });
+      toast.success("Form submission deleted successfully");
     } catch (error: any) {
-      addNotification({
-        type: "error",
-        title:
-          error.response?.data?.error || "Failed to delete form submission",
-      });
+      const errorMessage =
+        error.response?.data?.error || "Failed to delete form submission";
+      toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
       setDeleteFormId(null);
@@ -228,7 +224,7 @@ export const FormsPage: React.FC = () => {
                       <td>
                         <div className="d-flex gap-1">
                           <Button
-                            as={Link}
+                            as={Link as any}
                             to={`/forms/${form.id}`}
                             variant="outline-primary"
                             size="sm"
@@ -237,7 +233,7 @@ export const FormsPage: React.FC = () => {
                             <Eye size={14} />
                           </Button>
                           <Button
-                            as={Link}
+                            as={Link as any}
                             to={`/templates/${form.template.id}/fill`}
                             variant="outline-secondary"
                             size="sm"

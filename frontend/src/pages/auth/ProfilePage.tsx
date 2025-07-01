@@ -13,12 +13,12 @@ import { useTranslation } from "react-i18next";
 import { Camera, Save } from "lucide-react";
 import { useAuthStore } from "../../store/index";
 import { UpdateProfileData } from "../../types/index";
-import { uploadAvatar } from "../../services/api";
+import { UploadAvatar } from "../../services/api";
 import { toast } from "react-toastify";
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const { user, UpdateProfile, UpdateAvatar, isLoading, error, clearError } =
+  const { user, updateProfile, updateAvatar, isLoading, error, clearError } =
     useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,18 +31,22 @@ export const ProfilePage: React.FC = () => {
 
   if (!user) return null;
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (error) clearError();
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await UpdateProfile(formData); // Fixed: Use capital U
+      await updateProfile(formData); // Fixed: Use capital U
       toast.success(t("auth.profile.updateSuccess"));
     } catch (error) {
       toast.error(t("auth.profile.updateError"));
@@ -67,8 +71,8 @@ export const ProfilePage: React.FC = () => {
 
     setUploadingAvatar(true);
     try {
-      const uploadResponse = await uploadAvatar(file);
-      await UpdateAvatar(uploadResponse.url); // Fixed: Use capital U
+      const uploadResponse = await UploadAvatar(file);
+      await updateAvatar(uploadResponse.url); // Fixed: Use capital U
       toast.success("Avatar updated successfully");
     } catch (error) {
       toast.error("Failed to update avatar");
@@ -143,7 +147,7 @@ export const ProfilePage: React.FC = () => {
                         type="text"
                         name="name"
                         value={formData.name}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         required
                         disabled={isLoading}
                       />
@@ -176,7 +180,7 @@ export const ProfilePage: React.FC = () => {
                           <Form.Select
                             name="language"
                             value={formData.language}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             disabled={isLoading}
                           >
                             <option value="EN">{t("languages.EN")}</option>
@@ -191,7 +195,7 @@ export const ProfilePage: React.FC = () => {
                           <Form.Select
                             name="theme"
                             value={formData.theme}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             disabled={isLoading}
                           >
                             <option value="LIGHT">{t("themes.LIGHT")}</option>
