@@ -5,11 +5,11 @@ const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth.routes");
-const templateRoutes = require("./routes/templates");
-const formRoutes = require("./routes/forms");
-const userRoutes = require("./routes/users");
-const searchRoutes = require("./routes/search");
-const uploadRoutes = require("./routes/upload");
+const templateRoutes = require("./routes/template.routes");
+const formRoutes = require("./routes/form.routes");
+const userRoutes = require("./routes/users.routes");
+const searchRoutes = require("./routes/search.routes");
+const uploadRoutes = require("./routes/upload.routes");
 
 const app = express();
 

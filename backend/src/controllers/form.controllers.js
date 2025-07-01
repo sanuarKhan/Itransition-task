@@ -1,14 +1,8 @@
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const { authenticateToken } = require("../middleware/auth.middleware");
+const db = require("../db/db");
 
-const router = express.Router();
-const prisma = new PrismaClient();
-
-// Get user's forms
-router.get("/my", authenticateToken, async (req, res) => {
+const getMyFormsCTRL = async (req, res) => {
   try {
-    const forms = await prisma.form.findMany({
+    const forms = await db.form.findMany({
       where: { userId: req.user.id },
       include: {
         template: {
@@ -43,12 +37,11 @@ router.get("/my", authenticateToken, async (req, res) => {
     console.error("Get my forms error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get specific form
-router.get("/:id", authenticateToken, async (req, res) => {
+const getFormByIdCTRL = async (req, res) => {
   try {
-    const form = await prisma.form.findUnique({
+    const form = await db.form.findUnique({
       where: { id: req.params.id },
       include: {
         template: {
@@ -91,12 +84,11 @@ router.get("/:id", authenticateToken, async (req, res) => {
     console.error("Get form error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Check if user has filled template
-router.get("/check/:templateId", authenticateToken, async (req, res) => {
+const checkFormExistsCTRL = async (req, res) => {
   try {
-    const form = await prisma.form.findUnique({
+    const form = await db.form.findUnique({
       where: {
         templateId_userId: {
           templateId: req.params.templateId,
@@ -122,16 +114,15 @@ router.get("/check/:templateId", authenticateToken, async (req, res) => {
     console.error("Check form error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Submit form
-router.post("/submit/:templateId", authenticateToken, async (req, res) => {
+const submitFormCTRL = async (req, res) => {
   try {
     const { answers } = req.body;
     const templateId = req.params.templateId;
 
     // Check if template exists
-    const template = await prisma.template.findUnique({
+    const template = await db.template.findUnique({
       where: { id: templateId },
       include: {
         questions: true,
@@ -155,7 +146,7 @@ router.post("/submit/:templateId", authenticateToken, async (req, res) => {
     }
 
     // Check if user already submitted
-    const existingForm = await prisma.form.findUnique({
+    const existingForm = await db.form.findUnique({
       where: {
         templateId_userId: {
           templateId,
@@ -203,7 +194,7 @@ router.post("/submit/:templateId", authenticateToken, async (req, res) => {
     }
 
     // Create form and answers
-    const form = await prisma.form.create({
+    const form = await db.form.create({
       data: {
         templateId,
         userId: req.user.id,
@@ -236,14 +227,13 @@ router.post("/submit/:templateId", authenticateToken, async (req, res) => {
     console.error("Submit form error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Update form (edit answers)
-router.put("/:id", authenticateToken, async (req, res) => {
+const updateFormCTRL = async (req, res) => {
   try {
     const { answers } = req.body;
 
-    const form = await prisma.form.findUnique({
+    const form = await db.form.findUnique({
       where: { id: req.params.id },
       include: {
         template: {
@@ -299,12 +289,12 @@ router.put("/:id", authenticateToken, async (req, res) => {
     }
 
     // Delete existing answers
-    await prisma.answer.deleteMany({
+    await db.answer.deleteMany({
       where: { formId: req.params.id },
     });
 
     // Create new answers
-    await prisma.answer.createMany({
+    await db.answer.createMany({
       data: answers.map((answer) => ({
         formId: req.params.id,
         questionId: answer.questionId,
@@ -315,7 +305,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
     });
 
     // Fetch updated form
-    const updatedForm = await prisma.form.findUnique({
+    const updatedForm = await db.form.findUnique({
       where: { id: req.params.id },
       include: {
         template: {
@@ -337,12 +327,11 @@ router.put("/:id", authenticateToken, async (req, res) => {
     console.error("Update form error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Delete form
-router.delete("/:id", authenticateToken, async (req, res) => {
+const deleteFormCTRL = async (req, res) => {
   try {
-    const form = await prisma.form.findUnique({
+    const form = await db.form.findUnique({
       where: { id: req.params.id },
       include: {
         template: {
@@ -365,7 +354,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    await prisma.form.delete({
+    await db.form.delete({
       where: { id: req.params.id },
     });
 
@@ -374,16 +363,15 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     console.error("Delete form error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get form statistics for dashboard
-router.get("/stats/overview", authenticateToken, async (req, res) => {
+const getFormStatsCTRL = async (req, res) => {
   try {
     const [totalForms, myForms, recentForms] = await Promise.all([
-      prisma.form.count({
+      db.form.count({
         where: { userId: req.user.id },
       }),
-      prisma.form.findMany({
+      db.form.findMany({
         where: { userId: req.user.id },
         include: {
           template: {
@@ -393,7 +381,7 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
         orderBy: { createdAt: "desc" },
         take: 5,
       }),
-      prisma.form.findMany({
+      db.form.findMany({
         where: { userId: req.user.id },
         include: {
           template: {
@@ -406,7 +394,7 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
     ]);
 
     // Forms by topic
-    const formsByTopic = await prisma.form.groupBy({
+    const formsByTopic = await db.form.groupBy({
       by: ["template.topic"],
       where: { userId: req.user.id },
       _count: true,
@@ -421,6 +409,14 @@ router.get("/stats/overview", authenticateToken, async (req, res) => {
     console.error("Get form stats error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getMyFormsCTRL,
+  getFormByIdCTRL,
+  checkFormExistsCTRL,
+  submitFormCTRL,
+  updateFormCTRL,
+  deleteFormCTRL,
+  getFormStatsCTRL,
+};

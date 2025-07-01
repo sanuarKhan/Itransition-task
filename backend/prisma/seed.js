@@ -17,7 +17,7 @@ async function main() {
       password: adminPassword,
       name: "Admin User",
       role: "ADMIN",
-      language: "EN",
+      lang: "EN",
       theme: "LIGHT",
     },
   });
@@ -32,7 +32,7 @@ async function main() {
       password: userPassword,
       name: "Test User",
       role: "USER",
-      language: "EN",
+      lang: "EN",
       theme: "LIGHT",
     },
   });

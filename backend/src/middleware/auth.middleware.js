@@ -1,9 +1,7 @@
 // backend/src/middleware/auth.js
 const jwt = require("jsonwebtoken");
-const { PrismaClient } = require("@prisma/client");
+const db = require("../db/db");
 const { decoded } = require("../utils/tokenGen");
-
-const prisma = new PrismaClient();
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -14,9 +12,10 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = decoded(token);
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+    const decodedToken = decoded(token);
+    console.log(decodedToken.userId);
+    const user = await db.user.findUnique({
+      where: { id: decodedToken.userId },
       select: {
         id: true,
         email: true,
@@ -57,9 +56,9 @@ const optionalAuth = async (req, res, next) => {
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
+      const decodedToken = decoded(token);
+      const user = await db.user.findUnique({
+        where: { id: decodedToken.userId },
         select: {
           id: true,
           email: true,

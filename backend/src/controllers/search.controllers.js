@@ -1,12 +1,6 @@
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const { optionalAuth } = require("../middleware/auth.middleware");
+const db = require("../db/db");
 
-const router = express.Router();
-const prisma = new PrismaClient();
-
-// Full-text search for templates
-router.get("/templates", optionalAuth, async (req, res) => {
+const searchTemplatesCTRL = async (req, res) => {
   try {
     const { q, topic, tags, page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
@@ -100,7 +94,7 @@ router.get("/templates", optionalAuth, async (req, res) => {
       }),
     };
 
-    const templates = await prisma.template.findMany({
+    const templates = await db.template.findMany({
       where,
       include: {
         owner: {
@@ -128,7 +122,7 @@ router.get("/templates", optionalAuth, async (req, res) => {
       take: parseInt(limit),
     });
 
-    const total = await prisma.template.count({ where });
+    const total = await db.template.count({ where });
 
     res.json({
       templates,
@@ -144,10 +138,9 @@ router.get("/templates", optionalAuth, async (req, res) => {
     console.error("Search templates error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get all tags for autocomplete
-router.get("/tags", async (req, res) => {
+const getTagsCTRL = async (req, res) => {
   try {
     const { q } = req.query;
 
@@ -160,7 +153,7 @@ router.get("/tags", async (req, res) => {
         }
       : {};
 
-    const tags = await prisma.tag.findMany({
+    const tags = await db.tag.findMany({
       where,
       select: {
         id: true,
@@ -182,12 +175,11 @@ router.get("/tags", async (req, res) => {
     console.error("Get tags error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get tag cloud
-router.get("/tag-cloud", async (req, res) => {
+const getTagCloudCTRL = async (req, res) => {
   try {
-    const tags = await prisma.tag.findMany({
+    const tags = await db.tag.findMany({
       select: {
         id: true,
         name: true,
@@ -227,10 +219,9 @@ router.get("/tag-cloud", async (req, res) => {
     console.error("Get tag cloud error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-// Get search suggestions
-router.get("/suggestions", async (req, res) => {
+const getSuggestionsCTRL = async (req, res) => {
   try {
     const { q } = req.query;
 
@@ -239,7 +230,7 @@ router.get("/suggestions", async (req, res) => {
     }
 
     // Get template titles
-    const templates = await prisma.template.findMany({
+    const templates = await db.template.findMany({
       where: {
         isPublic: true,
         title: {
@@ -252,7 +243,7 @@ router.get("/suggestions", async (req, res) => {
     });
 
     // Get tag names
-    const tags = await prisma.tag.findMany({
+    const tags = await db.tag.findMany({
       where: {
         name: {
           contains: q,
@@ -273,6 +264,11 @@ router.get("/suggestions", async (req, res) => {
     console.error("Get suggestions error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  searchTemplatesCTRL,
+  getTagsCTRL,
+  getTagCloudCTRL,
+  getSuggestionsCTRL,
+};

@@ -1,5 +1,7 @@
+//src/controllers/auth.controllers.js
 const db = require("../db/db");
 const { genJWTToken } = require("../utils/tokenGen");
+const bcrypt = require("bcryptjs");
 const registerCTRL = async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -47,7 +49,7 @@ const registerCTRL = async (req, res) => {
     });
 
     // Generate token
-    const token = genJWTToken({ userId: user.id });
+    const token = genJWTToken(user.id);
 
     res.status(201).json({
       message: "User created successfully",
@@ -89,7 +91,7 @@ const loginCTRL = async (req, res) => {
     }
 
     // Generate token
-    const token = genJWTToken({ userId: user.id });
+    const token = genJWTToken(user.id);
 
     const userResponse = {
       id: user.id,
