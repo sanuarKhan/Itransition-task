@@ -192,7 +192,7 @@ const createTemplate = async (req, res) => {
         title,
         description,
         topic,
-        image: image || null,
+        thumbnail: thumbnail || null,
         isPublic,
         ownerId: req.user.id,
         tags: {
@@ -214,7 +214,7 @@ const createTemplate = async (req, res) => {
       },
       include: {
         owner: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
         tags: {
           include: { tag: true },

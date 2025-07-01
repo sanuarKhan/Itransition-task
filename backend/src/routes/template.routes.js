@@ -2,7 +2,6 @@ const express = require("express");
 const {
   authenticateToken,
   optionalAuth,
-  requireAdmin,
 } = require("../middleware/auth.middleware");
 const {
   getPublicTemplates,

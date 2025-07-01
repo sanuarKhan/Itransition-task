@@ -100,7 +100,7 @@ const loginCTRL = async (req, res) => {
       role: user.role,
       lang: user.lang,
       theme: user.theme,
-      img: user.avatar,
+      img: user.img,
       createdAt: user.createdAt,
     };
 
