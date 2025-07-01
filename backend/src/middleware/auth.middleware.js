@@ -13,7 +13,7 @@ const authenticateToken = async (req, res, next) => {
 
   try {
     const decodedToken = decoded(token);
-    console.log(decodedToken.userId);
+
     const user = await db.user.findUnique({
       where: { id: decodedToken.userId },
       select: {
@@ -22,9 +22,9 @@ const authenticateToken = async (req, res, next) => {
         name: true,
         role: true,
         isBlocked: true,
-        language: true,
+        lang: true,
         theme: true,
-        avatar: true,
+        img: true,
       },
     });
 

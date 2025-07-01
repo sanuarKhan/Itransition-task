@@ -144,7 +144,7 @@ export const getTemplate = async (
 export const createTemplate = async (
   data: CreateTemplateData
 ): Promise<{ template: Template; message: string }> => {
-  const res = await api.post("/api/templates", data);
+  const res = await api.post("/api/templates/create", data);
   return res.data;
 };
 

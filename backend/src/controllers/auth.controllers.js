@@ -41,9 +41,9 @@ const registerCTRL = async (req, res) => {
         email: true,
         name: true,
         role: true,
-        language: true,
+        lang: true,
         theme: true,
-        avatar: true,
+        img: true,
         createdAt: true,
       },
     });
@@ -98,9 +98,9 @@ const loginCTRL = async (req, res) => {
       email: user.email,
       name: user.name,
       role: user.role,
-      language: user.language,
+      lang: user.lang,
       theme: user.theme,
-      avatar: user.avatar,
+      img: user.avatar,
       createdAt: user.createdAt,
     };
 
@@ -121,13 +121,13 @@ const currentUserCTRL = async (req, res) => {
 
 const profileCTRL = async (req, res) => {
   try {
-    const { name, language, theme } = req.body;
+    const { name, lang, theme } = req.body;
 
     const updatedUser = await db.user.update({
       where: { id: req.user.id },
       data: {
         ...(name && { name }),
-        ...(language && { language }),
+        ...(lang && { lang }),
         ...(theme && { theme }),
       },
       select: {
@@ -135,9 +135,9 @@ const profileCTRL = async (req, res) => {
         email: true,
         name: true,
         role: true,
-        language: true,
+        lang: true,
         theme: true,
-        avatar: true,
+        img: true,
         createdAt: true,
       },
     });
@@ -165,9 +165,9 @@ const avatarCTRL = async (req, res) => {
         email: true,
         name: true,
         role: true,
-        language: true,
+        lang: true,
         theme: true,
-        avatar: true,
+        img: true,
         createdAt: true,
       },
     });
