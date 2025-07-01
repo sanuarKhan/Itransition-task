@@ -1,8 +1,7 @@
-import React from "react";
 import { Spinner } from "react-bootstrap";
 
 interface LoadingSpinnerProps {
-  size?: "sm" | "lg";
+  size?: "sm"; // Remove "lg" as it's not supported by Bootstrap
   text?: string;
   center?: boolean;
 }
