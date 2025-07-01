@@ -13,14 +13,30 @@ const uploadRoutes = require("./routes/upload.routes");
 
 const app = express();
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://doogletorm.pages.dev",
+      "http://localhost:5173", // Vite dev server
+      "http://localhost:3000", // In case you use different port
+      "http://127.0.0.1:5173", // Alternative localhost
+    ];
+
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // If you're using cookies/sessions
+};
+
 // Security middleware
 app.use(helmet());
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({

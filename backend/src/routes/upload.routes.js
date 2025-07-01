@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
+// const cloudinary = require("cloudinary").v2;
 const { authenticateToken } = require("../middleware/auth.middleware");
 const {
   uploadImageCTRL,
@@ -10,12 +10,12 @@ const {
 
 const router = express.Router();
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// // Configure Cloudinary
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
 
 // Configure Multer for memory storage
 const storage = multer.memoryStorage();

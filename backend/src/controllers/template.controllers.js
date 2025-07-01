@@ -43,7 +43,7 @@ const getPublicTemplates = async (req, res) => {
       where,
       include: {
         owner: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
         tags: {
           include: { tag: true },
@@ -85,7 +85,7 @@ const getMyTemplates = async (req, res) => {
       where: { ownerId: req.user.id },
       include: {
         owner: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
         tags: {
           include: { tag: true },
@@ -109,7 +109,7 @@ const getSingletemplate = async (req, res) => {
       where: { id: req.params.id },
       include: {
         owner: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
         questions: {
           orderBy: { order: "asc" },
@@ -136,7 +136,7 @@ const getSingletemplate = async (req, res) => {
         comments: {
           include: {
             user: {
-              select: { id: true, name: true, avatar: true },
+              select: { id: true, name: true, img: true },
             },
           },
           orderBy: { createdAt: "desc" },
@@ -309,7 +309,7 @@ const updatedTemplate = async (req, res) => {
         },
         include: {
           owner: {
-            select: { id: true, name: true, avatar: true },
+            select: { id: true, name: true, img: true },
           },
           tags: {
             include: { tag: true },
@@ -427,7 +427,7 @@ const updateTemplateQuestions = async (req, res) => {
       where: { id: req.params.id },
       include: {
         questions: { orderBy: { order: "asc" } },
-        owner: { select: { id: true, name: true, avatar: true } },
+        owner: { select: { id: true, name: true, img: true } },
         tags: { include: { tag: true } },
       },
     });
@@ -657,7 +657,7 @@ const addTemplateComment = async (req, res) => {
       },
       include: {
         user: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
       },
     });
@@ -681,7 +681,7 @@ const getTemplateComments = async (req, res) => {
       where: { templateId: req.params.id },
       include: {
         user: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
       },
       orderBy: { createdAt: "desc" },

@@ -1,4 +1,16 @@
+const {
+  cloudinary_name,
+  cloudinary_api_key,
+  cloudinary_api_secret,
+} = require("../constants");
+
 const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: cloudinary_name,
+  api_key: cloudinary_api_key,
+  api_secret: cloudinary_api_secret,
+});
 
 const uploadImageCTRL = async (req, res) => {
   try {
@@ -12,7 +24,7 @@ const uploadImageCTRL = async (req, res) => {
         .upload_stream(
           {
             resource_type: "image",
-            folder: "formcraft/templates",
+            folder: "doolge-torm/templates",
             transformation: [
               { width: 800, height: 600, crop: "limit" },
               { quality: "auto:good" },
@@ -53,7 +65,7 @@ const uploadAvatarCTRL = async (req, res) => {
         .upload_stream(
           {
             resource_type: "image",
-            folder: "formcraft/avatars",
+            folder: "doogle-torm/avatars",
             transformation: [
               { width: 200, height: 200, crop: "fill", gravity: "face" },
               { radius: "max" },

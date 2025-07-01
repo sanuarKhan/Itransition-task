@@ -24,7 +24,7 @@ const getAllUsersCTRL = async (req, res) => {
         isBlocked: true,
         lang: true,
         theme: true,
-        avatar: true,
+        img: true,
         createdAt: true,
         _count: {
           select: {
@@ -77,7 +77,7 @@ const searchUsersCTRL = async (req, res) => {
         id: true,
         name: true,
         email: true,
-        avatar: true,
+        img: true,
       },
       take: 10,
     });
@@ -101,7 +101,7 @@ const getUserProfileCTRL = async (req, res) => {
         isBlocked: true,
         lang: true,
         theme: true,
-        avatar: true,
+        img: true,
         createdAt: true,
         _count: {
           select: {

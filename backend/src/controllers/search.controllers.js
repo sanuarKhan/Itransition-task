@@ -98,7 +98,7 @@ const searchTemplatesCTRL = async (req, res) => {
       where,
       include: {
         owner: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, img: true },
         },
         tags: {
           include: { tag: true },
