@@ -22,8 +22,8 @@ import {
 import { toast } from "react-toastify"; // FIXED: Added toast import
 import { useAuthStore, useFormsStore } from "../../store/index"; // FIXED: Removed useUIStore
 import { getForm } from "../../services/api";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
-import { ConfirmModal } from "../../components/UI/ConfirmModal";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
+import { ConfirmModal } from "../../components/ui/ConfirmModal";
 import { formatDistanceToNow } from "date-fns";
 
 export const FormViewPage: React.FC = () => {
@@ -51,13 +51,15 @@ export const FormViewPage: React.FC = () => {
   const form = formData?.form;
 
   // Check permissions
-  const canEdit =    user &&
+  const canEdit =
+    user &&
     form &&
     (user.id === form.userId ||
       user.id === form.template.owner.id ||
       user.role === "ADMIN");
 
-  const canDelete =    user &&
+  const canDelete =
+    user &&
     form &&
     (user.id === form.userId ||
       user.id === form.template.owner.id ||
@@ -68,7 +70,7 @@ export const FormViewPage: React.FC = () => {
 
     setIsDeleting(true);
     try {
-      await deleteForm(form.id); 
+      await deleteForm(form.id);
       toast.success("Form submission deleted successfully");
 
       navigate("/forms");

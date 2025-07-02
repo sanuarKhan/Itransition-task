@@ -10,9 +10,9 @@ import {
   getTagCloud,
 } from "../services/api";
 import { useAuthStore } from "../store/index";
-import { LoadingSpinner } from "../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { TemplateCard } from "../components/templates/TemplateCard";
-import { TagCloud } from "../components/UI/TagCloud";
+import { TagCloud } from "../components/ui/TagCloud";
 import { HeroSection } from "../components/home/HeroSection";
 import { FeaturesSection } from "../components/home/FeaturesSection";
 

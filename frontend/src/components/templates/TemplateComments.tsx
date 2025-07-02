@@ -6,7 +6,7 @@ import { MessageSquare, Send, Clock } from "lucide-react";
 import { toast } from "react-toastify"; // FIXED: Use react-toastify
 import { getComments, addComment } from "../../services/api";
 import { useAuthStore } from "../../store/index"; // FIXED: Removed useUIStore
-import { LoadingSpinner } from "../UI/LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 
 interface TemplateCommentsProps {

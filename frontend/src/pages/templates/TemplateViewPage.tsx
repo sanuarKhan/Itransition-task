@@ -14,8 +14,8 @@ import {
 import { toast } from "react-toastify"; // FIXED: Use react-toastify
 import { useAuthStore } from "../../store/index"; // FIXED: Removed useUIStore
 import { deleteTemplate, getTemplate, toggleLike } from "../../services/api";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
-import { ConfirmModal } from "../../components/UI/ConfirmModal";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
+import { ConfirmModal } from "../../components/ui/ConfirmModal";
 import { TemplateInfo } from "../../components/templates/TemplateInfo";
 import { TemplateQuestions } from "../../components/templates/TemplateQuestions";
 import { TemplateResults } from "../../components/templates/TemplateResults";

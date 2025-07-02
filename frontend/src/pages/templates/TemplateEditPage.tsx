@@ -32,7 +32,7 @@ import {
   uploadImage,
 } from "../../services/api";
 import type { UpdateTemplateData, Topic } from "../../types/index";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { toast } from "react-toastify";
 

@@ -17,7 +17,7 @@ import { Search, PlusCircle, FileText, Grid, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/index";
 import { getTemplates, getMyTemplates } from "../../services/api";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { TemplateCard } from "../../components/templates/TemplateCard";
 import type { Topic } from "../../types/index";
 

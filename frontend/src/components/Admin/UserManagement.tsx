@@ -33,8 +33,8 @@ import {
   updateUserRole,
 } from "../../services/api";
 import { useAuthStore } from "../../store/index";
-import { LoadingSpinner } from "../UI/LoadingSpinner";
-import { ConfirmModal } from "../UI/ConfirmModal";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
+import { ConfirmModal } from "../ui/ConfirmModal";
 import type { User } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 

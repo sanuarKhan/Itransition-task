@@ -12,20 +12,13 @@ import {
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FileText,
-  Search,
-  Eye,
-  Edit,
-  Trash2,
-  Calendar,
-} from "lucide-react";
+import { FileText, Search, Eye, Edit, Trash2, Calendar } from "lucide-react";
 import { useFormsStore, useAuthStore } from "../../store/index";
 import { useQuery } from "@tanstack/react-query";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "react-toastify";
-import { ConfirmModal } from "../../components/UI/ConfirmModal";
+import { ConfirmModal } from "../../components/ui/ConfirmModal";
 
 export const FormsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -231,7 +224,9 @@ export const FormsPage: React.FC = () => {
                             <Eye size={14} />
                           </Button>
                           <Button
-                            onClick={() => navigate(`/templates/${form.template.id}/fill`)}
+                            onClick={() =>
+                              navigate(`/templates/${form.template.id}/fill`)
+                            }
                             variant="outline-secondary"
                             size="sm"
                             title="Edit submission"

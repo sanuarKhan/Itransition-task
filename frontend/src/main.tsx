@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { ErrorBoundary } from "./components/UI/ErrorBoundary";
+import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import App from "./App";
 import "./locales/i18n";
 import "bootstrap/dist/css/bootstrap.min.css";

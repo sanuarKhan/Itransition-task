@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "../store/index";
 import { getDashboardStats, getMyTemplates } from "../services/api";
-import { LoadingSpinner } from "../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { formatSafeDate } from "../utils/dateUtils";
 
 export const DashboardPage: React.FC = () => {

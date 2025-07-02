@@ -15,9 +15,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, X, Tag } from "lucide-react";
 import { getTagCloud, searchTemplates } from "../services/api";
 import type { Topic } from "../types";
-import { LoadingSpinner } from "../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { TemplateCard } from "../components/templates/TemplateCard";
-import { TagCloud } from "../components/UI/TagCloud";
+import { TagCloud } from "../components/ui/TagCloud";
 
 export const SearchPage: React.FC = () => {
   const { t } = useTranslation();

@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import { Send, ArrowLeft, Clock, User } from "lucide-react";
 import { useAuthStore, useFormsStore } from "../../store/index";
 import { checkFormSubmission, getTemplate } from "../../services/api";
-import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import type { Question } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 

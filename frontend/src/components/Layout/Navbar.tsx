@@ -10,7 +10,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Search, User, Settings, LogOut, Moon, Sun, Globe } from "lucide-react";
 import { useAuthStore, useUIStore } from "../../store/index";
-import { SearchBar } from "../UI/SearchBar";
+import { SearchBar } from "../ui/SearchBar";
 import type { Language, Theme } from "../../types/index";
 
 export const Navbar: React.FC = () => {
@@ -62,7 +62,9 @@ export const Navbar: React.FC = () => {
 
             {user && (
               <>
-                <Nav.Link as={Link} to="/dashboard"
+                <Nav.Link
+                  as={Link}
+                  to="/dashboard"
                   active={isActive("/dashboard")}
                 >
                   {t("nav.dashboard")}

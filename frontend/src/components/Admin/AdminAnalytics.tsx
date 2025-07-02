@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import { Row, Col, Card, Alert } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
@@ -11,12 +11,10 @@ import {
   Activity,
 } from "lucide-react";
 import { getAdminStats } from "../../services/api";
-import { LoadingSpinner } from "../UI/LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 
 export const AdminAnalytics: React.FC = () => {
-  
-
   const {
     data: statsData,
     isLoading,
@@ -98,8 +96,11 @@ export const AdminAnalytics: React.FC = () => {
               <small className="text-muted">Active Users</small>
               <div className="mt-2">
                 <small className="text-success">
-                  {((stats?.activeUsers || 0) / (stats?.totalUsers || 1) * 100).toFixed(1)}%
-                  active
+                  {(
+                    ((stats?.activeUsers || 0) / (stats?.totalUsers || 1)) *
+                    100
+                  ).toFixed(1)}
+                  % active
                 </small>
               </div>
             </Card.Body>

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Eye, Download, User, Calendar, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getTemplateResults } from "../../services/api";
-import { LoadingSpinner } from "../UI/LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 
 interface TemplateResultsProps {
