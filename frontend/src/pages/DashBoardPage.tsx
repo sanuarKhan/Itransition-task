@@ -22,7 +22,7 @@ import {
   User,
 } from "lucide-react";
 import { useAuthStore } from "../store/index";
-import { getDashboardStats } from "../services/api";
+import { getDashboardStats, getMyTemplates } from "../services/api";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
 import { formatSafeDate } from "../utils/dateUtils";
 
@@ -38,7 +38,11 @@ export const DashboardPage: React.FC = () => {
   });
 
   // Fetch my templates
-  
+  const { data: templatesData, isLoading: loadingTemplates } = useQuery({
+    queryKey: ["myTemplates"],
+    queryFn: getMyTemplates,
+    enabled: !!user,
+  });
 
   if (!user) {
     return (
@@ -49,9 +53,9 @@ export const DashboardPage: React.FC = () => {
   }
 
   const stats = statsData?.stats;
-  
+  const recentTemplates = statsData?.recentTemplates || [];
   const recentForms = statsData?.recentForms || [];
-  
+  // const myTemplates = templatesData?.templates || [];
 
   const handleCreateTemplate = () => navigate("/templates/create");
   const handleViewTemplates = () => navigate("/templates");
@@ -168,7 +172,7 @@ export const DashboardPage: React.FC = () => {
               </Button>
             </Card.Header>
             <Card.Body>
-              {loadingStats ? (
+              {loadingTemplates ? (
                 <LoadingSpinner center />
               ) : recentTemplates.length === 0 ? (
                 <div className="text-center py-4">
