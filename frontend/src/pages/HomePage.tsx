@@ -11,10 +11,10 @@ import {
 } from "../services/api";
 import { useAuthStore } from "../store/index";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
-import { TemplateCard } from "../components/Templates/TemplateCard";
+import { TemplateCard } from "../components/templates/TemplateCard";
 import { TagCloud } from "../components/UI/TagCloud";
-import { HeroSection } from "../components/Home/HeroSection";
-import { FeaturesSection } from "../components/Home/FeaturesSection";
+import { HeroSection } from "../components/home/HeroSection";
+import { FeaturesSection } from "../components/home/FeaturesSection";
 
 export const HomePage: React.FC = () => {
   const { t } = useTranslation();

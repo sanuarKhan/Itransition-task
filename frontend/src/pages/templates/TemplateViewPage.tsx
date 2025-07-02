@@ -16,15 +16,15 @@ import { useAuthStore } from "../../store/index"; // FIXED: Removed useUIStore
 import { deleteTemplate, getTemplate, toggleLike } from "../../services/api";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import { ConfirmModal } from "../../components/UI/ConfirmModal";
-import { TemplateInfo } from "../../components/Templates/TemplateInfo";
-import { TemplateQuestions } from "../../components/Templates/TemplateQuestions";
-import { TemplateResults } from "../../components/Templates/TemplateResults";
-import { TemplateAnalytics } from "../../components/Templates/TemplateAnalytics";
-import { TemplateComments } from "../../components/Templates/TemplateComments";
+import { TemplateInfo } from "../../components/templates/TemplateInfo";
+import { TemplateQuestions } from "../../components/templates/TemplateQuestions";
+import { TemplateResults } from "../../components/templates/TemplateResults";
+import { TemplateAnalytics } from "../../components/templates/TemplateAnalytics";
+import { TemplateComments } from "../../components/templates/TemplateComments";
 
 export const TemplateViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  
+
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
@@ -48,7 +48,7 @@ export const TemplateViewPage: React.FC = () => {
 
   console.log(templateData, "templateData");
 
-  const template = templateData?.template ;
+  const template = templateData?.template;
 
   // Check if current user can edit/delete
   const canEdit =
@@ -142,7 +142,10 @@ export const TemplateViewPage: React.FC = () => {
           <p>
             The template you're looking for doesn't exist or has been deleted.
           </p>
-          <Button onClick={() => navigate("/templates")} variant="outline-primary">
+          <Button
+            onClick={() => navigate("/templates")}
+            variant="outline-primary"
+          >
             <ArrowLeft size={16} className="me-2" />
             Back to Templates
           </Button>
@@ -197,10 +200,10 @@ export const TemplateViewPage: React.FC = () => {
           {/* Edit Button */}
           {canEdit && (
             <Button
-            onClick={() => navigate(`/templates/${template.id}/edit`)}
-            variant="outline-primary"
-            size="sm"
-          >
+              onClick={() => navigate(`/templates/${template.id}/edit`)}
+              variant="outline-primary"
+              size="sm"
+            >
               <Edit size={16} className="me-2" />
               Edit
             </Button>

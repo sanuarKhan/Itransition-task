@@ -32,7 +32,7 @@ import { getTags, searchUsers, uploadImage } from "../../services/api";
 import type { CreateTemplateData } from "../../types";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
-import { QuestionBuilder } from "../../components/Templates/QuestionBuilder";
+import { QuestionBuilder } from "../../components/templates/QuestionBuilder";
 
 // Removed yup schema and resolver
 

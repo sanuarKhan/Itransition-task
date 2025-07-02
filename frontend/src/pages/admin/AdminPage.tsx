@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { Shield, Users, BarChart3, Activity } from "lucide-react";
 import { useAuthStore } from "../../store/index";
 import { Navigate } from "react-router-dom";
-import { UserManagement } from "../../components/Admin/UserManagement";
-import { AdminAnalytics } from "../../components/Admin/AdminAnalytics";
-import { SystemActivity } from "../../components/Admin/SystemActivity";
+import { UserManagement } from "../../components/admin/UserManagement";
+import { AdminAnalytics } from "../../components/admin/AdminAnalytics";
+import { SystemActivity } from "../../components/admin/SystemActivity";
 
 export const AdminPage: React.FC = () => {
   const { t } = useTranslation();

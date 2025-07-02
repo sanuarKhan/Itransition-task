@@ -16,7 +16,7 @@ import { Search, Filter, X, Tag } from "lucide-react";
 import { getTagCloud, searchTemplates } from "../services/api";
 import type { Topic } from "../types";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
-import { TemplateCard } from "../components/Templates/TemplateCard";
+import { TemplateCard } from "../components/templates/TemplateCard";
 import { TagCloud } from "../components/UI/TagCloud";
 
 export const SearchPage: React.FC = () => {

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuthStore, useUIStore } from "./store/index";
-import { Layout } from "./components/Layout/Layout";
+import { Layout } from "./components/layout/Layout";
 
 // Pages
 import { HomePage } from "./pages/HomePage";
@@ -13,10 +13,10 @@ import { DashboardPage } from "./pages/DashBoardPage";
 import { SearchPage } from "./pages/SearchPage";
 
 // Template Pages
-import { TemplatesPage } from "./pages/Templates/TemplatesPage";
-import { TemplateViewPage } from "./pages/Templates/TemplateViewPage";
-import { TemplateCreatePage } from "./pages/Templates/TemplateCreatePage";
-import { TemplateEditPage } from "./pages/Templates/TemplateEditPage";
+import { TemplatesPage } from "./pages/templates/TemplatesPage";
+import { TemplateViewPage } from "./pages/templates/TemplateViewPage";
+import { TemplateCreatePage } from "./pages/templates/TemplateCreatePage";
+import { TemplateEditPage } from "./pages/templates/TemplateEditPage";
 
 // Form Pages
 import { FormsPage } from "./pages/forms/FormsPage";
@@ -27,8 +27,8 @@ import { FormFillPage } from "./pages/forms/FormFillPage";
 import { AdminPage } from "./pages/admin/AdminPage";
 
 // Route Guards
-import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
-import { AdminRoute } from "./components/Auth/AdminRoute";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { AdminRoute } from "./components/auth/AdminRoute";
 
 function App() {
   const { i18n } = useTranslation();

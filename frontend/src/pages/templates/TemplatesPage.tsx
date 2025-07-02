@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/index";
 import { getTemplates, getMyTemplates } from "../../services/api";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
-import { TemplateCard } from "../../components/Templates/TemplateCard";
+import { TemplateCard } from "../../components/templates/TemplateCard";
 import type { Topic } from "../../types/index";
 
 export const TemplatesPage: React.FC = () => {
@@ -89,7 +89,10 @@ export const TemplatesPage: React.FC = () => {
           <p className="text-muted mb-0">Browse and manage form templates</p>
         </div>
         {user && (
-          <Button onClick={() => navigate("/templates/create")} variant="primary">
+          <Button
+            onClick={() => navigate("/templates/create")}
+            variant="primary"
+          >
             <PlusCircle size={16} className="me-2" />
             {t("templates.createNew")}
           </Button>
@@ -211,7 +214,10 @@ export const TemplatesPage: React.FC = () => {
                       : t("templates.createFirst")}
                   </p>
                   {!searchQuery && (
-                    <Button onClick={() => navigate("/templates/create")} variant="primary">
+                    <Button
+                      onClick={() => navigate("/templates/create")}
+                      variant="primary"
+                    >
                       <PlusCircle size={16} className="me-2" />
                       Create Your First Template
                     </Button>
