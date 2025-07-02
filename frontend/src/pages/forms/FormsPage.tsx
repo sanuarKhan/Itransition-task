@@ -57,6 +57,7 @@ export const FormsPage: React.FC = () => {
     try {
       await deleteForm(deleteFormId);
       toast.success("Form submission deleted successfully");
+      //eslint-disable-next-line
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.error || "Failed to delete form submission";

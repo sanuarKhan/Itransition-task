@@ -21,7 +21,6 @@ import type {
   Question,
 } from "../types/index";
 
-// FIXED: Removed duplicate /api from the base URL
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 // Create axios instance
@@ -61,7 +60,6 @@ api.interceptors.response.use(
 // Export the main api instance (for apiService usage)
 export const apiService = api;
 
-// FIXED: Authentication APIs - Now correctly calling /api/auth routes
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   const res = await api.post<AuthResponse>("/api/auth/register", data);
   return res.data;
@@ -128,11 +126,6 @@ export const getMyTemplates = async (): Promise<{ templates: Template[] }> => {
   const res = await api.get("/api/templates/my");
   return res.data;
 };
-
-// export const getMyTemplates = async (): Promise<{ templates: Template[] }> => {
-//   const res = await api.get("/api/templates/my");
-//   return res.data;
-// };
 
 export const getTemplate = async (
   id: string

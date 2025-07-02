@@ -47,14 +47,14 @@ export const RegisterPage: React.FC = () => {
 
   if (user) return <Navigate to="/dashboard" replace />;
 
-  const onSubmit = async ({ confirmPassword, ...data }: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      console.log("Register attempt with:", data.email); // Debug log
       await registerUser(data);
       toast.success("Account created successfully!");
       navigate("/dashboard");
+      //eslint-disable-next-line
     } catch (error: any) {
-      console.error("Registration error:", error); // Debug log
+      console.error("Registration error:", error);
       const errorMessage =
         error?.response?.data?.error || error?.message || "Registration failed";
       toast.error(errorMessage);

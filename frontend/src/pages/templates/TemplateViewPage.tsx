@@ -11,8 +11,8 @@ import {
   PlusCircle,
   ArrowLeft,
 } from "lucide-react";
-import { toast } from "react-toastify"; // FIXED: Use react-toastify
-import { useAuthStore } from "../../store/index"; // FIXED: Removed useUIStore
+import { toast } from "react-toastify";
+import { useAuthStore } from "../../store/index";
 import { deleteTemplate, getTemplate, toggleLike } from "../../services/api";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { ConfirmModal } from "../../components/ui/ConfirmModal";
@@ -83,6 +83,7 @@ export const TemplateViewPage: React.FC = () => {
 
       // Refetch template to update like count
       refetch();
+      //eslint-disable-next-line
     } catch (error: any) {
       // FIXED: Use toast instead of addNotification
       const errorMessage =
@@ -99,13 +100,11 @@ export const TemplateViewPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await deleteTemplate(template.id);
-
-      // FIXED: Use toast instead of addNotification
       toast.success("Template deleted successfully");
 
       navigate("/templates");
+      //eslint-disable-next-line
     } catch (error: any) {
-      // FIXED: Use toast instead of addNotification
       const errorMessage =
         error.response?.data?.error || "Failed to delete template";
       toast.error(errorMessage);
@@ -122,10 +121,9 @@ export const TemplateViewPage: React.FC = () => {
       const url = window.location.href;
       await navigator.clipboard.writeText(url);
 
-      // FIXED: Use toast instead of addNotification
       toast.success("Template link copied to clipboard!");
+      //eslint-disable-next-line
     } catch (error) {
-      // FIXED: Use toast instead of addNotification
       toast.error("Failed to copy link");
     }
   };
@@ -224,6 +222,7 @@ export const TemplateViewPage: React.FC = () => {
           {/* Fill Form Button */}
           {template.isPublic ||
             (user &&
+              //eslint-disable-next-line
               (template.allowedUsers?.some((u: any) => u.id === user.id) ||
                 canEdit) && (
                 <Button
