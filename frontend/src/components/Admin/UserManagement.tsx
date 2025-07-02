@@ -48,10 +48,12 @@ export const UserManagement: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [confirmAction, setConfirmAction] = React.useState<{
-    type: "block" | "unblock" | "makeAdmin" | "removeAdmin" | "delete";
-    user: User;
-  } | null>(null);
+  interface ConfirmAction {
+  type: "block" | "unblock" | "makeAdmin" | "removeAdmin" | "delete";
+  user: User;
+}
+
+  const [confirmAction, setConfirmAction] = React.useState<ConfirmAction | null>(null);
   const [isProcessing, setIsProcessing] = React.useState(false);
 
   const itemsPerPage = 10;

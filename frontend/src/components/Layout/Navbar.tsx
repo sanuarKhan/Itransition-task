@@ -83,8 +83,7 @@ export const Navbar: React.FC = () => {
                 </Nav.Link>
                 {user.role === "ADMIN" && (
                   <Nav.Link
-                    as={Link as any}
-                    to="/admin"
+                    as={Link}
                     active={isActive("/admin")}
                   >
                     {t("nav.admin")}
@@ -167,7 +166,7 @@ export const Navbar: React.FC = () => {
                 <Nav.Link as={Link as any} to="/login">
                   {t("nav.login")}
                 </Nav.Link>
-                <Nav.Link as={Link as any} to="/register">
+                <Nav.Link as={Link} to="/register">
                   {t("nav.register")}
                 </Nav.Link>
               </>

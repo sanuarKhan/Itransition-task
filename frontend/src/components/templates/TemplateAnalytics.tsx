@@ -233,7 +233,7 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
           </Card>
         );
 
-      default: // SINGLE_LINE, MULTI_LINE
+      default: { // SINGLE_LINE, MULTI_LINE
         const frequency = stats.frequency || {};
         const sortedEntries = Object.entries(frequency)
           .sort(([, a], [, b]) => b - a)
@@ -288,7 +288,7 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
               )}
             </Card.Body>
           </Card>
-        );
+        );}
     }
   };
 

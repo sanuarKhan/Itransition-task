@@ -24,7 +24,7 @@ import {
   Tag,
   Image as ImageIcon,
 } from "lucide-react";
-import { useAuthStore, useTemplatesStore, useUIStore } from "../../store/index";
+import { useAuthStore, useTemplatesStore } from "../../store/index";
 import {
   getTags,
   getTemplate,
@@ -34,13 +34,14 @@ import {
 import { UpdateTemplateData, Topic } from "../../types/index";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
+import { toast } from "react-toastify";
 
 export const TemplateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { addNotification } = useUIStore();
+
   const { updateTemplate } = useTemplatesStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -159,7 +160,7 @@ export const TemplateEditPage: React.FC = () => {
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
+  //eslint-disable-next-line
   const handleChange = (field: keyof UpdateTemplateData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
@@ -168,17 +169,19 @@ export const TemplateEditPage: React.FC = () => {
       setValidationErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
-
+  //eslint-disable-next-line
   const handleTagChange = (selectedOptions: any) => {
     const tags = selectedOptions
-      ? selectedOptions.map((option: any) => option.value)
+      ? //eslint-disable-next-line
+        selectedOptions.map((option: any) => option.value)
       : [];
     handleChange("tags", tags);
   };
-
+  //eslint-disable-next-line
   const handleUserChange = (selectedOptions: any) => {
     const userIds = selectedOptions
-      ? selectedOptions.map((option: any) => option.value)
+      ? //eslint-disable-next-line
+        selectedOptions.map((option: any) => option.value)
       : [];
     handleChange("allowedUserIds", userIds);
   };
@@ -188,18 +191,12 @@ export const TemplateEditPage: React.FC = () => {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      addNotification({
-        type: "error",
-        title: "Please select an image file",
-      });
+      toast.error("Please select an image file");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      addNotification({
-        type: "error",
-        title: "Image size must be less than 5MB",
-      });
+      toast.error("Image size must be less than 5MB");
       return;
     }
 
@@ -207,15 +204,10 @@ export const TemplateEditPage: React.FC = () => {
     try {
       const response = await uploadImage(file);
       handleChange("image", response.url);
-      addNotification({
-        type: "success",
-        title: "Image uploaded successfully",
-      });
+      toast.success("Image uploaded successfully");
+      //eslint-disable-next-line
     } catch (error: any) {
-      addNotification({
-        type: "error",
-        title: error.response?.data?.error || "Failed to upload image",
-      });
+      toast.error(error.response?.data?.error || "Failed to upload image");
     } finally {
       setUploadingImage(false);
     }
@@ -229,16 +221,11 @@ export const TemplateEditPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await updateTemplate(template.id, formData);
-      addNotification({
-        type: "success",
-        title: "Template updated successfully!",
-      });
+      toast.success("Template updated successfully!");
       navigate(`/templates/${template.id}`);
+      //eslint-disable-next-line
     } catch (error: any) {
-      addNotification({
-        type: "error",
-        title: error.response?.data?.error || "Failed to update template",
-      });
+      toast.error(error.response?.data?.error || "Failed to update template");
     } finally {
       setIsSubmitting(false);
     }

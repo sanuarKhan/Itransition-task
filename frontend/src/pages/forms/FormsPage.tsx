@@ -11,7 +11,6 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FileText,
@@ -25,9 +24,11 @@ import { useFormsStore, useAuthStore } from "../../store/index";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "react-toastify";
+import { ConfirmModal } from "../../components/UI/ConfirmModal";
 
 export const FormsPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const { forms, fetchMyForms, deleteForm } = useFormsStore();

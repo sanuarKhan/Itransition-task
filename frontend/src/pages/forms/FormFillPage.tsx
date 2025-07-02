@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Container,
   Card,
@@ -258,7 +259,7 @@ export const FormFillPage: React.FC = () => {
                   />
                 );
               default:
-                return null;
+                return <></>;
             }
           }}
         />

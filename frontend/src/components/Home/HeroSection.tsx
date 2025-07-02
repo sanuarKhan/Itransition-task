@@ -23,8 +23,7 @@ export const HeroSection: React.FC = () => {
             <p className="lead mb-4">{t("home.hero.subtitle")}</p>
             <div className="d-flex gap-3">
               <Button
-                as={Link as any}
-                to={user ? "/dashboard" : "/register"}
+                as={Link}
                 variant="light"
                 size="lg"
                 className="px-4"
@@ -33,8 +32,7 @@ export const HeroSection: React.FC = () => {
                 <ArrowRight size={20} className="ms-2" />
               </Button>
               <Button
-                as={Link as any}
-                to="/templates"
+                as={Link}
                 variant="outline-light"
                 size="lg"
                 className="px-4"

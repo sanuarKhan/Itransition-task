@@ -1,7 +1,7 @@
 // frontend/src/pages/Templates/TemplateViewPage.tsx - FIXED VERSION
 import React, { useState, useEffect } from "react";
 import { Container, Tab, Tabs, Button, Alert } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   Edit,
@@ -24,7 +24,7 @@ import { TemplateComments } from "../../components/Templates/TemplateComments";
 
 export const TemplateViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
@@ -47,7 +47,6 @@ export const TemplateViewPage: React.FC = () => {
   });
 
   console.log(templateData, "templateData");
-  console.log(data, "data");
 
   const template = templateData?.template ;
 
@@ -62,7 +61,7 @@ export const TemplateViewPage: React.FC = () => {
   useEffect(() => {
     if (template && user) {
       setIsLiked(
-        template.likes?.some((like: any) => like.userId === user.id) || false
+        template._count.likes > 0 && template.likes?.some((like: any) => like.userId === user.id) || false
       );
     }
   }, [template, user]);
