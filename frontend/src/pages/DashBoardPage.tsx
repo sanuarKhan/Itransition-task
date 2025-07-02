@@ -1,4 +1,3 @@
-// frontend/src/pages/DashboardPage.tsx - FIXED VERSION
 import React from "react";
 import {
   Container,
@@ -11,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import {
   PlusCircle,
   FileText,
@@ -25,14 +24,13 @@ import {
 import { useAuthStore } from "../store/index";
 import { getDashboardStats, getMyTemplates } from "../services/api";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
-import { formatSafeDate } from "../utils/dateUtils"; // FIXED: Import safe date utility
+import { formatSafeDate } from "../utils/dateUtils";
 
 export const DashboardPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
-  const navigate = useNavigate(); // FIXED: Use navigate hook for programmatic navigation
+  const navigate = useNavigate();
 
-  // Fetch dashboard stats
   const { data: statsData, isLoading: loadingStats } = useQuery({
     queryKey: ["dashboardStats"],
     queryFn: getDashboardStats,
@@ -41,6 +39,10 @@ export const DashboardPage: React.FC = () => {
 
   // Fetch my templates
   const { data: templatesData, isLoading: loadingTemplates } = useQuery({
+    queryKey: ["myTemplates"],
+    queryFn: getMyTemplates,
+    enabled: !!user,
+  });
 
   if (!user) {
     return (
@@ -53,8 +55,8 @@ export const DashboardPage: React.FC = () => {
   const stats = statsData?.stats;
   const recentTemplates = statsData?.recentTemplates || [];
   const recentForms = statsData?.recentForms || [];
+  const myTemplates = templatesData?.templates || [];
 
-  // FIXED: Handler functions for navigation
   const handleCreateTemplate = () => navigate("/templates/create");
   const handleViewTemplates = () => navigate("/templates");
   const handleViewForms = () => navigate("/forms");
@@ -63,7 +65,6 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <Container className="py-4">
-      {/* Welcome Header */}
       <div className="mb-4">
         <h1 className="h3 mb-1">
           {t("dashboard.welcome", { name: user.name })}
@@ -73,7 +74,6 @@ export const DashboardPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Stats Cards */}
       {loadingStats ? (
         <LoadingSpinner center />
       ) : (
@@ -134,7 +134,6 @@ export const DashboardPage: React.FC = () => {
             </Card.Header>
             <Card.Body>
               <div className="d-grid gap-3">
-                {/* FIXED: Use onClick with navigate instead of as={Link as any} */}
                 <Button
                   onClick={handleCreateTemplate}
                   variant="primary"
@@ -250,7 +249,6 @@ export const DashboardPage: React.FC = () => {
         </Col>
       </Row>
 
-      {/* Recent Forms */}
       <Row>
         <Col className="mb-4">
           <Card>
@@ -335,3 +333,5 @@ export const DashboardPage: React.FC = () => {
         </Col>
       </Row>
     </Container>
+  );
+};

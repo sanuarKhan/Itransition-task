@@ -60,6 +60,12 @@ export const QuestionBuilder: React.FC<QuestionBuilderProps> = ({
   };
 
   const deleteQuestion = (index: number) => {
+    if (window.confirm("Are you sure you want to delete this question?")) {
+      const updatedQuestions = questions.filter((_, i) => i !== index);
+      onChange(updatedQuestions);
+      setEditingIndex(null);
+    }
+  };
 
   if (questions.length === 0) {
     return (
