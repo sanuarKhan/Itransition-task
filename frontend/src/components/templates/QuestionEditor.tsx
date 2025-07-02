@@ -1,6 +1,6 @@
 import React from "react";
 import type { Template } from "../../types";
-
+// path issue fixing
 interface QuestionEditorProps {
   template: Template;
   onSave: () => void;

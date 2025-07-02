@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../../store/index";
-
+// path issue fixing
 interface AdminRouteProps {
   children: React.ReactNode;
 }

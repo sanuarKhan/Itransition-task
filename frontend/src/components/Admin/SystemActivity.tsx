@@ -3,7 +3,6 @@ import { Card, Alert, Table, Badge } from "react-bootstrap";
 import { Activity, Clock, AlertCircle } from "lucide-react";
 
 export const SystemActivity: React.FC = () => {
-  // This would typically fetch real system logs
   const mockActivities = [
     {
       id: 1,

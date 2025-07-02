@@ -25,7 +25,7 @@ import { useAuthStore } from "../store/index";
 import { getDashboardStats, getMyTemplates } from "../services/api";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { formatSafeDate } from "../utils/dateUtils";
-
+// path issue fixing
 export const DashboardPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();

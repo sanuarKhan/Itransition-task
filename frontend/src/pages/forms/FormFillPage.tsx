@@ -21,12 +21,12 @@ import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import type { Question } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 
-// Dynamic validation schema based on questions
+// path issue fixing
 const createValidationSchema = (
   questions: Question[],
   t: (key: string) => string
 ) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const schemaFields: any = {};
 
   questions.forEach((question) => {

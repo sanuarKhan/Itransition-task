@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "../../store/index";
 import type { LoginData } from "../../types/index";
-
+// path issue fixing
 const schema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
@@ -38,6 +38,7 @@ export const LoginPage: React.FC = () => {
       await login(data);
       toast.success("Login successful!");
       navigate("/dashboard");
+      //eslint-disable-next-line
     } catch (error: any) {
       console.error("Login error:", error); // Debug log
       const errorMessage =

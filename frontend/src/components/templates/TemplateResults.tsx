@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getTemplateResults } from "../../services/api";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
-
+// path issue fixing
 interface TemplateResultsProps {
   templateId: string;
 }
@@ -35,12 +35,11 @@ export const TemplateResults: React.FC<TemplateResultsProps> = ({
   const endIndex = startIndex + itemsPerPage;
   const currentForms = forms.slice(startIndex, endIndex);
 
-  // Get questions that should be shown in table
   const tableQuestions =
     forms[0]?.answers
       ?.filter((answer) => answer.question.showInTable)
       ?.map((answer) => answer.question) || [];
-
+  //eslint-disable-next-line
   const getAnswerValue = (formAnswers: any[], questionId: string) => {
     const answer = formAnswers.find((a) => a.questionId === questionId);
     if (!answer) return "-";

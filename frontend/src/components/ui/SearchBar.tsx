@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Form, InputGroup, Button, ListGroup } from "react-bootstrap";
 import { Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSearchSuggestions } from "../../services/api";
 import { useUIStore } from "../../store/index";
 import { debounce } from "lodash";
-
+// path issue fixing
 interface SearchBarProps {
   onSearch?: () => void;
   placeholder?: string;
@@ -26,21 +26,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Debounced search for suggestions
-  const debouncedGetSuggestions = useCallback(
-    debounce(async (query: string) => {
-      if (query.length >= 2) {
-        return getSearchSuggestions(query);
-      }
-      return { suggestions: [] };
-    }, 300),
-    []
-  );
+  const debouncedGetSuggestions = debounce(async (query: string) => {
+    if (query.length >= 2) {
+      return getSearchSuggestions(query);
+    }
+    return { suggestions: [] };
+  }, 300);
 
   const { data: suggestions } = useQuery({
     queryKey: ["searchSuggestions", localQuery],
     queryFn: () => debouncedGetSuggestions(localQuery),
     enabled: localQuery.length >= 2 && showSuggestions,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
   const handleSearch = (query: string = localQuery) => {

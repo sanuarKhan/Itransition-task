@@ -34,7 +34,7 @@ import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { QuestionBuilder } from "../../components/templates/QuestionBuilder";
 
-// Removed yup schema and resolver
+// path issue fixing
 
 export const TemplateCreatePage: React.FC = () => {
   const { t } = useTranslation();

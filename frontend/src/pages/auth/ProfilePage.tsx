@@ -15,7 +15,7 @@ import { useAuthStore } from "../../store/index";
 import type { UpdateProfileData } from "../../types/index";
 import { UploadAvatar } from "../../services/api";
 import { toast } from "react-toastify";
-
+// path issue fixing
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
   const { user, updateProfile, updateAvatar, isLoading, error, clearError } =
@@ -48,6 +48,7 @@ export const ProfilePage: React.FC = () => {
     try {
       await updateProfile(formData); // Fixed: Use capital U
       toast.success(t("auth.profile.updateSuccess"));
+      //eslint-disable-next-line
     } catch (error) {
       toast.error(t("auth.profile.updateError"));
     }
@@ -72,8 +73,9 @@ export const ProfilePage: React.FC = () => {
     setUploadingAvatar(true);
     try {
       const uploadResponse = await UploadAvatar(file);
-      await updateAvatar(uploadResponse.url); // Fixed: Use capital U
+      await updateAvatar(uploadResponse.url);
       toast.success("Avatar updated successfully");
+      //eslint-disable-next-line
     } catch (error) {
       toast.error("Failed to update avatar");
     } finally {

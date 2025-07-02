@@ -1,10 +1,8 @@
 import React from "react";
-
+// path issue fixing
 import { Container, Row, Col } from "react-bootstrap";
 
 export const Footer: React.FC = () => {
-  
-
   return (
     <footer className="bg-light py-4 mt-auto border-top">
       <Container>

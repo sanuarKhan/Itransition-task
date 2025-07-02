@@ -18,7 +18,7 @@ import type { Topic } from "../types";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { TemplateCard } from "../components/templates/TemplateCard";
 import { TagCloud } from "../components/ui/TagCloud";
-
+// path issue fixing
 export const SearchPage: React.FC = () => {
   const { t } = useTranslation();
   // const navigate = useNavigate();
@@ -113,11 +113,9 @@ export const SearchPage: React.FC = () => {
 
   return (
     <Container className="py-4">
-      {/* Search Header */}
       <div className="text-center mb-4">
         <h1 className="h3 mb-3">{t("search.title")}</h1>
 
-        {/* Search Form */}
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
             <Form onSubmit={handleSearch}>

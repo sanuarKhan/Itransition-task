@@ -2,7 +2,7 @@ import React from "react";
 import { Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import type { Tag } from "../../types/index";
-
+// path issue fixing
 interface TagCloudProps {
   tags: Tag[];
   onTagClick?: (tagName: string) => void;

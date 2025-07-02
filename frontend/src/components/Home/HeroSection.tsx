@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Play } from "lucide-react";
 import { useAuthStore } from "../../store/index";
-
+// path issue fixing
 export const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

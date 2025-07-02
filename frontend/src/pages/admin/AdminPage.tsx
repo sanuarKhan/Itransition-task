@@ -7,13 +7,12 @@ import { Navigate } from "react-router-dom";
 import { UserManagement } from "../../components/admin/UserManagement";
 import { AdminAnalytics } from "../../components/admin/AdminAnalytics";
 import { SystemActivity } from "../../components/admin/SystemActivity";
-
+// path issue fixing
 export const AdminPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState("users");
 
-  // Redirect if not admin
   if (!user || user.role !== "ADMIN") {
     return <Navigate to="/" replace />;
   }

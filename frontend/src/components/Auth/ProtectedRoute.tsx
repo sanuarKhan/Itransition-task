@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/index";
-
+// path issue fixing
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }

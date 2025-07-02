@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { AlertTriangle } from "lucide-react";
-
+// path issue fixing
 interface ConfirmModalProps {
   show: boolean;
   title: string;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+// path issue fixing
 import { Card, Button, Alert, Badge, Row, Col } from "react-bootstrap";
 import { Plus, Edit, GripVertical, Settings, Eye } from "lucide-react";
 import type { Template, Question } from "../../types/index";
@@ -16,7 +16,6 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
   canEdit = false,
   onUpdate = () => {},
 }) => {
-  
   const [editingQuestions, setEditingQuestions] = useState(false);
 
   const getQuestionTypeIcon = (type: string) => {

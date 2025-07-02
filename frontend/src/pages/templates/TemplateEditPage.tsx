@@ -35,7 +35,7 @@ import type { UpdateTemplateData, Topic } from "../../types/index";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { toast } from "react-toastify";
-
+// path issue fixing
 export const TemplateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();

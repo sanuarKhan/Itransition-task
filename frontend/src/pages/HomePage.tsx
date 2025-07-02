@@ -15,7 +15,7 @@ import { TemplateCard } from "../components/templates/TemplateCard";
 import { TagCloud } from "../components/ui/TagCloud";
 import { HeroSection } from "../components/home/HeroSection";
 import { FeaturesSection } from "../components/home/FeaturesSection";
-
+// path issue fixing
 export const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();

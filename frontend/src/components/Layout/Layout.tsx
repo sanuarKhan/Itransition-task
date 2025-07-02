@@ -9,7 +9,7 @@ interface LayoutProps {
   showFooter?: boolean;
   fluid?: boolean;
 }
-
+// path issue fixing
 export const Layout: React.FC<LayoutProps> = ({
   children,
   showNavbar = true,

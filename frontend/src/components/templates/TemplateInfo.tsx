@@ -1,20 +1,20 @@
-import React from 'react';
-import { Card, Badge, Row, Col, Image } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
-import { 
-  Calendar, 
-  User, 
-  Eye, 
-  Heart, 
-  MessageSquare, 
+import React from "react";
+import { Card, Badge, Row, Col, Image } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
+import {
+  Calendar,
+  User,
+  Eye,
+  Heart,
+  MessageSquare,
   FileText,
   Globe,
-  Lock
-} from 'lucide-react';
-import type { Template } from '@/types';
-import { formatDistanceToNow } from 'date-fns';
-
+  Lock,
+} from "lucide-react";
+import type { Template } from "@/types";
+import { formatDistanceToNow } from "date-fns";
+// path issue fixing
 interface TemplateInfoProps {
   template: Template;
 }
@@ -24,15 +24,15 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
 
   const getTopicVariant = (topic: string) => {
     const variants: Record<string, string> = {
-      EDUCATION: 'primary',
-      BUSINESS: 'success',
-      QUIZ: 'warning',
-      SURVEY: 'info',
-      RESEARCH: 'secondary',
-      POLL: 'dark',
-      OTHER: 'light'
+      EDUCATION: "primary",
+      BUSINESS: "success",
+      QUIZ: "warning",
+      SURVEY: "info",
+      RESEARCH: "secondary",
+      POLL: "dark",
+      OTHER: "light",
     };
-    return variants[topic] || 'secondary';
+    return variants[topic] || "secondary";
   };
 
   return (
@@ -50,7 +50,7 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
         {template.tags && template.tags.length > 0 && (
           <Card className="mb-4">
             <Card.Body>
-              <h5 className="mb-3">{t('templates.view.info.tags')}</h5>
+              <h5 className="mb-3">{t("templates.view.info.tags")}</h5>
               <div className="d-flex flex-wrap gap-2">
                 {template.tags.map(({ tag }) => (
                   <Badge key={tag.id} bg="secondary" className="px-3 py-2">
@@ -70,7 +70,7 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
               src={template.thumbnail}
               alt={template.title}
               className="card-img-top"
-              style={{ height: '200px', objectFit: 'cover' }}
+              style={{ height: "200px", objectFit: "cover" }}
             />
           </Card>
         )}
@@ -78,7 +78,7 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
         <Card className="mb-4">
           <Card.Body>
             <h5 className="mb-3">Template Details</h5>
-            
+
             <div className="mb-3">
               <small className="text-muted d-block">Topic</small>
               <Badge bg={getTopicVariant(template.topic)}>
@@ -115,7 +115,9 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
               <small className="text-muted d-block">Created</small>
               <div className="d-flex align-items-center">
                 <Calendar size={16} className="me-2" />
-                {formatDistanceToNow(new Date(template.createdAt), { addSuffix: true })}
+                {formatDistanceToNow(new Date(template.createdAt), {
+                  addSuffix: true,
+                })}
               </div>
             </div>
           </Card.Body>
@@ -124,7 +126,7 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
         <Card>
           <Card.Body>
             <h5 className="mb-3">Statistics</h5>
-            
+
             <Row className="text-center">
               <Col xs={6} className="mb-3">
                 <div className="d-flex flex-column align-items-center">

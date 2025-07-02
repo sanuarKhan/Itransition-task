@@ -21,7 +21,7 @@ import { TemplateQuestions } from "../../components/templates/TemplateQuestions"
 import { TemplateResults } from "../../components/templates/TemplateResults";
 import { TemplateAnalytics } from "../../components/templates/TemplateAnalytics";
 import { TemplateComments } from "../../components/templates/TemplateComments";
-
+// path issue fixing
 export const TemplateViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 

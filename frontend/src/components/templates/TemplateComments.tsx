@@ -3,12 +3,12 @@ import { Card, Form, Button, Alert, Image } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MessageSquare, Send, Clock } from "lucide-react";
-import { toast } from "react-toastify"; // FIXED: Use react-toastify
+import { toast } from "react-toastify";
 import { getComments, addComment } from "../../services/api";
-import { useAuthStore } from "../../store/index"; // FIXED: Removed useUIStore
+import { useAuthStore } from "../../store/index";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
-
+// path issue fixing
 interface TemplateCommentsProps {
   templateId: string;
 }
@@ -31,7 +31,7 @@ export const TemplateComments: React.FC<TemplateCommentsProps> = ({
   } = useQuery({
     queryKey: ["templateComments", templateId],
     queryFn: () => getComments(templateId),
-    refetchInterval: 5000, // Auto-refresh every 5 seconds
+    refetchInterval: 5000,
   });
 
   const comments = commentsData?.comments || [];
@@ -40,13 +40,11 @@ export const TemplateComments: React.FC<TemplateCommentsProps> = ({
     e.preventDefault();
 
     if (!user) {
-      // FIXED: Use toast instead of addNotification
       toast.error("Please login to comment");
       return;
     }
 
     if (!newComment.trim()) {
-      // FIXED: Use toast instead of addNotification
       toast.error("Comment cannot be empty");
       return;
     }
@@ -56,15 +54,13 @@ export const TemplateComments: React.FC<TemplateCommentsProps> = ({
       await addComment(templateId, newComment.trim());
       setNewComment("");
 
-      // Invalidate and refetch comments
       queryClient.invalidateQueries({
         queryKey: ["templateComments", templateId],
       });
 
-      // FIXED: Use toast instead of addNotification
       toast.success("Comment added successfully");
+      //eslint-disable-next-line
     } catch (error: any) {
-      // FIXED: Use toast instead of addNotification
       const errorMessage =
         error.response?.data?.error || "Failed to add comment";
       toast.error(errorMessage);

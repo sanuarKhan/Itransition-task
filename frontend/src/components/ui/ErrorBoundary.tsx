@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Button } from "react-bootstrap";
 import { RefreshCw } from "lucide-react";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
-
+// path issue fixing
 function ErrorFallback() {
   return (
     <div className="container py-5">

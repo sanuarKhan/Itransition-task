@@ -7,7 +7,7 @@ interface QuestionBuilderProps {
   questions: CreateQuestionData[];
   onChange: (questions: CreateQuestionData[]) => void;
 }
-
+// path issue fixing
 const QUESTION_TYPES: { value: QuestionType; label: string; icon: string }[] = [
   { value: "SINGLE_LINE", label: "Short Text", icon: "📝" },
   { value: "MULTI_LINE", label: "Long Text", icon: "📄" },

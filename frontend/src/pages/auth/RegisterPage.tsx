@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "../../store/index";
-
+// path issue fixing
 const schema = yup.object({
   name: yup.string().required("Name is required").min(2, "Name too short"),
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -32,7 +32,7 @@ type RegisterFormData = {
 export const RegisterPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  // FIXED: Use lowercase method name
+
   const { user, register: registerUser, isLoading } = useAuthStore();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);

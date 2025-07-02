@@ -11,7 +11,7 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
-
+// path issue fixing
 export const FeaturesSection: React.FC = () => {
   const { t } = useTranslation();
 

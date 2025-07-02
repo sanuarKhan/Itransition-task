@@ -12,7 +12,7 @@ import { Search, User, Settings, LogOut, Moon, Sun, Globe } from "lucide-react";
 import { useAuthStore, useUIStore } from "../../store/index";
 import { SearchBar } from "../ui/SearchBar";
 import type { Language, Theme } from "../../types/index";
-
+// path issue fixing
 export const Navbar: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();

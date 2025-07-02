@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-
+// path issue fixing
 interface LoadingSpinnerProps {
   size?: "sm";
   text?: string;

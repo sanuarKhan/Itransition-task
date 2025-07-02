@@ -25,7 +25,7 @@ import { getForm } from "../../services/api";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { ConfirmModal } from "../../components/ui/ConfirmModal";
 import { formatDistanceToNow } from "date-fns";
-
+// path issue fixing
 export const FormViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
