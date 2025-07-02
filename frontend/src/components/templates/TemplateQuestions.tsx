@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Card, Button, Alert, Badge, Row, Col } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { Plus, Edit, GripVertical, Settings, Eye } from "lucide-react";
 import { Template, Question } from "../../types/index";
 import { QuestionEditor } from "./QuestionEditor";

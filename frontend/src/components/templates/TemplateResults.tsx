@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Card, Table, Button, Alert, Badge, Pagination } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Download, User, Calendar, Edit } from "lucide-react";
 import { Link } from "react-router-dom";

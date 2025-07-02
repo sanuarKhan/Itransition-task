@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
         <section className="mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="fw-bold">{t("home.latest.title")}</h2>
-            <Button as={Link as any} to="/templates" variant="outline-primary">
+            <Button onClick={() => navigate("/templates")} variant="outline-primary">
               {t("home.latest.viewAll")}{" "}
               <ArrowRight size={16} className="ms-1" />
             </Button>
@@ -146,11 +146,10 @@ export const HomePage: React.FC = () => {
                   Start building beautiful, responsive forms in minutes.
                 </p>
                 <Button
-                  as={Link as any}
-                  to="/templates/create"
-                  variant="light"
-                  size="lg"
-                >
+                    onClick={() => navigate("/templates/create")}
+                    variant="light"
+                    size="lg"
+                  >
                   <PlusCircle size={20} className="me-2" />
                   Create Your First Template
                 </Button>

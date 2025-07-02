@@ -3,7 +3,7 @@ import { Alert, Button } from "react-bootstrap";
 import { RefreshCw } from "lucide-react";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
-function ErrorFallback({ error }: { error: Error }) {
+function ErrorFallback() {
   return (
     <div className="container py-5">
       <Alert variant="danger" className="text-center">

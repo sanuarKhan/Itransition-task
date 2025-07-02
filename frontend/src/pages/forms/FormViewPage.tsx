@@ -9,7 +9,6 @@ import {
   Badge,
 } from "react-bootstrap";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -50,18 +49,16 @@ export const FormViewPage: React.FC = () => {
   const form = formData?.form;
 
   // Check permissions
-  const canEdit =
-    user &&
+  const canEdit =    user &&
     form &&
     (user.id === form.userId ||
-      user.id === form.template.ownerId ||
+      user.id === form.template.owner.id ||
       user.role === "ADMIN");
 
-  const canDelete =
-    user &&
+  const canDelete =    user &&
     form &&
     (user.id === form.userId ||
-      user.id === form.template.ownerId ||
+      user.id === form.template.owner.id ||
       user.role === "ADMIN");
 
   const handleDelete = async () => {
@@ -103,7 +100,7 @@ export const FormViewPage: React.FC = () => {
             The form submission you're looking for doesn't exist or has been
             deleted.
           </p>
-          <Button as={Link as any} to="/forms" variant="outline-primary">
+          <Button onClick={() => navigate("/forms")} variant="outline-primary">
             <ArrowLeft size={16} className="me-2" />
             Back to Forms
           </Button>
@@ -118,8 +115,7 @@ export const FormViewPage: React.FC = () => {
       <div className="d-flex justify-content-between align-items-start mb-4">
         <div className="d-flex align-items-center">
           <Button
-            as={Link as any}
-            to="/forms"
+            onClick={() => navigate("/forms")}
             variant="outline-secondary"
             size="sm"
             className="me-3"
@@ -138,8 +134,7 @@ export const FormViewPage: React.FC = () => {
         <div className="d-flex gap-2">
           {canEdit && (
             <Button
-              as={Link as any}
-              to={`/forms/${form.id}/edit`}
+              onClick={() => navigate(`/forms/${form.id}/edit`)}
               variant="outline-primary"
               size="sm"
             >

@@ -206,7 +206,7 @@ export interface SubmitFormData {
   answers: {
     questionId: string;
     valueText?: string;
-    valueInt?: number;
+    valueInt?: number | null;
     valueBool?: boolean;
   }[];
 }

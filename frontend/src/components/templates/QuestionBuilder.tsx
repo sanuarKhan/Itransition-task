@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col, Badge, Alert } from "react-bootstrap";
-import { Plus, Trash2, Edit3, GripVertical } from "lucide-react";
+import { Trash2, Edit3 } from "lucide-react";
 import { CreateQuestionData, QuestionType } from "../../types";
 
 interface QuestionBuilderProps {
@@ -60,19 +60,6 @@ export const QuestionBuilder: React.FC<QuestionBuilderProps> = ({
   };
 
   const deleteQuestion = (index: number) => {
-    if (window.confirm("Are you sure you want to delete this question?")) {
-      const updatedQuestions = questions.filter((_, i) => i !== index);
-      onChange(updatedQuestions);
-      setEditingIndex(null);
-    }
-  };
-
-  const moveQuestion = (fromIndex: number, toIndex: number) => {
-    const updatedQuestions = [...questions];
-    const [moved] = updatedQuestions.splice(fromIndex, 1);
-    updatedQuestions.splice(toIndex, 0, moved);
-    onChange(updatedQuestions);
-  };
 
   if (questions.length === 0) {
     return (

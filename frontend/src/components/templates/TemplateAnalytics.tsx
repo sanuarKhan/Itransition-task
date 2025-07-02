@@ -1,39 +1,8 @@
 import React from "react";
 import { Card, Row, Col, Alert, Badge, ProgressBar } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3, TrendingUp, Hash, CheckSquare } from "lucide-react";
 import { getTemplateAnalytics } from "../../services/api";
-import { LoadingSpinner } from "../UI/LoadingSpinner";
-import { QuestionAnalytics } from "../../types/index";
-
-interface TemplateAnalyticsProps {
-  templateId: string;
-}
-
-// Backend response structure (different from frontend expectation)
-interface BackendAnalyticsResponse {
-  totalResponses: number;
-  responsesByDate: Record<string, number>;
-  questionAnalytics: Record<
-    string,
-    {
-      question: string;
-      type: string;
-      totalAnswers: number;
-      answers: Array<{
-        value: any;
-        createdAt: string;
-      }>;
-      // Additional fields for specific question types
-      average?: number;
-      min?: number;
-      max?: number;
-      truePercentage?: number;
-      [key: string]: any;
-    }
-  >;
-}
 
 export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
   templateId,

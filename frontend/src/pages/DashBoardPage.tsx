@@ -41,10 +41,6 @@ export const DashboardPage: React.FC = () => {
 
   // Fetch my templates
   const { data: templatesData, isLoading: loadingTemplates } = useQuery({
-    queryKey: ["myTemplates"],
-    queryFn: getMyTemplates,
-    enabled: !!user,
-  });
 
   if (!user) {
     return (
@@ -57,7 +53,6 @@ export const DashboardPage: React.FC = () => {
   const stats = statsData?.stats;
   const recentTemplates = statsData?.recentTemplates || [];
   const recentForms = statsData?.recentForms || [];
-  const myTemplates = templatesData?.templates || [];
 
   // FIXED: Handler functions for navigation
   const handleCreateTemplate = () => navigate("/templates/create");
@@ -223,9 +218,7 @@ export const DashboardPage: React.FC = () => {
                                 size={16}
                                 className="me-2 text-muted"
                               />
-                              {template._count?.forms ||
-                                template.forms?.length ||
-                                0}
+                              {template._count?.forms || 0}
                             </div>
                           </td>
                           <td>
@@ -342,5 +335,3 @@ export const DashboardPage: React.FC = () => {
         </Col>
       </Row>
     </Container>
-  );
-};

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuthStore, useUIStore } from "./store/index";
@@ -33,7 +33,7 @@ import { AdminRoute } from "./components/Auth/AdminRoute";
 function App() {
   const { i18n } = useTranslation();
   const { user, refreshUser } = useAuthStore();
-  const { theme, language, setTheme } = useUIStore();
+  const { theme, language } = useUIStore();
 
   // Initialize app
   useEffect(() => {

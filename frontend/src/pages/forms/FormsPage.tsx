@@ -20,12 +20,9 @@ import {
   Edit,
   Trash2,
   Calendar,
-  Filter,
 } from "lucide-react";
-import { useFormsStore, useAuthStore, useUIStore } from "../../store/index";
+import { useFormsStore, useAuthStore } from "../../store/index";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
-import { ConfirmModal } from "../../components/UI/ConfirmModal";
-import { Form as FormType } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "react-toastify";
 
@@ -224,8 +221,7 @@ export const FormsPage: React.FC = () => {
                       <td>
                         <div className="d-flex gap-1">
                           <Button
-                            as={Link as any}
-                            to={`/forms/${form.id}`}
+                            onClick={() => navigate(`/forms/${form.id}`)}
                             variant="outline-primary"
                             size="sm"
                             title="View submission"
@@ -233,8 +229,7 @@ export const FormsPage: React.FC = () => {
                             <Eye size={14} />
                           </Button>
                           <Button
-                            as={Link as any}
-                            to={`/templates/${form.template.id}/fill`}
+                            onClick={() => navigate(`/templates/${form.template.id}/fill`)}
                             variant="outline-secondary"
                             size="sm"
                             title="Edit submission"

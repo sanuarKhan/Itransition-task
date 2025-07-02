@@ -64,10 +64,10 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
       </Col>
 
       <Col lg={4}>
-        {template.image && (
+        {template.thumbnail && (
           <Card className="mb-4">
             <Image
-              src={template.image}
+              src={template.thumbnail}
               alt={template.title}
               className="card-img-top"
               style={{ height: '200px', objectFit: 'cover' }}

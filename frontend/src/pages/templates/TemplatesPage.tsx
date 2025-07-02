@@ -13,7 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Search, Filter, PlusCircle, FileText, Grid, List } from "lucide-react";
+import { Search, PlusCircle, FileText, Grid, List } from "lucide-react";
 import { useAuthStore } from "../../store/index";
 import { getTemplates, getMyTemplates } from "../../services/api";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
@@ -87,7 +87,7 @@ export const TemplatesPage: React.FC = () => {
           <p className="text-muted mb-0">Browse and manage form templates</p>
         </div>
         {user && (
-          <Button as={Link} to="/templates/create" variant="primary">
+          <Button onClick={() => navigate("/templates/create")} variant="primary">
             <PlusCircle size={16} className="me-2" />
             {t("templates.createNew")}
           </Button>
@@ -209,7 +209,7 @@ export const TemplatesPage: React.FC = () => {
                       : t("templates.createFirst")}
                   </p>
                   {!searchQuery && (
-                    <Button as={Link} to="/templates/create" variant="primary">
+                    <Button onClick={() => navigate("/templates/create")} variant="primary">
                       <PlusCircle size={16} className="me-2" />
                       Create Your First Template
                     </Button>

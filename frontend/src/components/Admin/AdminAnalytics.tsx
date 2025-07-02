@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col, Card, Alert } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import {
   TrendingUp,
@@ -98,7 +97,7 @@ export const AdminAnalytics: React.FC = () => {
               <small className="text-muted">Active Users</small>
               <div className="mt-2">
                 <small className="text-success">
-                  {((stats?.activeUsers / stats?.totalUsers) * 100).toFixed(1)}%
+                  {((stats?.activeUsers || 0) / (stats?.totalUsers || 1) * 100).toFixed(1)}%
                   active
                 </small>
               </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation();

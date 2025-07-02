@@ -24,7 +24,7 @@ import {
   Tag,
   Image as ImageIcon,
 } from "lucide-react";
-import { useAuthStore, useUIStore, useTemplatesStore } from "../../store/index";
+import { useAuthStore, useTemplatesStore } from "../../store/index";
 import {
   getTags,
   getTemplate,
@@ -87,7 +87,7 @@ export const TemplateEditPage: React.FC = () => {
         title: template.title,
         description: template.description,
         topic: template.topic,
-        image: template.image || "",
+        image: template.thumbnail || "",
         tags: template.tags.map((t) => t.tag.name),
         isPublic: template.isPublic,
         allowedUserIds: template.allowedUsers?.map((au) => au.user.id) || [],

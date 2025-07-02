@@ -1,8 +1,7 @@
 // frontend/src/pages/Templates/TemplateViewPage.tsx - FIXED VERSION
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Tab, Tabs, Button, Alert } from "react-bootstrap";
+import { Container, Tab, Tabs, Button, Alert } from "react-bootstrap";
 import { useParams, Link, useNavigate, data } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import {
   Edit,
@@ -161,8 +160,7 @@ export const TemplateViewPage: React.FC = () => {
       <div className="d-flex justify-content-between align-items-start mb-4">
         <div className="d-flex align-items-center">
           <Button
-            as={Link}
-            to="/templates"
+            onClick={() => navigate("/templates")}
             variant="outline-secondary"
             size="sm"
             className="me-3"
@@ -172,7 +170,7 @@ export const TemplateViewPage: React.FC = () => {
           <div>
             <h1 className="h3 mb-1">{template.title}</h1>
             <p className="text-muted mb-0">
-              by {template.owner.name} • {template.forms?.length || 0} responses
+              by {template.owner.name} • {template._count.forms || 0} responses
             </p>
           </div>
         </div>
@@ -190,7 +188,7 @@ export const TemplateViewPage: React.FC = () => {
               className={isLiked ? "me-2" : "me-2"}
               fill={isLiked ? "currentColor" : "none"}
             />
-            {template.likes?.length || 0}
+            {template._count.likes || 0}
           </Button>
 
           {/* Share Button */}
@@ -202,11 +200,10 @@ export const TemplateViewPage: React.FC = () => {
           {/* Edit Button */}
           {canEdit && (
             <Button
-              as={Link}
-              to={`/templates/${template.id}/edit`}
-              variant="outline-primary"
-              size="sm"
-            >
+            onClick={() => navigate(`/templates/${template.id}/edit`)}
+            variant="outline-primary"
+            size="sm"
+          >
               <Edit size={16} className="me-2" />
               Edit
             </Button>
@@ -230,8 +227,7 @@ export const TemplateViewPage: React.FC = () => {
               (template.allowedUsers?.some((u: any) => u.id === user.id) ||
                 canEdit) && (
                 <Button
-                  as={Link}
-                  to={`/templates/${template.id}/fill`}
+                  onClick={() => navigate(`/templates/${template.id}/fill`)}
                   variant="primary"
                   size="sm"
                 >
@@ -262,7 +258,7 @@ export const TemplateViewPage: React.FC = () => {
         {canEdit && (
           <Tab
             eventKey="results"
-            title={`Results (${template.forms?.length || 0})`}
+            title={`Results (${template._count.forms || 0})`}
           >
             <TemplateResults templateId={template.id} />
           </Tab>
@@ -276,7 +272,7 @@ export const TemplateViewPage: React.FC = () => {
 
         <Tab
           eventKey="comments"
-          title={`Comments (${template.comments?.length || 0})`}
+          title={`Comments (${template._count.comments || 0})`}
         >
           <TemplateComments templateId={template.id} />
         </Tab>

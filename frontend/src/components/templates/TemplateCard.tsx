@@ -10,7 +10,7 @@ import {
   User,
   Calendar,
 } from "lucide-react";
-import { Template } from "../../types/index"; // FIXED: Corrected import path
+import { Template } from "../../types"; // FIXED: Corrected import path
 import { formatSafeDate } from "../../utils/dateUtils"; // FIXED: Use safe date formatting
 import { getSafeTags } from "../../utils/tagUtils"; // FIXED: Use tag utilities
 
@@ -53,10 +53,10 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   return (
     <Card className="h-100 shadow-sm border-0 hover-lift template-card">
       {/* Template Image */}
-      {template.image && (
+      {template.thumbnail && (
         <Card.Img
           variant="top"
-          src={template.image}
+          src={template.thumbnail}
           style={{ height: "200px", objectFit: "cover" }}
           alt={template.title}
           loading="lazy"

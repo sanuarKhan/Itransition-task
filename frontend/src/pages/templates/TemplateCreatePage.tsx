@@ -30,8 +30,6 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { useAuthStore, useTemplatesStore } from "../../store/index";
-import { getTags, searchUsers, uploadImage } from "../../services/api";
-import { CreateTemplateData, Topic, CreateQuestionData } from "../../types";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { QuestionBuilder } from "../../components/Templates/QuestionBuilder";
@@ -187,7 +185,7 @@ export const TemplateCreatePage: React.FC = () => {
             </div>
           </div>
 
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit(onSubmit as any)}>
             {/* Basic Information */}
             <Card className="mb-4">
               <Card.Header>

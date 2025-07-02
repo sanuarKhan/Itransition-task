@@ -8,7 +8,6 @@ import {
   ProgressBar,
 } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -212,7 +211,7 @@ export const FormFillPage: React.FC = () => {
         <Controller
           name={question.id}
           control={control}
-          render={({ field }) => {
+          render={({ field }): React.ReactElement => {
             switch (question.type) {
               case "SINGLE_LINE":
                 return (

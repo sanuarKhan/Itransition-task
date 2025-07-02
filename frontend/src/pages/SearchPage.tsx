@@ -9,15 +9,11 @@ import {
   Alert,
   Badge,
 } from "react-bootstrap";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, X, Tag } from "lucide-react";
 import { getTagCloud, searchTemplates } from "../services/api";
-import { LoadingSpinner } from "../components/UI/LoadingSpinner";
-import { TemplateCard } from "../components/Templates/TemplateCard";
-import { TagCloud } from "../components/UI/TagCloud";
-import { Template, Topic } from "../types/index";
 
 export const SearchPage: React.FC = () => {
   const { t } = useTranslation();

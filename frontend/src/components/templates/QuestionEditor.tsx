@@ -8,9 +8,7 @@ import {
   Row,
   Col,
   Container,
-  Dropdown,
 } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
