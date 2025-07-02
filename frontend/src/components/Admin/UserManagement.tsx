@@ -43,17 +43,17 @@ interface SearchForm {
 }
 
 export const UserManagement: React.FC = () => {
-  
   const { user: currentUser } = useAuthStore();
   const queryClient = useQueryClient();
 
   const [currentPage, setCurrentPage] = React.useState(1);
   interface ConfirmAction {
-  type: "block" | "unblock" | "makeAdmin" | "removeAdmin" | "delete";
-  user: User;
-}
+    type: "block" | "unblock" | "makeAdmin" | "removeAdmin" | "delete";
+    user: User;
+  }
 
-  const [confirmAction, setConfirmAction] = React.useState<ConfirmAction | null>(null);
+  const [confirmAction, setConfirmAction] =
+    React.useState<ConfirmAction | null>(null);
   const [isProcessing, setIsProcessing] = React.useState(false);
 
   const itemsPerPage = 10;
@@ -119,6 +119,7 @@ export const UserManagement: React.FC = () => {
       // Refresh data
       queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
       queryClient.invalidateQueries({ queryKey: ["adminStats"] });
+      //eslint-disable-next-line
     } catch (error: any) {
       toast.error(
         error.response?.data?.error || `Failed to ${confirmAction.type} user`

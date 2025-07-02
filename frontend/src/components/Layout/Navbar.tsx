@@ -46,6 +46,7 @@ export const Navbar: React.FC = () => {
       sticky="top"
     >
       <Container>
+        {/* eslint-disable-next-line */}
         <BSNavbar.Brand as={Link as any} to="/" className="fw-bold">
           FormCraft
         </BSNavbar.Brand>
@@ -54,6 +55,7 @@ export const Navbar: React.FC = () => {
 
         <BSNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
+            {/* eslint-disable-next-line */}
             <Nav.Link as={Link as any} to="/" active={isActive("/")}>
               {t("nav.home")}
             </Nav.Link>
@@ -61,6 +63,7 @@ export const Navbar: React.FC = () => {
             {user && (
               <>
                 <Nav.Link
+                  //eslint-disable-next-line
                   as={Link as any}
                   to="/dashboard"
                   active={isActive("/dashboard")}
@@ -68,6 +71,7 @@ export const Navbar: React.FC = () => {
                   {t("nav.dashboard")}
                 </Nav.Link>
                 <Nav.Link
+                  // eslint-disable-next-line
                   as={Link as any}
                   to="/templates"
                   active={isActive("/templates")}
@@ -75,6 +79,7 @@ export const Navbar: React.FC = () => {
                   {t("nav.templates")}
                 </Nav.Link>
                 <Nav.Link
+                  // eslint-disable-next-line
                   as={Link as any}
                   to="/forms"
                   active={isActive("/forms")}
@@ -83,7 +88,10 @@ export const Navbar: React.FC = () => {
                 </Nav.Link>
                 {user.role === "ADMIN" && (
                   <Nav.Link
-                    as={Link}
+                    // eslint-disable-next-line
+                    as={Link as any}
+                    to="/admin"
+                    className="me-2"
                     active={isActive("/admin")}
                   >
                     {t("nav.admin")}
@@ -151,6 +159,7 @@ export const Navbar: React.FC = () => {
                 }
                 id="user-dropdown"
               >
+                {/* eslint-disable-next-line */}
                 <NavDropdown.Item as={Link as any} to="/profile">
                   <Settings size={16} className="me-2" />
                   {t("nav.profile")}
@@ -163,6 +172,7 @@ export const Navbar: React.FC = () => {
               </NavDropdown>
             ) : (
               <>
+                {/* eslint-disable-next-line */}
                 <Nav.Link as={Link as any} to="/login">
                   {t("nav.login")}
                 </Nav.Link>

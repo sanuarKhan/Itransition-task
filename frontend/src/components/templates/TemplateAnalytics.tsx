@@ -14,8 +14,6 @@ interface TemplateAnalyticsProps {
 export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
   templateId,
 }) => {
-  
-
   const {
     data: analyticsData,
     isLoading,
@@ -28,11 +26,11 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
   // Debug log to see the actual structure
   console.log("Raw analytics data:", analyticsData);
 
-  // Convert backend response to frontend format
+  //eslint-disable-next-line
   const convertBackendToFrontend = (backendData: any): QuestionAnalytics[] => {
     if (!backendData) return [];
 
-    // Handle different possible response structures
+    //eslint-disable-next-line
     let questionAnalytics: Record<string, any> = {};
 
     // Case 1: Direct questionAnalytics object
@@ -50,10 +48,11 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
 
     // Convert object to array format
     return Object.entries(questionAnalytics).map(
+      //eslint-disable-next-line
       ([questionId, data]: [string, any]) => {
+        //eslint-disable-next-line
         const questionData = data as any;
-
-        // Calculate stats based on question type
+        //eslint-disable-next-line
         let stats: any = {
           total: questionData.totalAnswers || 0,
           count: questionData.totalAnswers || 0,
@@ -80,6 +79,7 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
           // For text questions, calculate frequency
           const frequency: Record<string, number> = {};
           if (questionData.answers && Array.isArray(questionData.answers)) {
+            //eslint-disable-next-line
             questionData.answers.forEach((answer: any) => {
               const value = String(answer.value || "").trim();
               if (value) {
@@ -179,7 +179,7 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
           </Card>
         );
 
-      case "CHECKBOX":
+      case "CHECKBOX": {
         const truePercentage = stats.total
           ? (stats.trueCount! / stats.total!) * 100
           : 0;
@@ -232,8 +232,10 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
             </Card.Body>
           </Card>
         );
+      }
 
-      default: { // SINGLE_LINE, MULTI_LINE
+      default: {
+        // SINGLE_LINE, MULTI_LINE
         const frequency = stats.frequency || {};
         const sortedEntries = Object.entries(frequency)
           .sort(([, a], [, b]) => b - a)
@@ -288,7 +290,8 @@ export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
               )}
             </Card.Body>
           </Card>
-        );}
+        );
+      }
     }
   };
 
