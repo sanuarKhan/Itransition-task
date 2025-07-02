@@ -1,5 +1,5 @@
 import React from "react";
-import { Template } from "../../types";
+import type { Template } from "../../types";
 
 interface QuestionEditorProps {
   template: Template;

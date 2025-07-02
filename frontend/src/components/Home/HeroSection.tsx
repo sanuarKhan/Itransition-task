@@ -3,12 +3,12 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Play } from "lucide-react";
-// import { useAuthStore } from "../../store/index";
+import { useAuthStore } from "../../store/index";
 
 export const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  // const { user } = useAuthStore();
+  const { user } = useAuthStore();
 
   return (
     <section
@@ -23,7 +23,12 @@ export const HeroSection: React.FC = () => {
             <h1 className="display-4 fw-bold mb-4">{t("home.hero.title")}</h1>
             <p className="lead mb-4">{t("home.hero.subtitle")}</p>
             <div className="d-flex gap-3">
-              <Button variant="light" size="lg" className="px-4">
+              <Button
+                onClick={() => navigate(user ? "/dashboard" : "/register")}
+                variant="light"
+                size="lg"
+                className="px-4"
+              >
                 {t("home.hero.getStarted")}{" "}
                 <ArrowRight size={20} className="ms-2" />
               </Button>

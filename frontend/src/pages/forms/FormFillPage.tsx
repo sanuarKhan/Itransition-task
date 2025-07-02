@@ -18,7 +18,7 @@ import { Send, ArrowLeft, Clock, User } from "lucide-react";
 import { useAuthStore, useFormsStore } from "../../store/index";
 import { checkFormSubmission, getTemplate } from "../../services/api";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
-import { Question } from "../../types/index";
+import type { Question } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 
 // Dynamic validation schema based on questions
@@ -65,6 +65,9 @@ const createValidationSchema = (questions: Question[]) => {
 
 export const FormFillPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();

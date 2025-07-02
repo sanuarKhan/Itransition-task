@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Table, Button, Alert, Badge, Pagination } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Download, User, Calendar, Edit } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getTemplateResults } from "../../services/api";
 import { LoadingSpinner } from "../UI/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
@@ -14,7 +14,7 @@ interface TemplateResultsProps {
 export const TemplateResults: React.FC<TemplateResultsProps> = ({
   templateId,
 }) => {
-  
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -182,8 +182,7 @@ export const TemplateResults: React.FC<TemplateResultsProps> = ({
                     <td>
                       <div className="d-flex gap-1">
                         <Button
-                          as={Link as any}
-                          to={`/forms/${form.id}`}
+                          onClick={() => navigate(`/forms/${form.id}`)}
                           variant="outline-primary"
                           size="sm"
                         >
@@ -191,8 +190,7 @@ export const TemplateResults: React.FC<TemplateResultsProps> = ({
                           View
                         </Button>
                         <Button
-                          as={Link as any}
-                          to={`/forms/${form.id}/edit`}
+                          onClick={() => navigate(`/forms/${form.id}/edit`)}
                           variant="outline-secondary"
                           size="sm"
                         >

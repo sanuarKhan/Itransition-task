@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "../../store/index";
-import { LoginData } from "../../types/index";
+import type { LoginData } from "../../types/index";
 
 const schema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),

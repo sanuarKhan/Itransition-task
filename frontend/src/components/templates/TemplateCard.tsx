@@ -10,7 +10,7 @@ import {
   User,
   Calendar,
 } from "lucide-react";
-import { Template } from "../../types"; // FIXED: Corrected import path
+import type { Template } from "../../types"; // FIXED: Corrected import path
 import { formatSafeDate } from "../../utils/dateUtils"; // FIXED: Use safe date formatting
 import { getSafeTags } from "../../utils/tagUtils"; // FIXED: Use tag utilities
 

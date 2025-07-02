@@ -12,7 +12,7 @@ import {
   Globe,
   Lock
 } from 'lucide-react';
-import { Template } from '@/types';
+import type { Template } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 
 interface TemplateInfoProps {

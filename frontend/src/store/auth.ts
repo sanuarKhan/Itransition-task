@@ -1,11 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import {
-  User,
+import type { User,
   LoginData,
   RegisterData,
-  UpdateProfileData,
-} from "../types/index";
+  UpdateProfileData, } from "../types/index";
 import {
   login,
   register,

@@ -14,14 +14,16 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 
 import { Search, PlusCircle, FileText, Grid, List } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/index";
 import { getTemplates, getMyTemplates } from "../../services/api";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import { TemplateCard } from "../../components/Templates/TemplateCard";
-import { Topic } from "../../types/index";
+import type { Topic } from "../../types/index";
 
 export const TemplatesPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const [activeTab, setActiveTab] = useState("public");

@@ -35,7 +35,7 @@ import {
 import { useAuthStore } from "../../store/index";
 import { LoadingSpinner } from "../UI/LoadingSpinner";
 import { ConfirmModal } from "../UI/ConfirmModal";
-import { User } from "../../types/index";
+import type { User } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 
 interface SearchForm {

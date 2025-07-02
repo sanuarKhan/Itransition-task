@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Camera, Save } from "lucide-react";
 import { useAuthStore } from "../../store/index";
-import { UpdateProfileData } from "../../types/index";
+import type { UpdateProfileData } from "../../types/index";
 import { UploadAvatar } from "../../services/api";
 import { toast } from "react-toastify";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Tag } from "../../types/index";
+import type { Tag } from "../../types/index";
 
 interface TagCloudProps {
   tags: Tag[];

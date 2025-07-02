@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BarChart3, TrendingUp, Hash, CheckSquare } from "lucide-react";
 import { getTemplateAnalytics } from "../../services/api";
 import { LoadingSpinner } from "../UI/LoadingSpinner";
-import { QuestionAnalytics } from "../../types";
+import type { QuestionAnalytics } from "../../types";
 
 interface TemplateAnalyticsProps {
   templateId: string;

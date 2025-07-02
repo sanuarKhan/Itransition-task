@@ -1,11 +1,9 @@
 import { create } from "zustand";
-import {
-  Template,
+import type { Template,
   CreateTemplateData,
   UpdateTemplateData,
   Question,
-  CreateQuestionData,
-} from "../types/index";
+  CreateQuestionData, } from "../types/index";
 import {
   getTemplates,
   getMyTemplates,

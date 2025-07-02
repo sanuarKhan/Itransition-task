@@ -28,6 +28,9 @@ import { formatDistanceToNow } from "date-fns";
 
 export const FormViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();

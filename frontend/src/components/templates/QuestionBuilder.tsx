@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col, Badge, Alert } from "react-bootstrap";
 import { Trash2, Edit3 } from "lucide-react";
-import { CreateQuestionData, QuestionType } from "../../types";
+import type { CreateQuestionData, QuestionType } from "../../types";
 
 interface QuestionBuilderProps {
   questions: CreateQuestionData[];

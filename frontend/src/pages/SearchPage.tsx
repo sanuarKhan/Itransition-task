@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, X, Tag } from "lucide-react";
 import { getTagCloud, searchTemplates } from "../services/api";
-import { Topic } from "../types";
+import type { Topic } from "../types";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
 import { TemplateCard } from "../components/Templates/TemplateCard";
 import { TagCloud } from "../components/UI/TagCloud";

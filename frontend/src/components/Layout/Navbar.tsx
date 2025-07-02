@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Search, User, Settings, LogOut, Moon, Sun, Globe } from "lucide-react";
 import { useAuthStore, useUIStore } from "../../store/index";
 import { SearchBar } from "../UI/SearchBar";
-import { Language, Theme } from "../../types/index";
+import type { Language, Theme } from "../../types/index";
 
 export const Navbar: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -48,7 +48,7 @@ export const Navbar: React.FC = () => {
       <Container>
         {/* eslint-disable-next-line */}
         <BSNavbar.Brand as={Link as any} to="/" className="fw-bold">
-          FormCraft
+          Doogle Torm{" "}
         </BSNavbar.Brand>
 
         <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
@@ -62,10 +62,7 @@ export const Navbar: React.FC = () => {
 
             {user && (
               <>
-                <Nav.Link
-                  //eslint-disable-next-line
-                  as={Link as any}
-                  to="/dashboard"
+                <Nav.Link as={Link} to="/dashboard"
                   active={isActive("/dashboard")}
                 >
                   {t("nav.dashboard")}
@@ -88,8 +85,7 @@ export const Navbar: React.FC = () => {
                 </Nav.Link>
                 {user.role === "ADMIN" && (
                   <Nav.Link
-                    // eslint-disable-next-line
-                    as={Link as any}
+                    as={Link}
                     to="/admin"
                     className="me-2"
                     active={isActive("/admin")}
@@ -172,8 +168,7 @@ export const Navbar: React.FC = () => {
               </NavDropdown>
             ) : (
               <>
-                {/* eslint-disable-next-line */}
-                <Nav.Link as={Link as any} to="/login">
+                <Nav.Link as={Link} to="/login">
                   {t("nav.login")}
                 </Nav.Link>
                 <Nav.Link as={Link} to="/register">

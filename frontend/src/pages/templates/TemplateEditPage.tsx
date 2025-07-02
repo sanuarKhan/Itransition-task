@@ -31,7 +31,7 @@ import {
   searchUsers,
   uploadImage,
 } from "../../services/api";
-import { UpdateTemplateData, Topic } from "../../types/index";
+import type { UpdateTemplateData, Topic } from "../../types/index";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { toast } from "react-toastify";

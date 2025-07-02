@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Form, SubmitFormData } from "../types/index";
+import type { Form, SubmitFormData } from "../types/index";
 import {
   getMyForms,
   getForm,

@@ -1,7 +1,7 @@
 // frontend/src/pages/Templates/TemplateViewPage.tsx - FIXED VERSION
 import React, { useState, useEffect } from "react";
 import { Container, Tab, Tabs, Button, Alert } from "react-bootstrap";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   Edit,
@@ -60,9 +60,7 @@ export const TemplateViewPage: React.FC = () => {
   // Initialize like status
   useEffect(() => {
     if (template && user) {
-      setIsLiked(
-        template._count.likes > 0 && template.likes?.some((like: any) => like.userId === user.id) || false
-      );
+      setIsLiked(template._count.likes > 0 && user !== null);
     }
   }, [template, user]);
 
@@ -144,7 +142,7 @@ export const TemplateViewPage: React.FC = () => {
           <p>
             The template you're looking for doesn't exist or has been deleted.
           </p>
-          <Button as={Link} to="/templates" variant="outline-primary">
+          <Button onClick={() => navigate("/templates")} variant="outline-primary">
             <ArrowLeft size={16} className="me-2" />
             Back to Templates
           </Button>

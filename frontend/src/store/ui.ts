@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Theme, Language } from "../types/index";
+import type { Theme, Language } from "../types/index";
 
 interface UIState {
   theme: Theme;

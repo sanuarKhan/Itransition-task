@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Card, Button, Alert, Badge, Row, Col } from "react-bootstrap";
 import { Plus, Edit, GripVertical, Settings, Eye } from "lucide-react";
-import { Template, Question } from "../../types/index";
+import type { Template, Question } from "../../types/index";
 import { QuestionEditor } from "./QuestionEditor";
 
 interface TemplateQuestionsProps {

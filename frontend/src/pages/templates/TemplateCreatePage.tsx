@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useAuthStore, useTemplatesStore } from "../../store/index";
 import { getTags, searchUsers, uploadImage } from "../../services/api";
-import { CreateTemplateData } from "../../types";
+import type { CreateTemplateData } from "../../types";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { QuestionBuilder } from "../../components/Templates/QuestionBuilder";
