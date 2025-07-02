@@ -37,7 +37,6 @@ export const FormViewPage: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Fetch form
   const {
     data: formData,
     isLoading,
