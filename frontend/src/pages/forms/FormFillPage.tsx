@@ -66,8 +66,6 @@ const createValidationSchema = (questions: Question[]) => {
 export const FormFillPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();
