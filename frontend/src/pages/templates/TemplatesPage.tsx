@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -31,11 +31,24 @@ export const TemplatesPage: React.FC = () => {
   const [topicFilter, setTopicFilter] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
   // Fetch public templates
   const { data: publicTemplatesData, isLoading: loadingPublic } = useQuery({
-    queryKey: ["publicTemplates", searchQuery, topicFilter],
+    queryKey: ["publicTemplates", debouncedSearchQuery, topicFilter],
     queryFn: () =>
       getTemplates({
+        q: debouncedSearchQuery,
         page: 1,
         limit: 20,
         ...(topicFilter && { topic: topicFilter }),
@@ -45,26 +58,13 @@ export const TemplatesPage: React.FC = () => {
 
   // Fetch my templates
   const { data: myTemplatesData, isLoading: loadingMy } = useQuery({
-    queryKey: ["myTemplates"],
-    queryFn: getMyTemplates,
+    queryKey: ["myTemplates", debouncedSearchQuery],
+    queryFn: () => getMyTemplates({ q: debouncedSearchQuery }),
     enabled: activeTab === "my" && !!user,
   });
 
   const publicTemplates = publicTemplatesData?.templates || [];
   const myTemplates = myTemplatesData?.templates || [];
-
-  // Filter templates by search
-  const filteredPublicTemplates = publicTemplates.filter(
-    (template) =>
-      template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const filteredMyTemplates = myTemplates.filter(
-    (template) =>
-      template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const topics: Topic[] = [
     "EDUCATION",
@@ -77,8 +77,7 @@ export const TemplatesPage: React.FC = () => {
   ];
 
   const isLoading = activeTab === "public" ? loadingPublic : loadingMy;
-  const templates =
-    activeTab === "public" ? filteredPublicTemplates : filteredMyTemplates;
+  const templates = activeTab === "public" ? publicTemplates : myTemplates;
 
   return (
     <Container className="py-4">

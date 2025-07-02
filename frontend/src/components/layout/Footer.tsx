@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
       <Container>
         <Row>
           <Col md={6}>
-            <h5 className="fw-bold">FormCraft</h5>
+            <h5 className="fw-bold">DoogleTorm</h5>
             <p className="text-muted">
               Create beautiful forms, surveys, and questionnaires with ease.
             </p>

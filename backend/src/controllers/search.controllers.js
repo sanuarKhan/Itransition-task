@@ -12,120 +12,88 @@ const searchTemplatesCTRL = async (req, res) => {
       });
     }
 
-    const searchTerms = q
-      .trim()
-      .split(" ")
-      .map((term) => term.trim())
-      .filter(Boolean); //TODO: need to study
+    let query = `
+      SELECT
+        t.*,
+        u.name as ownerName,
+        u.img as ownerImg,
+        u.id as ownerId,
+        (SELECT COUNT(*) FROM "forms" WHERE "templateId" = t.id) as formsCount,
+        (SELECT COUNT(*) FROM "likes" WHERE "templateId" = t.id) as likesCount,
+        (SELECT COUNT(*) FROM "comments" WHERE "templateId" = t.id) as commentsCount
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."isPublic" = true
+    `;
 
-    const where = {
-      isPublic: true,
-      OR: [
-        // Search in title
-        {
-          title: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        // Search in description
-        {
-          description: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        // Search in questions
-        {
-          questions: {
-            some: {
-              //TODO: need to study
-              OR: [
-                {
-                  title: {
-                    contains: q,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  description: {
-                    contains: q,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        },
-        // Search in tags
-        {
-          tags: {
-            some: {
-              tag: {
-                name: {
-                  contains: q,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-        // Search in comments
-        {
-          comments: {
-            some: {
-              content: {
-                contains: q,
-                mode: "insensitive",
-              },
-            },
-          },
-        },
-      ],
-      ...(topic && { topic }),
-      ...(tags && {
-        tags: {
-          some: {
-            tag: {
-              name: { in: tags.split(",") },
-            },
-          },
-        },
-      }),
-    };
+    const queryParams = [];
+    let paramIndex = 1;
 
-    const templates = await db.template.findMany({
-      where,
-      include: {
-        owner: {
-          select: { id: true, name: true, img: true },
-        },
-        tags: {
-          include: { tag: true },
-        },
-        _count: {
-          select: { forms: true, likes: true, comments: true },
-        },
+    const searchTsQuery = q.split(' ').map(term => `${term}:*`).join(' & ');
+    query += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+    queryParams.push(searchTsQuery, searchTsQuery);
+
+    if (topic) {
+      query += ` AND t.topic = ${paramIndex++}`;
+      queryParams.push(topic);
+    }
+
+    if (tags) {
+      const tagArray = tags.split(',').map(tag => tag.trim());
+      query += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name IN (${tagArray.map((_, i) => `${paramIndex + i}`).join(',')}))`;
+      queryParams.push(...tagArray);
+      paramIndex += tagArray.length;
+    }
+
+    query += ` ORDER BY ts_rank(t.search_vector, to_tsquery(${paramIndex++})) DESC, t."updatedAt" DESC LIMIT ${paramIndex++} OFFSET ${paramIndex++}`;
+    queryParams.push(searchTsQuery, parseInt(limit), offset);
+
+    const templates = await db.$queryRawUnsafe(query, ...queryParams);
+
+    const totalQuery = `
+      SELECT COUNT(*)
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."isPublic" = true
+    `;
+    const totalParams = [];
+    paramIndex = 1;
+
+    const totalSearchTsQuery = q.split(' ').map(term => `${term}:*`).join(' & ');
+    totalQuery += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+    totalParams.push(totalSearchTsQuery, totalSearchTsQuery);
+
+    if (topic) {
+      totalQuery += ` AND t.topic = ${paramIndex++}`;
+      totalParams.push(topic);
+    }
+
+    if (tags) {
+      const tagArray = tags.split(',').map(tag => tag.trim());
+      totalQuery += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name IN (${tagArray.map((_, i) => `${paramIndex + i}`).join(',')}))`;
+      totalParams.push(...tagArray);
+      paramIndex += tagArray.length;
+    }
+
+    const totalResult = await db.$queryRawUnsafe(totalQuery, ...totalParams);
+    const total = totalResult[0].count;
+
+    const formattedTemplates = templates.map(template => ({
+      ...template,
+      owner: {
+        id: template.ownerId,
+        name: template.ownerName,
+        img: template.ownerImg,
       },
-      orderBy: [
-        // Prioritize title matches
-        {
-          _relevance: {
-            fields: ["title"],
-            search: q,
-            sort: "desc",
-          },
-        },
-        { createdAt: "desc" },
-      ],
-      skip: offset,
-      take: parseInt(limit),
-    });
-
-    const total = await db.template.count({ where });
+      _count: {
+        forms: Number(template.formsCount),
+        likes: Number(template.likesCount),
+        comments: Number(template.commentsCount),
+      },
+    }));
 
     res.json({
-      templates,
+      templates: formattedTemplates,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),

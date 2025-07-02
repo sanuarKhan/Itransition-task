@@ -254,7 +254,6 @@ export const TemplateCreatePage: React.FC = () => {
               </Card.Body>
             </Card>
 
-            {/* ✅ FIXED: Questions Section with proper component */}
             <Card className="mb-4">
               <Card.Header>
                 <h5 className="mb-0">Questions *</h5>

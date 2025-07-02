@@ -222,8 +222,7 @@ export const TemplateViewPage: React.FC = () => {
           {/* Fill Form Button */}
           {template.isPublic ||
             (user &&
-              //eslint-disable-next-line
-              (template.allowedUsers?.some((u: any) => u.id === user.id) ||
+              (template.allowedUsers?.some((au) => au.userId === user.id) ||
                 canEdit) && (
                 <Button
                   onClick={() => navigate(`/templates/${template.id}/fill`)}
@@ -244,7 +243,7 @@ export const TemplateViewPage: React.FC = () => {
         className="mb-4"
       >
         <Tab eventKey="info" title="Info">
-          <TemplateInfo template={template} />
+          <TemplateInfo template={template} canEdit={canEdit} />
         </Tab>
 
         <Tab

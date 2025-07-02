@@ -201,9 +201,9 @@ const submitFormCTRL = async (req, res) => {
         answers: {
           create: answers.map((answer) => ({
             questionId: answer.questionId,
-            valueText: answer.valueText || null,
-            valueInt: answer.valueInt || null,
-            valueBool: answer.valueBool || null,
+            valueText: answer.valueText !== undefined ? answer.valueText : null,
+            valueInt: answer.valueInt !== undefined ? answer.valueInt : null,
+            valueBool: answer.valueBool !== undefined ? answer.valueBool : null,
           })),
         },
       },
@@ -298,9 +298,9 @@ const updateFormCTRL = async (req, res) => {
       data: answers.map((answer) => ({
         formId: req.params.id,
         questionId: answer.questionId,
-        valueText: answer.valueText || null,
-        valueInt: answer.valueInt || null,
-        valueBool: answer.valueBool || null,
+        valueText: answer.valueText !== undefined ? answer.valueText : null,
+        valueInt: answer.valueInt !== undefined ? answer.valueInt : null,
+        valueBool: answer.valueBool !== undefined ? answer.valueBool : null,
       })),
     });
 

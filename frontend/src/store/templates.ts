@@ -14,7 +14,6 @@ import {
   addQuestion,
   updateQuestion,
   deleteQuestion,
-  reorderQuestions,
 } from "../services/api";
 
 interface TemplatesState {
@@ -44,10 +43,10 @@ interface TemplatesState {
     questionData: Partial<CreateQuestionData>
   ) => Promise<Question>;
   deleteQuestion: (templateId: string, questionId: string) => Promise<void>;
-  reorderQuestions: (
+  updateTemplateQuestions: (
     templateId: string,
-    questionIds: string[]
-  ) => Promise<void>;
+    questions: CreateQuestionData[]
+  ) => Promise<{ questions: Question[]; message: string }>;
 }
 
 export const useTemplatesStore = create<TemplatesState>((set, get) => ({
@@ -190,13 +189,5 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
     }
   },
 
-  reorderQuestions: async (templateId: string, questionIds: string[]) => {
-    await reorderQuestions(templateId, questionIds);
-
-    // Refresh current template if it's the same
-    const { currentTemplate } = get();
-    if (currentTemplate?.id === templateId) {
-      get().fetchTemplate(templateId);
-    }
-  },
+  
 }));

@@ -20,6 +20,16 @@ const getPublicTemplates = async (req, res) => {
             },
           },
         },
+        {
+          questions: {
+            some: {
+              OR: [
+                { title: { contains: search, mode: "insensitive" } },
+                { description: { contains: search, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
       ];
     }
 
@@ -39,31 +49,96 @@ const getPublicTemplates = async (req, res) => {
       where.ownerId = userId;
     }
 
-    const templates = await db.template.findMany({
-      where,
-      include: {
-        owner: {
-          select: { id: true, name: true, img: true },
-        },
-        tags: {
-          include: { tag: true },
-        },
-        _count: {
-          select: { forms: true, likes: true, comments: true },
-        },
-        ...(req.user && {
-          likes: {
-            where: { userId: req.user.id },
-            select: { id: true },
-          },
-        }),
-      },
-      orderBy: { updatedAt: "desc" },
-      skip: offset,
-      take: parseInt(limit),
-    });
+    let query = `
+      SELECT
+        t.*,
+        u.name as ownerName,
+        u.img as ownerImg,
+        u.id as ownerId,
+        (SELECT COUNT(*) FROM "forms" WHERE "templateId" = t.id) as formsCount,
+        (SELECT COUNT(*) FROM "likes" WHERE "templateId" = t.id) as likesCount,
+        (SELECT COUNT(*) FROM "comments" WHERE "templateId" = t.id) as commentsCount
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."isPublic" = true
+    `;
 
-    const total = await db.template.count({ where });
+    const queryParams = [];
+    let paramIndex = 1;
+
+    if (search) {
+      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      query += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+      queryParams.push(searchTsQuery, searchTsQuery);
+    }
+
+    if (topic) {
+      query += ` AND t.topic = ${paramIndex++}`;
+      queryParams.push(topic);
+    }
+
+    if (tag) {
+      query += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name = ${paramIndex++})`;
+      queryParams.push(tag);
+    }
+
+    if (userId) {
+      query += ` AND t."ownerId" = ${paramIndex++}`;
+      queryParams.push(userId);
+    }
+
+    query += ` ORDER BY t."updatedAt" DESC LIMIT ${paramIndex++} OFFSET ${paramIndex++}`;
+    queryParams.push(parseInt(limit), offset);
+
+    const templates = await db.$queryRawUnsafe(query, ...queryParams);
+
+    const totalQuery = `
+      SELECT COUNT(*)
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."isPublic" = true
+    `;
+    const totalParams = [];
+    paramIndex = 1;
+
+    if (search) {
+      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      totalQuery += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+      totalParams.push(searchTsQuery, searchTsQuery);
+    }
+
+    if (topic) {
+      totalQuery += ` AND t.topic = ${paramIndex++}`;
+      totalParams.push(topic);
+    }
+
+    if (tag) {
+      totalQuery += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name = ${paramIndex++})`;
+      totalParams.push(tag);
+    }
+
+    if (userId) {
+      totalQuery += ` AND t."ownerId" = ${paramIndex++}`;
+      totalParams.push(userId);
+    }
+
+    const totalResult = await db.$queryRawUnsafe(totalQuery, ...totalParams);
+    const total = totalResult[0].count;
+
+    const formattedTemplates = templates.map(template => ({
+      ...template,
+      owner: {
+        id: template.ownerId,
+        name: template.ownerName,
+        img: template.ownerImg,
+      },
+      _count: {
+        forms: Number(template.formsCount),
+        likes: Number(template.likesCount),
+        comments: Number(template.commentsCount),
+      },
+      likes: req.user ? (template.likesCount > 0 ? [{ id: 'dummy' }] : []) : [], // Simplified for now
+    }));
 
     res.json({
       templates,
@@ -81,23 +156,98 @@ const getPublicTemplates = async (req, res) => {
 };
 const getMyTemplates = async (req, res) => {
   try {
-    const templates = await db.template.findMany({
-      where: { ownerId: req.user.id },
-      include: {
-        owner: {
-          select: { id: true, name: true, img: true },
-        },
-        tags: {
-          include: { tag: true },
-        },
-        questions: {
-          orderBy: { order: "asc" },
-        },
-      },
-      orderBy: { updatedAt: "desc" },
-    });
+    const { page = 1, limit = 12, search, topic, tag } = req.query;
+    const offset = (page - 1) * limit;
 
-    res.json({ templates });
+    let query = `
+      SELECT
+        t.*,
+        u.name as ownerName,
+        u.img as ownerImg,
+        u.id as ownerId,
+        (SELECT COUNT(*) FROM "forms" WHERE "templateId" = t.id) as formsCount,
+        (SELECT COUNT(*) FROM "likes" WHERE "templateId" = t.id) as likesCount,
+        (SELECT COUNT(*) FROM "comments" WHERE "templateId" = t.id) as commentsCount
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."ownerId" = $1
+    `;
+
+    const queryParams = [req.user.id];
+    let paramIndex = 2;
+
+    if (search) {
+      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      query += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+      queryParams.push(searchTsQuery, searchTsQuery);
+    }
+
+    if (topic) {
+      query += ` AND t.topic = ${paramIndex++}`;
+      queryParams.push(topic);
+    }
+
+    if (tag) {
+      query += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name = ${paramIndex++})`;
+      queryParams.push(tag);
+    }
+
+    query += ` ORDER BY t."updatedAt" DESC LIMIT ${paramIndex++} OFFSET ${paramIndex++}`;
+    queryParams.push(parseInt(limit), offset);
+
+    const templates = await db.$queryRawUnsafe(query, ...queryParams);
+
+    const totalQuery = `
+      SELECT COUNT(*)
+      FROM "templates" t
+      JOIN "users" u ON t."ownerId" = u.id
+      WHERE t."ownerId" = $1
+    `;
+    const totalParams = [req.user.id];
+    paramIndex = 2;
+
+    if (search) {
+      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      totalQuery += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
+      totalParams.push(searchTsQuery, searchTsQuery);
+    }
+
+    if (topic) {
+      totalQuery += ` AND t.topic = ${paramIndex++}`;
+      totalParams.push(topic);
+    }
+
+    if (tag) {
+      totalQuery += ` AND EXISTS (SELECT 1 FROM "template_tags" tt JOIN "tags" tg ON tt."tagId" = tg.id WHERE tt."templateId" = t.id AND tg.name = ${paramIndex++})`;
+      totalParams.push(tag);
+    }
+
+    const totalResult = await db.$queryRawUnsafe(totalQuery, ...totalParams);
+    const total = totalResult[0].count;
+
+    const formattedTemplates = templates.map(template => ({
+      ...template,
+      owner: {
+        id: template.ownerId,
+        name: template.ownerName,
+        img: template.ownerImg,
+      },
+      _count: {
+        forms: Number(template.formsCount),
+        likes: Number(template.likesCount),
+        comments: Number(template.commentsCount),
+      },
+    }));
+
+    res.json({
+      templates: formattedTemplates,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error("Get my templates error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -230,6 +380,9 @@ const createTemplate = async (req, res) => {
       },
     });
 
+    // Update search_vector after creation
+    await db.$executeRaw`UPDATE "templates" SET search_vector = setweight(to_tsvector('english', ${title}), 'A') || setweight(to_tsvector('english', ${description}), 'B') WHERE id = ${template.id}`;
+
     res.status(201).json({
       message: "Template created successfully",
       template,
@@ -328,6 +481,9 @@ const updatedTemplate = async (req, res) => {
       });
     });
 
+    // Update search_vector after update
+    await db.$executeRaw`UPDATE "templates" SET search_vector = setweight(to_tsvector('english', ${title}), 'A') || setweight(to_tsvector('english', ${description}), 'B') WHERE id = ${req.params.id}`;
+
     res.json({
       message: "Template updated successfully",
       template,
@@ -419,6 +575,11 @@ const updateTemplateQuestions = async (req, res) => {
             isRequired: q.isRequired || false,
           })),
         });
+
+        // Update search_vector for each new question
+        for (const q of questions) {
+          await tx.$executeRaw`UPDATE "questions" SET search_vector = setweight(to_tsvector('english', ${q.title.trim()}), 'A') || setweight(to_tsvector('english', ${q.description?.trim() || ''}), 'B') WHERE "templateId" = ${req.params.id} AND title = ${q.title.trim()}`;
+        }
       }
     });
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Badge, Row, Col, Image } from "react-bootstrap";
+import { Card, Badge, Row, Col, Image, Alert } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import {
@@ -17,9 +17,13 @@ import { formatDistanceToNow } from "date-fns";
 // path issue fixing
 interface TemplateInfoProps {
   template: Template;
+  canEdit?: boolean;
 }
 
-export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
+export const TemplateInfo: React.FC<TemplateInfoProps> = ({
+  template,
+  canEdit,
+}) => {
   const { t } = useTranslation();
 
   const getTopicVariant = (topic: string) => {
@@ -88,7 +92,7 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
 
             <div className="mb-3">
               <small className="text-muted d-block">Access</small>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center mb-2">
                 {template.isPublic ? (
                   <>
                     <Globe size={16} className="me-2 text-success" />
@@ -101,6 +105,35 @@ export const TemplateInfo: React.FC<TemplateInfoProps> = ({ template }) => {
                   </>
                 )}
               </div>
+              {!template.isPublic &&
+                canEdit &&
+                template.allowedUsers &&
+                template.allowedUsers.length > 0 && (
+                  <div>
+                    <small className="text-muted d-block mb-1">
+                      Allowed Users:
+                    </small>
+                    <ul className="list-unstyled small ms-3">
+                      {template.allowedUsers.map((allowedUser) => (
+                        <li key={allowedUser.user.id}>
+                          <User size={12} className="me-1" />
+                          {allowedUser.user.name} ({allowedUser.user.email})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              {!template.isPublic &&
+                canEdit &&
+                (!template.allowedUsers ||
+                  template.allowedUsers.length === 0) && (
+                  <Alert variant="info" className="mt-2 py-2 px-3">
+                    <small>
+                      No specific users are allowed yet. This template is
+                      restricted but accessible by no one.
+                    </small>
+                  </Alert>
+                )}
             </div>
 
             <div className="mb-3">

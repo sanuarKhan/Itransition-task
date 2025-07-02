@@ -122,8 +122,14 @@ export const getPopularTemplates = async (): Promise<{
   return res.data;
 };
 
-export const getMyTemplates = async (): Promise<{ templates: Template[] }> => {
-  const res = await api.get("/api/templates/my");
+export const getMyTemplates = async (params?: {
+  page?: number;
+  limit?: number;
+  topic?: string;
+  tags?: string;
+  q?: string;
+}): Promise<{ templates: Template[] }> => {
+  const res = await api.get("/api/templates/my", { params });
   return res.data;
 };
 
@@ -158,10 +164,8 @@ export const deleteTemplate = async (
 
 export const updateTemplateQuestions = async (
   id: string,
-  //eslint-disable-next-line
-  questions: any[]
-  //eslint-disable-next-line
-): Promise<{ questions: any[]; message: string }> => {
+  questions: CreateQuestionData[]
+): Promise<{ questions: Question[]; message: string }> => {
   const res = await api.put(`/api/templates/${id}/questions`, { questions });
   return res.data;
 };
@@ -217,14 +221,7 @@ export const deleteQuestion = async (
   await api.delete(`/api/templates/${templateId}/questions/${questionId}`);
 };
 
-export const reorderQuestions = async (
-  templateId: string,
-  questionIds: string[]
-): Promise<void> => {
-  await api.put(`/api/templates/${templateId}/questions/reorder`, {
-    questionIds,
-  });
-};
+
 // Comments APIs
 export const getComments = async (
   templateId: string

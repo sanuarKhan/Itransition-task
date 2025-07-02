@@ -37,10 +37,21 @@ export const FormViewPage: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const handleShare = async () => {
+    if (!form) return;
+
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      toast.success(t("common.copySuccess", "Form link copied to clipboard!"));
+    } catch (error) {
+      toast.error(t("common.copyError", "Failed to copy link"));
+    }
+  };
+
   const {
     data: formData,
     isLoading,
-    error,
   } = useQuery({
     queryKey: ["form", id],
     queryFn: () => getForm(id!),
@@ -151,6 +162,10 @@ export const FormViewPage: React.FC = () => {
         </div>
 
         <div className="d-flex gap-2">
+          <Button variant="outline-primary" size="sm" onClick={handleShare}>
+            <Share2 size={16} className="me-2" />
+            {t("common.share")}
+          </Button>
           {canEdit && (
             <Button
               onClick={() => navigate(`/forms/${form.id}/edit`)}

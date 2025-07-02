@@ -95,8 +95,8 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
     );
   }
 
-  // Empty state - no questions
-  if (!template.questions || template.questions.length === 0) {
+  // Handle empty or undefined questions
+  if (!Array.isArray(template.questions) || template.questions.length === 0) {
     return (
       <Card className="border-2 border-dashed">
         <Card.Body className="text-center py-5">
@@ -149,7 +149,9 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="mb-1">Questions ({template.questions.length})</h4>
+          <h4 className="mb-1">
+            Questions ({template.questions?.length ?? 0})
+          </h4>
           <p className="text-muted mb-0">
             {canEdit
               ? "Manage your template questions. You can edit, reorder, or add new ones."
@@ -288,12 +290,13 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
           <Eye size={16} className="me-2" />
           <strong>Form Preview</strong> - This is how the questions will appear
           when filling out the form.
-          {template.questions.some((q) => q.isRequired) && (
-            <span className="ms-2">
-              Questions marked with <span className="text-danger">*</span> are
-              required.
-            </span>
-          )}
+          {template.questions &&
+            template.questions.some((q) => q.isRequired) && (
+              <span className="ms-2">
+                Questions marked with <span className="text-danger">*</span> are
+                required.
+              </span>
+            )}
         </Alert>
       )}
     </div>
