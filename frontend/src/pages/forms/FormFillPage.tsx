@@ -22,7 +22,11 @@ import type { Question } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 
 // Dynamic validation schema based on questions
-const createValidationSchema = (questions: Question[]) => {
+const createValidationSchema = (
+  questions: Question[],
+  t: (key: string) => string
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schemaFields: any = {};
 
   questions.forEach((question) => {
@@ -32,18 +36,18 @@ const createValidationSchema = (questions: Question[]) => {
         case "MULTI_LINE":
           schemaFields[question.id] = yup
             .string()
-            .required(`${question.title} is required`);
+            .required(t("formFill.required"));
           break;
         case "INTEGER":
           schemaFields[question.id] = yup
             .number()
-            .required(`${question.title} is required`)
-            .min(0, "Must be non-negative");
+            .required(t("formFill.required"))
+            .min(0, t("formFill.nonNegative"));
           break;
         case "CHECKBOX":
           schemaFields[question.id] = yup
             .boolean()
-            .required(`${question.title} is required`);
+            .required(t("formFill.required"));
           break;
       }
     } else {
@@ -51,7 +55,7 @@ const createValidationSchema = (questions: Question[]) => {
         case "INTEGER":
           schemaFields[question.id] = yup
             .number()
-            .min(0, "Must be non-negative")
+            .min(0, t("formFill.nonNegative"))
             .nullable();
           break;
         default:
@@ -65,7 +69,6 @@ const createValidationSchema = (questions: Question[]) => {
 
 export const FormFillPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();
@@ -92,14 +95,18 @@ export const FormFillPage: React.FC = () => {
   const template = templateData?.template;
   const existingForm = formCheckData?.form;
   const hasFilled = formCheckData?.hasFilled;
-  const questions =
-    template?.questions?.sort((a, b) => a.order - b.order) || [];
+  const questions = React.useMemo(
+    () => template?.questions?.slice().sort((a, b) => a.order - b.order) || [],
+    [template]
+  );
 
   // Create dynamic form with validation
   const validationSchema = React.useMemo(
     () =>
-      questions.length > 0 ? createValidationSchema(questions) : yup.object(),
-    [questions]
+      questions.length > 0
+        ? createValidationSchema(questions, t)
+        : yup.object(),
+    [questions, t]
   );
 
   const {
@@ -110,6 +117,7 @@ export const FormFillPage: React.FC = () => {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: React.useMemo(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const defaults: any = {};
       if (existingForm?.answers) {
         existingForm.answers.forEach((answer) => {
@@ -130,35 +138,32 @@ export const FormFillPage: React.FC = () => {
     return (
       <Container className="py-5 text-center">
         <Alert variant="warning">
-          <h4>Authentication Required</h4>
-          <p>Please login to fill out this form.</p>
+          <h4>{t("formFill.authRequiredTitle")}</h4>
+          <p>{t("formFill.authRequiredText")}</p>
           <Button href="/login" variant="primary">
-            Login
+            {t("formFill.login")}
           </Button>
         </Alert>
       </Container>
     );
   }
 
-  if (isLoading) return <LoadingSpinner center text="Loading form..." />;
+  if (isLoading) return <LoadingSpinner center text={t("formFill.loading")} />;
 
   if (error || !template) {
     return (
       <Container className="py-5 text-center">
         <Alert variant="danger">
-          <h4>Form not found</h4>
-          <p>
-            The form you're looking for doesn't exist or you don't have
-            permission to fill it.
-          </p>
+          <h4>{t("formFill.notFoundTitle")}</h4>
+          <p>{t("formFill.notFoundText")}</p>
           <Button onClick={() => navigate(-1)} variant="primary">
-            Go Back
+            {t("formFill.goBack")}
           </Button>
         </Alert>
       </Container>
     );
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
       const formData = {
@@ -185,13 +190,12 @@ export const FormFillPage: React.FC = () => {
 
       await submitForm(template.id, formData);
       toast.success(
-        hasFilled
-          ? "Form updated successfully!"
-          : "Form submitted successfully!"
+        hasFilled ? t("formFill.updateSuccess") : t("formFill.submitSuccess")
       );
       navigate("/forms");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to submit form");
+      toast.error(error.response?.data?.error || t("formFill.submitFail"));
     }
   };
 
@@ -220,7 +224,7 @@ export const FormFillPage: React.FC = () => {
                   <Form.Control
                     {...field}
                     type="text"
-                    placeholder="Type your answer here..."
+                    placeholder={t("formFill.singleLinePlaceholder")}
                     isInvalid={!!errors[question.id]}
                     disabled={isSubmitting}
                   />
@@ -231,7 +235,7 @@ export const FormFillPage: React.FC = () => {
                     {...field}
                     as="textarea"
                     rows={4}
-                    placeholder="Type your answer here..."
+                    placeholder={t("formFill.multiLinePlaceholder")}
                     isInvalid={!!errors[question.id]}
                     disabled={isSubmitting}
                   />
@@ -242,7 +246,7 @@ export const FormFillPage: React.FC = () => {
                     {...field}
                     type="number"
                     min="0"
-                    placeholder="Enter a number..."
+                    placeholder={t("formFill.integerPlaceholder")}
                     isInvalid={!!errors[question.id]}
                     disabled={isSubmitting}
                     value={field.value || ""}
@@ -253,7 +257,7 @@ export const FormFillPage: React.FC = () => {
                   <Form.Check
                     {...field}
                     type="checkbox"
-                    label="Yes"
+                    label={t("formFill.checkboxLabel")}
                     checked={field.value || false}
                     isInvalid={!!errors[question.id]}
                     disabled={isSubmitting}
@@ -286,7 +290,6 @@ export const FormFillPage: React.FC = () => {
     <Container className="py-4">
       <div className="row justify-content-center">
         <div className="col-lg-8">
-          {/* Header */}
           <div className="d-flex align-items-center mb-4">
             <Button
               variant="link"
@@ -299,10 +302,12 @@ export const FormFillPage: React.FC = () => {
               <h1 className="h3 mb-1">{template.title}</h1>
               <div className="d-flex align-items-center text-muted">
                 <User size={16} className="me-1" />
-                <span className="me-3">by {template.owner.name}</span>
+                <span className="me-3">
+                  {t("formFill.by")} {template.owner.name}
+                </span>
                 <Clock size={16} className="me-1" />
                 <span>
-                  Created{" "}
+                  {t("formFill.created")}{" "}
                   {formatDistanceToNow(new Date(template.createdAt), {
                     addSuffix: true,
                   })}
@@ -313,25 +318,26 @@ export const FormFillPage: React.FC = () => {
 
           {hasFilled && (
             <Alert variant="info" className="mb-4">
-              <strong>Note:</strong> You have already submitted this form. You
-              can update your answers below.
+              <strong>{t("formFill.note")}</strong>{" "}
+              {t("formFill.alreadySubmitted")}
             </Alert>
           )}
 
-          {/* Description */}
           <Card className="mb-4">
             <Card.Body>
               <div className="prose">{template.description}</div>
             </Card.Body>
           </Card>
 
-          {/* Progress */}
           <Card className="mb-4">
             <Card.Body className="py-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="fw-medium">Progress</span>
+                <span className="fw-medium">{t("formFill.progress")}</span>
                 <span className="text-muted">
-                  {filledQuestions} of {questions.length} questions
+                  {t("formFill.progressCount", {
+                    filled: filledQuestions,
+                    total: questions.length,
+                  })}
                 </span>
               </div>
               <ProgressBar
@@ -355,12 +361,16 @@ export const FormFillPage: React.FC = () => {
                 {isSubmitting ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" />
-                    {hasFilled ? "Updating..." : "Submitting..."}
+                    {hasFilled
+                      ? t("formFill.updating")
+                      : t("formFill.submitting")}
                   </>
                 ) : (
                   <>
                     <Send size={20} className="me-2" />
-                    {hasFilled ? "Update Form" : "Submit Form"}
+                    {hasFilled
+                      ? t("formFill.updateForm")
+                      : t("formFill.submitForm")}
                   </>
                 )}
               </Button>

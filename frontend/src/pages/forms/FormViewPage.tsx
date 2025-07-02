@@ -19,8 +19,8 @@ import {
   Calendar,
   FileText,
 } from "lucide-react";
-import { toast } from "react-toastify"; // FIXED: Added toast import
-import { useAuthStore, useFormsStore } from "../../store/index"; // FIXED: Removed useUIStore
+import { toast } from "react-toastify";
+import { useAuthStore, useFormsStore } from "../../store/index";
 import { getForm } from "../../services/api";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { ConfirmModal } from "../../components/ui/ConfirmModal";
@@ -28,7 +28,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export const FormViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthStore();
@@ -71,42 +71,53 @@ export const FormViewPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await deleteForm(form.id);
-      toast.success("Form submission deleted successfully");
+      toast.success(
+        t("formView.toastDeleteSuccess", "Form submission deleted successfully")
+      );
 
       navigate("/forms");
+      //eslint-disable-next-line
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.error || "Failed to delete form submission";
+        error.response?.data?.error ||
+        t("formView.toastDeleteError", "Failed to delete form submission");
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
       setShowDeleteModal(false);
     }
   };
-
+  //eslint-disable-next-line
   const getAnswerValue = (answer: any) => {
     if (answer.valueText) return answer.valueText;
     if (answer.valueInt !== null) return answer.valueInt.toString();
-    if (answer.valueBool !== null) return answer.valueBool ? "Yes" : "No";
+    if (answer.valueBool !== null)
+      return answer.valueBool
+        ? t("formView.yes", "Yes")
+        : t("formView.no", "No");
     return "-";
   };
 
   if (isLoading) {
-    return <LoadingSpinner center text="Loading form..." />;
+    return (
+      <LoadingSpinner center text={t("formView.loading", "Loading form...")} />
+    );
   }
 
   if (error || !form) {
     return (
       <Container className="py-5">
         <Alert variant="danger">
-          <h4>Form Not Found</h4>
+          <h4>{t("formView.notFoundTitle", "Form Not Found")}</h4>
           <p>
-            The form submission you're looking for doesn't exist or has been
-            deleted.
+            {t(
+              "formView.notFoundText",
+              "The form submission you're looking for doesn't exist or has been deleted."
+            )}
           </p>
           <Button onClick={() => navigate("/forms")} variant="outline-primary">
             <ArrowLeft size={16} className="me-2" />
-            Back to Forms
+            {t("formView.backToForms", "Back to Forms")}
           </Button>
         </Alert>
       </Container>
@@ -129,9 +140,14 @@ export const FormViewPage: React.FC = () => {
           <div>
             <h1 className="h4 mb-1">
               <FileText size={20} className="me-2" />
-              Form Submission
+              {t("formView.title", "Form Submission")}
             </h1>
-            <p className="text-muted mb-0">for "{form.template.title}"</p>
+            <p className="text-muted mb-0">
+              {t("formView.forTemplate", {
+                title: form.template.title,
+                defaultValue: `for "${form.template.title}"`,
+              })}
+            </p>
           </div>
         </div>
 
@@ -143,7 +159,7 @@ export const FormViewPage: React.FC = () => {
               size="sm"
             >
               <Edit size={16} className="me-2" />
-              Edit
+              {t("formView.edit", "Edit")}
             </Button>
           )}
 
@@ -154,7 +170,7 @@ export const FormViewPage: React.FC = () => {
               onClick={() => setShowDeleteModal(true)}
             >
               <Trash2 size={16} className="me-2" />
-              Delete
+              {t("formView.delete", "Delete")}
             </Button>
           )}
         </div>
@@ -165,7 +181,7 @@ export const FormViewPage: React.FC = () => {
         <Col lg={8}>
           <Card>
             <Card.Header>
-              <h5 className="mb-0">Answers</h5>
+              <h5 className="mb-0">{t("formView.answers", "Answers")}</h5>
             </Card.Header>
             <Card.Body>
               {form.answers.map((answer) => (
@@ -188,20 +204,23 @@ export const FormViewPage: React.FC = () => {
         <Col lg={4}>
           <Card>
             <Card.Header>
-              <h6 className="mb-0">Submission Details</h6>
+              <h6 className="mb-0">
+                {t("formView.submissionDetails", "Submission Details")}
+              </h6>
             </Card.Header>
             <Card.Body>
               <div className="d-flex align-items-center mb-3">
                 <User size={16} className="me-2 text-muted" />
                 <span>
-                  <strong>Submitted by:</strong> {form.user.name}
+                  <strong>{t("formView.submittedBy", "Submitted by:")}</strong>{" "}
+                  {form.user.name}
                 </span>
               </div>
 
               <div className="d-flex align-items-center mb-3">
                 <Calendar size={16} className="me-2 text-muted" />
                 <span>
-                  <strong>Submitted:</strong>{" "}
+                  <strong>{t("formView.submitted", "Submitted:")}</strong>{" "}
                   {formatDistanceToNow(new Date(form.createdAt), {
                     addSuffix: true,
                   })}
@@ -212,7 +231,9 @@ export const FormViewPage: React.FC = () => {
                 <div className="d-flex align-items-center mb-3">
                   <Calendar size={16} className="me-2 text-muted" />
                   <span>
-                    <strong>Last updated:</strong>{" "}
+                    <strong>
+                      {t("formView.lastUpdated", "Last updated:")}
+                    </strong>{" "}
                     {formatDistanceToNow(new Date(form.updatedAt), {
                       addSuffix: true,
                     })}
@@ -222,16 +243,20 @@ export const FormViewPage: React.FC = () => {
 
               <hr />
 
-              <h6 className="mb-2">Template Info</h6>
+              <h6 className="mb-2">
+                {t("formView.templateInfo", "Template Info")}
+              </h6>
               <p className="mb-2">
-                <strong>Title:</strong> {form.template.title}
+                <strong>{t("formView.templateTitle", "Title:")}</strong>{" "}
+                {form.template.title}
               </p>
               <p className="mb-2">
-                <strong>Topic:</strong>{" "}
+                <strong>{t("formView.topic", "Topic:")}</strong>{" "}
                 <Badge bg="primary">{form.template.topic}</Badge>
               </p>
               <p className="mb-0">
-                <strong>Created by:</strong> {form.template.owner.name}
+                <strong>{t("formView.createdBy", "Created by:")}</strong>{" "}
+                {form.template.owner.name}
               </p>
             </Card.Body>
           </Card>
@@ -241,9 +266,12 @@ export const FormViewPage: React.FC = () => {
       {/* Delete Confirmation Modal */}
       <ConfirmModal
         show={showDeleteModal}
-        title="Delete Form Submission"
-        message="Are you sure you want to delete this form submission? This action cannot be undone."
-        confirmText="Delete"
+        title={t("formView.deleteModalTitle", "Delete Form Submission")}
+        message={t(
+          "formView.deleteModalMessage",
+          "Are you sure you want to delete this form submission? This action cannot be undone."
+        )}
+        confirmText={t("formView.delete", "Delete")}
         confirmVariant="danger"
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteModal(false)}

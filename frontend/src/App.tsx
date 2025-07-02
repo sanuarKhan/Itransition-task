@@ -35,22 +35,17 @@ function App() {
   const { user, refreshUser } = useAuthStore();
   const { theme, language } = useUIStore();
 
-  // Initialize app
   useEffect(() => {
-    // Set theme
     document.documentElement.setAttribute("data-bs-theme", theme.toLowerCase());
 
-    // Set language
     i18n.changeLanguage(language.toLowerCase());
 
-    // Refresh user data if token exists
     const token = localStorage.getItem("token");
     if (token && !user) {
       refreshUser();
     }
   }, [theme, language, i18n, user, refreshUser]);
 
-  // Update theme when it changes
   useEffect(() => {
     document.documentElement.setAttribute("data-bs-theme", theme.toLowerCase());
   }, [theme]);
@@ -58,7 +53,6 @@ function App() {
   return (
     <Layout>
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
