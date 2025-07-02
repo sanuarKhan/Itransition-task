@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+
 import { Row, Col, Card, Alert } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -14,7 +15,7 @@ import { LoadingSpinner } from "../UI/LoadingSpinner";
 import { formatDistanceToNow } from "date-fns";
 
 export const AdminAnalytics: React.FC = () => {
-  const { t } = useTranslation();
+  
 
   const {
     data: statsData,

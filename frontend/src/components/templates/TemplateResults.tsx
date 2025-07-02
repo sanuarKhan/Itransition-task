@@ -14,7 +14,7 @@ interface TemplateResultsProps {
 export const TemplateResults: React.FC<TemplateResultsProps> = ({
   templateId,
 }) => {
-  const { t } = useTranslation();
+  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 

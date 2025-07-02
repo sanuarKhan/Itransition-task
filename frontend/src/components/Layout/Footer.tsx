@@ -1,8 +1,9 @@
 import React from "react";
+
 import { Container, Row, Col } from "react-bootstrap";
 
 export const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  
 
   return (
     <footer className="bg-light py-4 mt-auto border-top">

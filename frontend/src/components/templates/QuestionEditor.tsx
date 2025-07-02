@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   Form,
@@ -358,7 +359,7 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
   onSave,
   onCancel,
 }) => {
-  const { t } = useTranslation();
+  
 
   const [questions, setQuestions] = useState<QuestionItem[]>(
     template.questions?.map((q, index) => ({

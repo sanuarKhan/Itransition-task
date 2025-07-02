@@ -1,13 +1,20 @@
 import React from "react";
+
 import { Card, Row, Col, Alert, Badge, ProgressBar } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3, TrendingUp, Hash, CheckSquare } from "lucide-react";
 import { getTemplateAnalytics } from "../../services/api";
+import { LoadingSpinner } from "../UI/LoadingSpinner";
+import { QuestionAnalytics } from "../../types";
+
+interface TemplateAnalyticsProps {
+  templateId: string;
+}
 
 export const TemplateAnalytics: React.FC<TemplateAnalyticsProps> = ({
   templateId,
 }) => {
-  const { t } = useTranslation();
+  
 
   const {
     data: analyticsData,

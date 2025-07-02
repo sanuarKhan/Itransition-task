@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Card,
   Table,
@@ -42,7 +43,7 @@ interface SearchForm {
 }
 
 export const UserManagement: React.FC = () => {
-  const { t } = useTranslation();
+  
   const { user: currentUser } = useAuthStore();
   const queryClient = useQueryClient();
 

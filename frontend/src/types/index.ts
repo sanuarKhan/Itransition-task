@@ -207,7 +207,7 @@ export interface SubmitFormData {
     questionId: string;
     valueText?: string;
     valueInt?: number | null;
-    valueBool?: boolean;
+    valueBool?: boolean | null;
   }[];
 }
 

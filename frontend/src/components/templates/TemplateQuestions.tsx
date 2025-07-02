@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { Card, Button, Alert, Badge, Row, Col } from "react-bootstrap";
 import { Plus, Edit, GripVertical, Settings, Eye } from "lucide-react";
 import { Template, Question } from "../../types/index";
@@ -15,7 +16,7 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
   canEdit = false,
   onUpdate = () => {},
 }) => {
-  const { t } = useTranslation();
+  
   const [editingQuestions, setEditingQuestions] = useState(false);
 
   const getQuestionTypeIcon = (type: string) => {
