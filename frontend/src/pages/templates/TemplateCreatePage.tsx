@@ -30,6 +30,8 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { useAuthStore, useTemplatesStore } from "../../store/index";
+import { getTags, searchUsers, uploadImage } from "../../services/api";
+import { CreateTemplateData, Tag, User } from "../../types";
 import { LoadingSpinner } from "../../components/UI/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { QuestionBuilder } from "../../components/Templates/QuestionBuilder";
@@ -313,12 +315,12 @@ export const TemplateCreatePage: React.FC = () => {
                         {...field}
                         isMulti
                         options={tagOptions}
-                        value={field.value?.map((tag) => ({
+                        value={field.value?.map((tag: string) => ({
                           value: tag,
                           label: tag,
                         }))}
                         onChange={(selected) =>
-                          field.onChange(selected?.map((s) => s.value) || [])
+                          field.onChange(selected?.map((s: { value: string }) => s.value) || [])
                         }
                         placeholder="Select or create tags..."
                         className="react-select-container"
@@ -451,12 +453,12 @@ export const TemplateCreatePage: React.FC = () => {
                           isMulti
                           options={userOptions}
                           value={field.value
-                            ?.map((id) =>
-                              userOptions.find((u) => u.value === id)
+                            ?.map((id: string) =>
+                              userOptions.find((u: { value: string; }) => u.value === id)
                             )
                             .filter(Boolean)}
                           onChange={(selected) =>
-                            field.onChange(selected?.map((s) => s.value) || [])
+                            field.onChange(selected?.map((s: { value: string; }) => s.value) || [])
                           }
                           onInputChange={setUserSearchQuery}
                           placeholder="Search and select users..."

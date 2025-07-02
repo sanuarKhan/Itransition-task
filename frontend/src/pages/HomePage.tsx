@@ -1,10 +1,14 @@
 import React from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, PlusCircle, TrendingUp } from "lucide-react";
-import { getLatestTemplates, getPopularTemplates, getTagCloud } from "../services/api";
+import {
+  getLatestTemplates,
+  getPopularTemplates,
+  getTagCloud,
+} from "../services/api";
 import { useAuthStore } from "../store/index";
 import { LoadingSpinner } from "../components/UI/LoadingSpinner";
 import { TemplateCard } from "../components/Templates/TemplateCard";
@@ -15,6 +19,7 @@ import { FeaturesSection } from "../components/Home/FeaturesSection";
 export const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  const navigate = useNavigate();
 
   // Fetch latest templates
   const { data: latestTemplates, isLoading: loadingLatest } = useQuery({
@@ -50,7 +55,10 @@ export const HomePage: React.FC = () => {
         <section className="mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="fw-bold">{t("home.latest.title")}</h2>
-            <Button onClick={() => navigate("/templates")} variant="outline-primary">
+            <Button
+              onClick={() => navigate("/templates")}
+              variant="outline-primary"
+            >
               {t("home.latest.viewAll")}{" "}
               <ArrowRight size={16} className="ms-1" />
             </Button>
@@ -146,10 +154,10 @@ export const HomePage: React.FC = () => {
                   Start building beautiful, responsive forms in minutes.
                 </p>
                 <Button
-                    onClick={() => navigate("/templates/create")}
-                    variant="light"
-                    size="lg"
-                  >
+                  onClick={() => navigate("/templates/create")}
+                  variant="light"
+                  size="lg"
+                >
                   <PlusCircle size={20} className="me-2" />
                   Create Your First Template
                 </Button>

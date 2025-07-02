@@ -24,7 +24,7 @@ import {
   Tag,
   Image as ImageIcon,
 } from "lucide-react";
-import { useAuthStore, useTemplatesStore } from "../../store/index";
+import { useAuthStore, useTemplatesStore, useUIStore } from "../../store/index";
 import {
   getTags,
   getTemplate,

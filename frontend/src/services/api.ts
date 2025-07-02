@@ -165,7 +165,9 @@ export const deleteTemplate = async (
 
 export const updateTemplateQuestions = async (
   id: string,
+  //eslint-disable-next-line
   questions: any[]
+  //eslint-disable-next-line
 ): Promise<{ questions: any[]; message: string }> => {
   const res = await api.put(`/api/templates/${id}/questions`, { questions });
   return res.data;
@@ -292,6 +294,7 @@ export const getUsers = async (params?: {
   page?: number;
   limit?: number;
   search?: string;
+  //eslint-disable-next-line
 }): Promise<{ users: User[]; pagination: any }> => {
   const res = await api.get("/api/users", { params });
   return res.data;

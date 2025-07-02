@@ -1,7 +1,7 @@
 // frontend/src/pages/Templates/TemplateViewPage.tsx - FIXED VERSION
 import React, { useState, useEffect } from "react";
 import { Container, Tab, Tabs, Button, Alert } from "react-bootstrap";
-import { useParams, Link, useNavigate, data } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   Edit,

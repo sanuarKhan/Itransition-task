@@ -187,12 +187,12 @@ export interface CreateTemplateData {
   topic: Topic;
   image?: string;
   tags: string[];
-  questions: CreateQuestionData[]; // ✅ ADDED - Missing questions field
+  questions: CreateQuestionData[];
   isPublic: boolean;
   allowedUserIds: string[];
 }
 
-export interface UpdateTemplateData extends Partial<CreateTemplateData> {}
+export type UpdateTemplateData = Partial<CreateTemplateData>;
 
 export interface CreateQuestionData {
   title: string;

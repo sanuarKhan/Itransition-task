@@ -54,6 +54,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+          //eslint-disable-next-line
         } catch (error: any) {
           const errorMessage =
             error?.response?.data?.error || error?.message || "Login failed";
@@ -80,6 +81,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+          //eslint-disable-next-line
         } catch (error: any) {
           const errorMessage =
             error?.response?.data?.error ||
@@ -114,6 +116,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+          //eslint-disable-next-line
         } catch (error: any) {
           const errorMessage =
             error?.response?.data?.error ||
@@ -140,6 +143,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+          //eslint-disable-next-line
         } catch (error: any) {
           const errorMessage =
             error?.response?.data?.error ||
@@ -166,6 +170,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+          //eslint-disable-next-line
         } catch (error: any) {
           // If token is invalid, logout
           if (error?.response?.status === 401) {

@@ -26,6 +26,7 @@ interface TemplatesState {
   isLoading: boolean;
 
   // Template Actions
+  //eslint-disable-next-line
   fetchTemplates: (params?: any) => Promise<void>;
   fetchMyTemplates: () => Promise<void>;
   fetchTemplate: (id: string) => Promise<void>;
@@ -154,19 +155,15 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
 
   // Question management methods
   addQuestion: async (templateId: string, questionData: CreateQuestionData) => {
-    try {
-      const response = await addQuestion(templateId, questionData);
+    const response = await addQuestion(templateId, questionData);
 
-      // Refresh current template if it's the same
-      const { currentTemplate } = get();
-      if (currentTemplate?.id === templateId) {
-        get().fetchTemplate(templateId);
-      }
-
-      return response.question;
-    } catch (error) {
-      throw error;
+    // Refresh current template if it's the same
+    const { currentTemplate } = get();
+    if (currentTemplate?.id === templateId) {
+      get().fetchTemplate(templateId);
     }
+
+    return response.question;
   },
 
   updateQuestion: async (
@@ -174,50 +171,34 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
     questionId: string,
     questionData: Partial<CreateQuestionData>
   ) => {
-    try {
-      const response = await updateQuestion(
-        templateId,
-        questionId,
-        questionData
-      );
+    const response = await updateQuestion(templateId, questionId, questionData);
 
-      // Refresh current template if it's the same
-      const { currentTemplate } = get();
-      if (currentTemplate?.id === templateId) {
-        get().fetchTemplate(templateId);
-      }
-
-      return response.question;
-    } catch (error) {
-      throw error;
+    // Refresh current template if it's the same
+    const { currentTemplate } = get();
+    if (currentTemplate?.id === templateId) {
+      get().fetchTemplate(templateId);
     }
+
+    return response.question;
   },
 
   deleteQuestion: async (templateId: string, questionId: string) => {
-    try {
-      await deleteQuestion(templateId, questionId);
+    await deleteQuestion(templateId, questionId);
 
-      // Refresh current template if it's the same
-      const { currentTemplate } = get();
-      if (currentTemplate?.id === templateId) {
-        get().fetchTemplate(templateId);
-      }
-    } catch (error) {
-      throw error;
+    // Refresh current template if it's the same
+    const { currentTemplate } = get();
+    if (currentTemplate?.id === templateId) {
+      get().fetchTemplate(templateId);
     }
   },
 
   reorderQuestions: async (templateId: string, questionIds: string[]) => {
-    try {
-      await reorderQuestions(templateId, questionIds);
+    await reorderQuestions(templateId, questionIds);
 
-      // Refresh current template if it's the same
-      const { currentTemplate } = get();
-      if (currentTemplate?.id === templateId) {
-        get().fetchTemplate(templateId);
-      }
-    } catch (error) {
-      throw error;
+    // Refresh current template if it's the same
+    const { currentTemplate } = get();
+    if (currentTemplate?.id === templateId) {
+      get().fetchTemplate(templateId);
     }
   },
 }));

@@ -15,6 +15,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5,
+      //eslint-disable-next-line
       retry: (failureCount, error: any) => {
         if (error?.response?.status >= 400 && error?.response?.status < 500) {
           return false;

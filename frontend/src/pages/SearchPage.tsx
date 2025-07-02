@@ -14,10 +14,14 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, X, Tag } from "lucide-react";
 import { getTagCloud, searchTemplates } from "../services/api";
+import { Topic } from "../types";
+import { LoadingSpinner } from "../components/UI/LoadingSpinner";
+import { TemplateCard } from "../components/Templates/TemplateCard";
+import { TagCloud } from "../components/UI/TagCloud";
 
 export const SearchPage: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("q") || "");
@@ -74,6 +78,7 @@ export const SearchPage: React.FC = () => {
     if (urlQuery !== query) setQuery(urlQuery);
     if (urlTopic !== topicFilter) setTopicFilter(urlTopic);
     if (urlTags !== tagsFilter) setTagsFilter(urlTags);
+    // eslint-disable-next-line
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {

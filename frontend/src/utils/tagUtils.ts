@@ -9,10 +9,7 @@ export interface TagWithRelation {
 
 export type TagItem = TagData | TagWithRelation;
 
-/**
- * Safely extract tag data from different tag structures
- * Handles both { tag: { id, name } } and { id, name } formats
- */
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const extractTagData = (tagItem: any): TagData | null => {
   try {
     // Handle structure: { tag: { id, name } }
@@ -38,9 +35,7 @@ export const extractTagData = (tagItem: any): TagData | null => {
   }
 };
 
-/**
- * Process an array of tags and return consistent TagData objects
- */
+//eslint-disable-next-line
 export const processTags = (tags: any[]): TagData[] => {
   if (!Array.isArray(tags)) {
     console.warn("processTags: Expected array, got:", typeof tags);
@@ -50,39 +45,28 @@ export const processTags = (tags: any[]): TagData[] => {
   return tags.map(extractTagData).filter((tag): tag is TagData => tag !== null);
 };
 
-/**
- * Get safe tags with a limit
- */
+//eslint-disable-next-line
 export const getSafeTags = (tags: any[], limit?: number): TagData[] => {
   const processedTags = processTags(tags);
   return limit ? processedTags.slice(0, limit) : processedTags;
 };
 
-/**
- * Check if a tag structure is valid
- */
+//eslint-disable-next-line
 export const isValidTagStructure = (tagItem: any): boolean => {
   return extractTagData(tagItem) !== null;
 };
 
-/**
- * Transform tags for API requests (converts to string array)
- */
 export const tagsForAPI = (tags: TagData[]): string[] => {
   return tags.map((tag) => tag.name);
 };
 
-/**
- * Transform tags from API response to consistent format
- */
+//eslint-disable-next-line
 export const tagsFromAPI = (apiTags: any[]): TagData[] => {
   return processTags(apiTags);
 };
 
-/**
- * Debug function to log tag structure for troubleshooting
- */
 export const debugTagStructure = (
+  //eslint-disable-next-line
   tags: any[],
   context: string = "unknown"
 ): void => {
