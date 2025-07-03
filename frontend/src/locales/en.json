@@ -57,7 +57,7 @@
     },
     "register": {
       "title": "Create Account",
-      "subtitle": "Join Doofle-Torm to create amazing forms!",
+      "subtitle": "Join Doogle-Torm to create amazing forms!",
       "name": "Full Name",
       "email": "Email Address",
       "password": "Password",
@@ -88,7 +88,7 @@
       "learnMore": "Learn More"
     },
     "features": {
-      "title": "Why Choose Doofle-Torm?",
+      "title": "Why Choose Doogle-Torm?",
       "create": {
         "title": "Easy Creation",
         "description": "Drag and drop interface to build forms quickly"
