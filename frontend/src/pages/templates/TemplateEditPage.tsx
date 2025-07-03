@@ -42,22 +42,26 @@ import { toast } from "react-toastify";
 import { QuestionEditor } from "../../components/templates/QuestionEditor";
 
 const schema = yup.object().shape({
-  title: yup.string().transform(value => value === '' ? null : value).nullable().optional(),
-  description: yup.string().transform(value => value === '' ? null : value).nullable().optional(),
-  topic: yup.string().nullable().optional(),
+  title: yup.string().optional(),
+  description: yup.string().optional(),
+  topic: yup.string().optional(),
   image: yup.string().nullable().optional(),
-  tags: yup.array().of(yup.string().required()).nullable().optional(),
-  questions: yup.array().of(
-    yup.object().shape({
-      title: yup.string().required("Question title is required"),
-      description: yup.string().nullable().optional(),
-      type: yup.string().required("Question type is required"),
-      isRequired: yup.boolean().optional(),
-      showInTable: yup.boolean().optional(),
-    })
-  ).optional(),
+  tags: yup.array().of(yup.string().required()).optional(),
+  questions: yup
+    .array()
+    .of(
+      yup.object().shape({
+        title: yup.string().required("Question title is required"),
+        description: yup.string().optional(),
+        type: yup.string().required("Question type is required"),
+        isRequired: yup.boolean().optional(),
+        showInTable: yup.boolean().optional(),
+        order: yup.number().optional(),
+      })
+    )
+    .optional(),
   isPublic: yup.boolean().optional(),
-  allowedUserIds: yup.array().of(yup.string().required()).nullable().optional(),
+  allowedUserIds: yup.array().of(yup.string().required()).optional(),
 });
 
 export const TemplateEditPage: React.FC = () => {
@@ -92,15 +96,15 @@ export const TemplateEditPage: React.FC = () => {
   } = useForm<UpdateTemplateData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      title: null,
-      description: null,
-      topic: null,
-      image: null,
+      title: undefined,
+      description: undefined,
+      topic: undefined,
+      image: undefined,
       tags: [],
       questions: [],
       isPublic: false,
       allowedUserIds: [],
-    } as UpdateTemplateData,
+    },
   });
 
   const watchedValues = watch();
@@ -110,15 +114,15 @@ export const TemplateEditPage: React.FC = () => {
   useEffect(() => {
     if (template) {
       reset({
-        title: template.title,
-        description: template.description,
-        topic: template.topic,
-        image: template.thumbnail || "",
+        title: template.title || undefined,
+        description: template.description || undefined,
+        topic: template.topic || undefined,
+        image: template.thumbnail || undefined,
         tags: template.tags.map((t) => t.tag.name),
         questions: template.questions?.map((q) => ({
           id: q.id,
           title: q.title,
-          description: q.description || "",
+          description: q.description || undefined,
           type: q.type,
           isRequired: q.isRequired,
           showInTable: q.showInTable,

@@ -196,7 +196,7 @@ export interface UpdateTemplateData {
   title?: string;
   description?: string;
   topic?: Topic;
-  image?: string | null;
+  image?: string;
   tags?: string[];
   questions?: CreateQuestionData[];
   isPublic?: boolean;
@@ -204,11 +204,13 @@ export interface UpdateTemplateData {
 }
 
 export interface CreateQuestionData {
+  id?: string;
   title: string;
   description?: string;
   type: QuestionType;
   showInTable: boolean;
   isRequired: boolean;
+  order: number;
 }
 
 export interface SubmitFormData {

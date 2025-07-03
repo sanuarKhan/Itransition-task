@@ -21,7 +21,7 @@ import { TemplateQuestions } from "../../components/templates/TemplateQuestions"
 import { TemplateResults } from "../../components/templates/TemplateResults";
 import { TemplateAnalytics } from "../../components/templates/TemplateAnalytics";
 import { TemplateComments } from "../../components/templates/TemplateComments";
-// path issue fixing
+
 export const TemplateViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -75,14 +75,11 @@ export const TemplateViewPage: React.FC = () => {
       const response = await toggleLike(template.id);
       setIsLiked(response.liked);
 
-      // FIXED: Use toast instead of addNotification
       toast.success(response.message);
 
-      // Refetch template to update like count
       refetch();
       //eslint-disable-next-line
     } catch (error: any) {
-      // FIXED: Use toast instead of addNotification
       const errorMessage =
         error.response?.data?.error || "Failed to update like";
       toast.error(errorMessage);
@@ -216,8 +213,7 @@ export const TemplateViewPage: React.FC = () => {
             </Button>
           )}
 
-          {/* Fill Form Button */}
-          {template.isPublic ||
+          {Boolean(template.isPublic) ||
             (user &&
               (template.allowedUsers?.some((au) => au.user.id === user.id) ||
                 canEdit) && (
@@ -233,14 +229,13 @@ export const TemplateViewPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Tabs */}
       <Tabs
         activeKey={activeTab}
         onSelect={(k) => setActiveTab(k || "info")}
         className="mb-4"
       >
         <Tab eventKey="info" title="Info">
-          <TemplateInfo template={template} canEdit={canEdit} />
+          <TemplateInfo template={template} canEdit={!!canEdit} />
         </Tab>
 
         <Tab
