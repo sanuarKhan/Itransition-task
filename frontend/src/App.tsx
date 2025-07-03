@@ -58,7 +58,6 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/templates" element={<TemplatesPage />} />
-        <Route path="/templates/:id" element={<TemplateViewPage />} />
 
         {/* Protected Routes */}
         <Route
@@ -101,6 +100,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/templates/:id" element={<TemplateViewPage />} />
         <Route
           path="/forms"
           element={

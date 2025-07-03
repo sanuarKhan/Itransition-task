@@ -18,6 +18,7 @@ import {
   User,
   Calendar,
   FileText,
+  Share2,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useAuthStore, useFormsStore } from "../../store/index";
@@ -25,7 +26,7 @@ import { getForm } from "../../services/api";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { ConfirmModal } from "../../components/ui/ConfirmModal";
 import { formatDistanceToNow } from "date-fns";
-// path issue fixing
+
 export const FormViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -49,10 +50,7 @@ export const FormViewPage: React.FC = () => {
     }
   };
 
-  const {
-    data: formData,
-    isLoading,
-  } = useQuery({
+  const { data: formData, isLoading } = useQuery({
     queryKey: ["form", id],
     queryFn: () => getForm(id!),
     enabled: !!id,
@@ -60,7 +58,6 @@ export const FormViewPage: React.FC = () => {
 
   const form = formData?.form;
 
-  // Check permissions
   const canEdit =
     user &&
     form &&

@@ -21,7 +21,6 @@ import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import type { Question } from "../../types/index";
 import { formatDistanceToNow } from "date-fns";
 
-// path issue fixing
 const createValidationSchema = (
   questions: Question[],
   t: (key: string) => string

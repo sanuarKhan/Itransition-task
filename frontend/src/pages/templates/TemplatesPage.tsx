@@ -44,7 +44,7 @@ export const TemplatesPage: React.FC = () => {
   }, [searchQuery]);
 
   // Fetch public templates
-  const { data: publicTemplatesData, isLoading: loadingPublic } = useQuery({
+  const { data: publicTemplatesData, isLoading: loadingPublic, error: publicError } = useQuery({
     queryKey: ["publicTemplates", debouncedSearchQuery, topicFilter],
     queryFn: () =>
       getTemplates({
@@ -57,7 +57,7 @@ export const TemplatesPage: React.FC = () => {
   });
 
   // Fetch my templates
-  const { data: myTemplatesData, isLoading: loadingMy } = useQuery({
+  const { data: myTemplatesData, isLoading: loadingMy, error: myError } = useQuery({
     queryKey: ["myTemplates", debouncedSearchQuery],
     queryFn: () => getMyTemplates({ q: debouncedSearchQuery }),
     enabled: activeTab === "my" && !!user,
@@ -184,11 +184,7 @@ export const TemplatesPage: React.FC = () => {
           ) : (
             <div className="space-y-3">
               {templates.map((template) => (
-                <TemplateCard
-                  key={template.id}
-                  template={template}
-                  // Could add a horizontal layout prop here
-                />
+                <TemplateCard key={template.id} template={template} />
               ))}
             </div>
           )}

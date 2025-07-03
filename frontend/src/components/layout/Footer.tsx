@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
           </Col>
           <Col md={6} className="text-md-end">
             <p className="text-muted mb-0">
-              © {new Date().getFullYear()} FormCraft. Built with React &
+              © {new Date().getFullYear()} DoogleTorm. Built with React &
               Express.
             </p>
           </Col>

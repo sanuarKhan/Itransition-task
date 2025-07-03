@@ -15,20 +15,18 @@ import { TemplateCard } from "../components/templates/TemplateCard";
 import { TagCloud } from "../components/ui/TagCloud";
 import { HeroSection } from "../components/home/HeroSection";
 import { FeaturesSection } from "../components/home/FeaturesSection";
-// path issue fixing
+
 export const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
-  // Fetch latest templates
   const { data: latestTemplates, isLoading: loadingLatest } = useQuery({
     queryKey: ["latestTemplates"],
     queryFn: getLatestTemplates,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Fetch popular templates
   const { data: popularTemplates, isLoading: loadingPopular } = useQuery({
     queryKey: ["popularTemplates"],
     queryFn: getPopularTemplates,
@@ -39,19 +37,16 @@ export const HomePage: React.FC = () => {
   const { data: tagCloudData, isLoading: loadingTags } = useQuery({
     queryKey: ["tagCloud"],
     queryFn: getTagCloud,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 
   return (
     <div>
-      {/* Hero Section */}
       <HeroSection />
 
-      {/* Features Section */}
       <FeaturesSection />
 
       <Container className="py-5">
-        {/* Latest Templates */}
         <section className="mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="fw-bold">{t("home.latest.title")}</h2>
@@ -77,7 +72,6 @@ export const HomePage: React.FC = () => {
           )}
         </section>
 
-        {/* Popular Templates */}
         <section className="mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="fw-bold d-flex align-items-center">
@@ -132,7 +126,6 @@ export const HomePage: React.FC = () => {
           )}
         </section>
 
-        {/* Tag Cloud */}
         <section className="mb-5">
           <h2 className="fw-bold mb-4">{t("home.tagCloud.title")}</h2>
           {loadingTags ? (
@@ -142,7 +135,6 @@ export const HomePage: React.FC = () => {
           )}
         </section>
 
-        {/* Call to Action */}
         {user && (
           <section className="text-center py-5">
             <Card className="bg-primary text-white">

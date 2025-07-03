@@ -16,6 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Save,
   ArrowLeft,
@@ -32,7 +33,7 @@ import { getTags, searchUsers, uploadImage } from "../../services/api";
 import type { CreateTemplateData } from "../../types";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
-import { QuestionBuilder } from "../../components/templates/QuestionBuilder";
+import { QuestionEditor } from "../../components/templates/QuestionEditor";
 
 // path issue fixing
 
@@ -42,6 +43,7 @@ export const TemplateCreatePage: React.FC = () => {
   const { user } = useAuthStore();
   const { createTemplate } = useTemplatesStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
   const {
     control,
@@ -123,6 +125,7 @@ export const TemplateCreatePage: React.FC = () => {
     try {
       const template = await createTemplate(data);
       toast.success("Template created successfully!");
+      queryClient.invalidateQueries({ queryKey: ["myTemplates"] }); // Invalidate myTemplates cache
       navigate(`/templates/${template.id}`);
       //eslint-disable-next-line
     } catch (error: any) {
@@ -263,17 +266,11 @@ export const TemplateCreatePage: React.FC = () => {
                   name="questions"
                   control={control}
                   render={({ field }) => (
-                    <>
-                      <QuestionBuilder
-                        questions={field.value}
-                        onChange={field.onChange}
-                      />
-                      {errors.questions && (
-                        <div className="text-danger small mt-2">
-                          {errors.questions.message}
-                        </div>
-                      )}
-                    </>
+                    <QuestionEditor
+                      control={control}
+                      name="questions"
+                      templateTitle={watchedValues.title || "New Template"}
+                    />
                   )}
                 />
               </Card.Body>

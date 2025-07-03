@@ -18,7 +18,6 @@ const uploadImageCTRL = async (req, res) => {
       return res.status(400).json({ error: "No image file provided" });
     }
 
-    // Upload to Cloudinary
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(

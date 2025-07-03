@@ -1,27 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Card, Button, Form, Row, Col, Alert, Badge } from "react-bootstrap";
-import { useForm, useFieldArray, Controller, type Control } from "react-hook-form";
+import { useFieldArray, Controller, useWatch } from "react-hook-form";
+import type { Control } from "react-hook-form";
 import { Plus, Trash2, GripVertical, Edit3 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useTemplatesStore } from "../../store/index";
-import type { Template, CreateQuestionData, QuestionType } from "../../types";
+import type { CreateQuestionData, QuestionType } from "../../types";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface QuestionEditorProps {
-  template: Template;
-  onSave: () => void;
-  onCancel: () => void;
-}
-
-interface QuestionFormValues {
-  questions: CreateQuestionData[];
+  control: Control<any>; // Control from the parent form
+  name: string; // The name of the field array (e.g., "questions")
+  templateTitle?: string; // Optional title for display
+  onCancel?: () => void; // Optional cancel handler
 }
 
 interface QuestionItemProps {
   question: CreateQuestionData;
   index: number;
-  control: Control<QuestionFormValues>;
+  control: Control<any>;
   remove: (index: number) => void;
   move: (dragIndex: number, hoverIndex: number) => void;
   watchedQuestions: CreateQuestionData[];
@@ -30,7 +27,7 @@ interface QuestionItemProps {
 }
 
 const ItemTypes = {
-  QUESTION: 'question',
+  QUESTION: "question",
 };
 
 const QuestionItem: React.FC<QuestionItemProps> = ({
@@ -93,6 +90,12 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
       // Generally it's better to avoid mutations, but it's good here for the sake of performance
       // to avoid expensive index searches.
       item.index = hoverIndex;
+      // Update the order property of the questions after a drag-and-drop operation
+      const updatedQuestions = [...watchedQuestions];
+      const [draggedItem] = updatedQuestions.splice(dragIndex, 1);
+      updatedQuestions.splice(hoverIndex, 0, draggedItem);
+      // You might need to call a function from the parent to update the form state
+      // For now, we'll assume the `move` function from `useFieldArray` handles this.
     },
   });
 
@@ -134,7 +137,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
   };
 
   return (
-    <Card ref={ref} className={`mb-3 question-card ${isDragging ? 'dragging' : ''}`}>
+    <Card
+      ref={ref}
+      className={`mb-3 question-card ${isDragging ? "dragging" : ""}`}
+    >
       <Card.Body>
         {isEditing ? (
           // Edit Mode
@@ -151,8 +157,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     type="text"
                     placeholder="Enter question title"
                     isInvalid={
-                      !!(control._formState.errors.questions &&
-                        control._formState.errors.questions[index]?.title)
+                      !!(
+                        control._formState.errors.questions &&
+                        control._formState.errors.questions[index]?.title
+                      )
                     }
                   />
                 )}
@@ -194,7 +202,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                           <option
                             key={option.value}
                             value={option.value}
-                            disabled={typeCounts[option.value] >= 4 && option.value !== watchedQuestions[index].type}
+                            disabled={
+                              typeCounts[option.value] >= 4 &&
+                              option.value !== watchedQuestions[index].type
+                            }
                           >
                             {option.label}
                           </option>
@@ -239,7 +250,14 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
               <Button
                 variant="success"
                 size="sm"
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  if (watchedQuestions[index].title.trim()) {
+                    setIsEditing(false);
+                  } else {
+                    // Optionally, show an error message or prevent saving
+                    alert("Question title cannot be empty.");
+                  }
+                }}
                 disabled={!watchedQuestions[index].title.trim()}
               >
                 Save
@@ -265,7 +283,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
           <div className="d-flex justify-content-between align-items-start">
             <div className="flex-grow-1">
               <div className="d-flex align-items-center mb-2">
-                <GripVertical size={20} className="text-muted me-2 cursor-move" />
+                <GripVertical
+                  size={20}
+                  className="text-muted me-2 cursor-move"
+                />
                 <span className="me-2">
                   {getQuestionTypeIcon(question.type)}
                 </span>
@@ -286,13 +307,9 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                 )}
               </div>
               {question.description && (
-                <p className="text-muted small mb-2">
-                  {question.description}
-                </p>
+                <p className="text-muted small mb-2">{question.description}</p>
               )}
-              <Badge bg="secondary">
-                {getQuestionTypeName(question.type)}
-              </Badge>
+              <Badge bg="secondary">{getQuestionTypeName(question.type)}</Badge>
             </div>
             <div className="d-flex gap-2">
               <Button
@@ -318,53 +335,20 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
 };
 
 export const QuestionEditor: React.FC<QuestionEditorProps> = ({
-  template,
-  onSave,
+  control,
+  name,
+  templateTitle,
   onCancel,
 }) => {
-  const { updateTemplateQuestions } = useTemplatesStore();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-    watch,
-  } = useForm<QuestionFormValues>({
-    defaultValues: {
-      questions: template.questions?.map((q) => ({
-        id: q.id,
-        title: q.title,
-        description: q.description || "",
-        type: q.type,
-        showInTable: q.showInTable,
-        isRequired: q.isRequired,
-        order: q.order,
-      })) || [],
-    },
-  });
-
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: "questions",
+    name: name,
   });
 
-  const watchedQuestions = watch("questions");
-
-  const onSubmit = async (data: QuestionFormValues) => {
-    try {
-      // Update order based on current array position
-      const questionsWithOrder = data.questions.map((q, index) => ({
-        ...q,
-        order: index + 1,
-      }));
-
-      await updateTemplateQuestions(template.id, questionsWithOrder);
-      toast.success("Questions updated successfully!");
-      onSave();
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to update questions");
-    }
-  };
+  const watchedQuestions = useWatch({
+    control,
+    name: name,
+  }) as CreateQuestionData[];
 
   const addQuestion = () => {
     const newQuestion: CreateQuestionData = {
@@ -373,7 +357,7 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
       type: "SINGLE_LINE",
       showInTable: false,
       isRequired: false,
-      order: fields.length + 1,
+      // order will be set by the parent form's submission logic
     };
 
     // Check type limits before appending
@@ -383,7 +367,11 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
     }, {} as Record<QuestionType, number>);
 
     if (currentTypeCounts[newQuestion.type] >= 4) {
-      toast.error(`You can only have up to 4 ${getQuestionTypeName(newQuestion.type)} questions.`);
+      toast.error(
+        `You can only have up to 4 ${getQuestionTypeName(
+          newQuestion.type
+        )} questions.`
+      );
       return;
     }
 
@@ -416,66 +404,53 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
     <DndProvider backend={HTML5Backend}>
       <Card className="mb-4">
         <Card.Header>
-          <h5 className="mb-0">Edit Questions for "{template.title}"</h5>
+          <h5 className="mb-0">
+            {templateTitle ? `Questions for "${templateTitle}"` : "Questions"}
+          </h5>
         </Card.Header>
         <Card.Body>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            {fields.length === 0 ? (
-              <Alert variant="info" className="text-center">
-                No questions added yet. Click "Add Question" to start.
-              </Alert>
-            ) : (
-              <div className="mb-4">
-                {fields.map((field, index) => (
-                  <QuestionItem
-                    key={field.id}
-                    index={index}
-                    question={field as CreateQuestionData}
-                    control={control}
-                    remove={remove}
-                    move={move}
-                    watchedQuestions={watchedQuestions}
-                    questionTypeOptions={questionTypeOptions}
-                    typeCounts={typeCounts}
-                  />
-                ))}
-              </div>
-            )}
-
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <Button variant="outline-primary" onClick={addQuestion}>
-                <Plus size={16} className="me-2" />
-                Add Question
-              </Button>
-              <div className="d-flex gap-3 small text-muted">
-                <span>
-                  📝 Short Text:{" "}
-                  {typeCounts["SINGLE_LINE"] || 0}/4
-                </span>
-                <span>
-                  📄 Long Text:{" "}
-                  {typeCounts["MULTI_LINE"] || 0}/4
-                </span>
-                <span>
-                  🔢 Number:{" "}
-                  {typeCounts["INTEGER"] || 0}/4
-                </span>
-                <span>
-                  ☑️ Checkbox:{" "}
-                  {typeCounts["CHECKBOX"] || 0}/4
-                </span>
-              </div>
+          {fields.length === 0 ? (
+            <Alert variant="info" className="text-center">
+              No questions added yet. Click "Add Question" to start.
+            </Alert>
+          ) : (
+            <div className="mb-4">
+              {fields.map((field, index) => (
+                <QuestionItem
+                  key={field.id}
+                  index={index}
+                  question={field as CreateQuestionData}
+                  control={control}
+                  remove={remove}
+                  move={move}
+                  watchedQuestions={watchedQuestions}
+                  questionTypeOptions={questionTypeOptions}
+                  typeCounts={typeCounts}
+                />
+              ))}
             </div>
+          )}
 
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <Button variant="outline-primary" onClick={addQuestion}>
+              <Plus size={16} className="me-2" />
+              Add Question
+            </Button>
+            <div className="d-flex gap-3 small text-muted">
+              <span>📝 Short Text: {typeCounts["SINGLE_LINE"] || 0}/4</span>
+              <span>📄 Long Text: {typeCounts["MULTI_LINE"] || 0}/4</span>
+              <span>🔢 Number: {typeCounts["INTEGER"] || 0}/4</span>
+              <span>☑️ Checkbox: {typeCounts["CHECKBOX"] || 0}/4</span>
+            </div>
+          </div>
+
+          {onCancel && (
             <div className="d-flex justify-content-end gap-2">
               <Button variant="secondary" onClick={onCancel}>
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Save Questions"}
-              </Button>
             </div>
-          </Form>
+          )}
         </Card.Body>
       </Card>
     </DndProvider>

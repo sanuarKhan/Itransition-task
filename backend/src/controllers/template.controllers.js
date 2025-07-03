@@ -67,7 +67,10 @@ const getPublicTemplates = async (req, res) => {
     let paramIndex = 1;
 
     if (search) {
-      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      const searchTsQuery = search
+        .split(" ")
+        .map((term) => `${term}:*`)
+        .join(" & ");
       query += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
       queryParams.push(searchTsQuery, searchTsQuery);
     }
@@ -92,7 +95,7 @@ const getPublicTemplates = async (req, res) => {
 
     const templates = await db.$queryRawUnsafe(query, ...queryParams);
 
-    const totalQuery = `
+    let totalQuery = `
       SELECT COUNT(*)
       FROM "templates" t
       JOIN "users" u ON t."ownerId" = u.id
@@ -102,7 +105,10 @@ const getPublicTemplates = async (req, res) => {
     paramIndex = 1;
 
     if (search) {
-      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      const searchTsQuery = search
+        .split(" ")
+        .map((term) => `${term}:*`)
+        .join(" & ");
       totalQuery += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
       totalParams.push(searchTsQuery, searchTsQuery);
     }
@@ -125,7 +131,7 @@ const getPublicTemplates = async (req, res) => {
     const totalResult = await db.$queryRawUnsafe(totalQuery, ...totalParams);
     const total = totalResult[0].count;
 
-    const formattedTemplates = templates.map(template => ({
+    const formattedTemplates = templates.map((template) => ({
       ...template,
       owner: {
         id: template.ownerId,
@@ -137,11 +143,11 @@ const getPublicTemplates = async (req, res) => {
         likes: Number(template.likesCount),
         comments: Number(template.commentsCount),
       },
-      likes: req.user ? (template.likesCount > 0 ? [{ id: 'dummy' }] : []) : [], // Simplified for now
+      likes: req.user ? (template.likesCount > 0 ? [{ id: "dummy" }] : []) : [], // Simplified for now
     }));
 
     res.json({
-      templates,
+      templates: formattedTemplates,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
@@ -177,7 +183,10 @@ const getMyTemplates = async (req, res) => {
     let paramIndex = 2;
 
     if (search) {
-      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      const searchTsQuery = search
+        .split(" ")
+        .map((term) => `${term}:*`)
+        .join(" & ");
       query += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
       queryParams.push(searchTsQuery, searchTsQuery);
     }
@@ -197,17 +206,20 @@ const getMyTemplates = async (req, res) => {
 
     const templates = await db.$queryRawUnsafe(query, ...queryParams);
 
-    const totalQuery = `
+    let totalQuery = `
       SELECT COUNT(*)
       FROM "templates" t
       JOIN "users" u ON t."ownerId" = u.id
       WHERE t."ownerId" = $1
     `;
     const totalParams = [req.user.id];
-    paramIndex = 2;
+    paramIndex = 2; // Reset paramIndex for totalQuery
 
     if (search) {
-      const searchTsQuery = search.split(' ').map(term => `${term}:*`).join(' & ');
+      const searchTsQuery = search
+        .split(" ")
+        .map((term) => `${term}:*`)
+        .join(" & ");
       totalQuery += ` AND (t.search_vector @@ to_tsquery(${paramIndex++}) OR EXISTS (SELECT 1 FROM "questions" q WHERE q."templateId" = t.id AND q.search_vector @@ to_tsquery(${paramIndex++})))`;
       totalParams.push(searchTsQuery, searchTsQuery);
     }
@@ -223,9 +235,9 @@ const getMyTemplates = async (req, res) => {
     }
 
     const totalResult = await db.$queryRawUnsafe(totalQuery, ...totalParams);
-    const total = totalResult[0].count;
+    const total = Number(totalResult[0].count);
 
-    const formattedTemplates = templates.map(template => ({
+    const formattedTemplates = templates.map((template) => ({
       ...template,
       owner: {
         id: template.ownerId,
@@ -397,7 +409,6 @@ const updatedTemplate = async (req, res) => {
     const { title, description, topic, image, tags, isPublic, allowedUserIds } =
       req.body;
 
-    // Check if template exists and user has permission
     const existingTemplate = await db.template.findUnique({
       where: { id: req.params.id },
       include: {
@@ -417,16 +428,12 @@ const updatedTemplate = async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    // Update template in transaction to handle tags and allowed users properly
     const template = await db.$transaction(async (tx) => {
-      // First, delete existing tags if new tags are provided
       if (tags) {
         await tx.tagOnTemplate.deleteMany({
           where: { templateId: req.params.id },
         });
       }
-
-      // Delete existing allowed users if new ones are provided
       if (allowedUserIds) {
         await tx.templateAccess.deleteMany({
           where: { templateId: req.params.id },
@@ -440,7 +447,7 @@ const updatedTemplate = async (req, res) => {
           title,
           description,
           topic,
-          image: image || null,
+          thumbnail: image || null,
           isPublic,
           ...(tags && {
             tags: {
@@ -501,7 +508,6 @@ const updateTemplateQuestions = async (req, res) => {
       return res.status(400).json({ error: "Questions must be an array" });
     }
 
-    // Check if template exists and user has permission
     const template = await db.template.findUnique({
       where: { id: req.params.id },
       include: { questions: true },
@@ -518,7 +524,6 @@ const updateTemplateQuestions = async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    // Validate questions
     const typeCounts = {
       SINGLE_LINE: 0,
       MULTI_LINE: 0,
@@ -546,7 +551,6 @@ const updateTemplateQuestions = async (req, res) => {
       typeCounts[question.type]++;
     }
 
-    // Business rule: max 4 of each type
     for (const [type, count] of Object.entries(typeCounts)) {
       if (count > 4) {
         return res.status(400).json({
@@ -555,14 +559,11 @@ const updateTemplateQuestions = async (req, res) => {
       }
     }
 
-    // Update questions in transaction
     await db.$transaction(async (tx) => {
-      // Delete existing questions
       await tx.question.deleteMany({
         where: { templateId: req.params.id },
       });
 
-      // Create new questions
       if (questions.length > 0) {
         await tx.question.createMany({
           data: questions.map((q, index) => ({
@@ -576,14 +577,16 @@ const updateTemplateQuestions = async (req, res) => {
           })),
         });
 
-        // Update search_vector for each new question
         for (const q of questions) {
-          await tx.$executeRaw`UPDATE "questions" SET search_vector = setweight(to_tsvector('english', ${q.title.trim()}), 'A') || setweight(to_tsvector('english', ${q.description?.trim() || ''}), 'B') WHERE "templateId" = ${req.params.id} AND title = ${q.title.trim()}`;
+          await tx.$executeRaw`UPDATE "questions" SET search_vector = setweight(to_tsvector('english', ${q.title.trim()}), 'A') || setweight(to_tsvector('english', ${
+            q.description?.trim() || ""
+          }), 'B') WHERE "templateId" = ${
+            req.params.id
+          } AND title = ${q.title.trim()}`;
         }
       }
     });
 
-    // Return updated template with questions
     const updatedTemplate = await db.template.findUnique({
       where: { id: req.params.id },
       include: {

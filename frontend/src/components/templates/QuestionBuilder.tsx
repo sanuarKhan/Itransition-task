@@ -189,7 +189,13 @@ export const QuestionBuilder: React.FC<QuestionBuilderProps> = ({
                     <Button
                       variant="success"
                       size="sm"
-                      onClick={() => setEditingIndex(null)}
+                      onClick={() => {
+                        if (question.title.trim()) {
+                          setEditingIndex(null);
+                        } else {
+                          alert("Question title cannot be empty.");
+                        }
+                      }}
                       disabled={!question.title.trim()}
                     >
                       Save
@@ -197,7 +203,14 @@ export const QuestionBuilder: React.FC<QuestionBuilderProps> = ({
                     <Button
                       variant="outline-secondary"
                       size="sm"
-                      onClick={() => setEditingIndex(null)}
+                      onClick={() => {
+                        // Revert changes if canceled and not saved
+                        if (!questions[index].title.trim() && editingIndex === index) {
+                          deleteQuestion(index); // Remove if title was empty and canceled
+                        } else {
+                          setEditingIndex(null);
+                        }
+                      }}
                     >
                       Cancel
                     </Button>
