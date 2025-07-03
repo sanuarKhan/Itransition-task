@@ -50,7 +50,11 @@ export const FormViewPage: React.FC = () => {
     }
   };
 
-  const { data: formData, isLoading } = useQuery({
+  const {
+    data: formData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["form", id],
     queryFn: () => getForm(id!),
     enabled: !!id,
@@ -61,15 +65,15 @@ export const FormViewPage: React.FC = () => {
   const canEdit =
     user &&
     form &&
-    (user.id === form?.userId ||
-      user.id === form?.template.owner.id ||
+    (user.id === form.userId ||
+      user.id === form.template.owner.id ||
       user.role === "ADMIN");
 
   const canDelete =
     user &&
     form &&
-    (user.id === form?.userId ||
-      user.id === form?.template.owner.id ||
+    (user.id === form.userId ||
+      user.id === form.template.owner.id ||
       user.role === "ADMIN");
 
   const handleDelete = async () => {
@@ -77,7 +81,7 @@ export const FormViewPage: React.FC = () => {
 
     setIsDeleting(true);
     try {
-      await deleteForm(form?.id);
+      await deleteForm(form.id);
       toast.success(
         t("formView.toastDeleteSuccess", "Form submission deleted successfully")
       );
@@ -107,7 +111,7 @@ export const FormViewPage: React.FC = () => {
 
   if (isLoading) return <LoadingSpinner center text={t("formFill.loading")} />;
 
-  if (error || !template) {
+  if (error || !form) {
     return (
       <Container className="py-5">
         <Alert variant="danger">
@@ -147,8 +151,8 @@ export const FormViewPage: React.FC = () => {
             </h1>
             <p className="text-muted mb-0">
               {t("formView.forTemplate", {
-                title: form?.template.title,
-                defaultValue: `for "${form?.template.title}"`,
+                title: form.template.title,
+                defaultValue: `for "${form.template.title}"`,
               })}
             </p>
           </div>
@@ -161,7 +165,7 @@ export const FormViewPage: React.FC = () => {
           </Button>
           {canEdit && (
             <Button
-              onClick={() => navigate(`/forms/${form?.id}/edit`)}
+              onClick={() => navigate(`/forms/${form.id}/edit`)}
               variant="outline-primary"
               size="sm"
             >
@@ -191,7 +195,7 @@ export const FormViewPage: React.FC = () => {
               <h5 className="mb-0">{t("formView.answers", "Answers")}</h5>
             </Card.Header>
             <Card.Body>
-              {form?.answers.map((answer) => (
+              {form.answers.map((answer) => (
                 <div key={answer.id} className="mb-4">
                   <h6 className="fw-bold">{answer.question.title}</h6>
                   {answer.question.description && (
@@ -220,7 +224,7 @@ export const FormViewPage: React.FC = () => {
                 <User size={16} className="me-2 text-muted" />
                 <span>
                   <strong>{t("formView.submittedBy", "Submitted by:")}</strong>{" "}
-                  {form?.user.name}
+                  {form.user.name}
                 </span>
               </div>
 
@@ -228,20 +232,20 @@ export const FormViewPage: React.FC = () => {
                 <Calendar size={16} className="me-2 text-muted" />
                 <span>
                   <strong>{t("formView.submitted", "Submitted:")}</strong>{" "}
-                  {formatDistanceToNow(new Date(form?.createdAt), {
+                  {formatDistanceToNow(new Date(form.createdAt), {
                     addSuffix: true,
                   })}
                 </span>
               </div>
 
-              {form?.updatedAt !== form?.createdAt && (
+              {form.updatedAt !== form.createdAt && (
                 <div className="d-flex align-items-center mb-3">
                   <Calendar size={16} className="me-2 text-muted" />
                   <span>
                     <strong>
                       {t("formView.lastUpdated", "Last updated:")}
                     </strong>{" "}
-                    {formatDistanceToNow(new Date(form?.updatedAt), {
+                    {formatDistanceToNow(new Date(form.updatedAt), {
                       addSuffix: true,
                     })}
                   </span>
@@ -255,22 +259,21 @@ export const FormViewPage: React.FC = () => {
               </h6>
               <p className="mb-2">
                 <strong>{t("formView.templateTitle", "Title:")}</strong>{" "}
-                {form?.template.title}
+                {form.template.title}
               </p>
               <p className="mb-2">
                 <strong>{t("formView.topic", "Topic:")}</strong>{" "}
-                <Badge bg="primary">{form?.template.topic}</Badge>
+                <Badge bg="primary">{form.template.topic}</Badge>
               </p>
               <p className="mb-0">
                 <strong>{t("formView.createdBy", "Created by:")}</strong>{" "}
-                {form?.template.owner.name}
+                {form.template.owner.name}
               </p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
-      {/* Delete Confirmation Modal */}
       <ConfirmModal
         show={showDeleteModal}
         title={t("formView.deleteModalTitle", "Delete Form Submission")}

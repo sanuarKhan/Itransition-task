@@ -156,20 +156,15 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     {...field}
                     type="text"
                     placeholder="Enter question title"
-                    isInvalid={
-                      !!(
-                        !!(control._formState.errors.questions?.[index] as any)?.title
-                      )
-                    }
+                    isInvalid={!!(control._formState.errors as any)[`questions.${index}.title`]}
                   />
                 )}
               />
-              {control._formState.errors.questions?.[index] &&
-                (control._formState.errors.questions[index] as any)?.title && (
-                  <Form.Control.Feedback type="invalid" className="d-block">
-                    {(control._formState.errors.questions[index] as any)?.title?.message}
-                  </Form.Control.Feedback>
-                )}
+              {(control._formState.errors as any)[`questions.${index}.title`] && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {(control._formState.errors as any)[`questions.${index}.title`]?.message}
+                </Form.Control.Feedback>
+              )}
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -387,7 +382,7 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
     return typeNames[type as keyof typeof typeNames] || type;
   };
 
-  const questionTypeOptions = [
+  const questionTypeOptions: { value: QuestionType; label: string }[] = [
     { value: "SINGLE_LINE", label: "Short Text" },
     { value: "MULTI_LINE", label: "Long Text" },
     { value: "INTEGER", label: "Number" },

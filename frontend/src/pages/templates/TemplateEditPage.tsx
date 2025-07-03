@@ -42,12 +42,9 @@ import { toast } from "react-toastify";
 import { QuestionEditor } from "../../components/templates/QuestionEditor";
 
 const schema = yup.object().shape({
-  title: yup.string().required("Template title is required"),
-  description: yup
-    .string()
-    .required("Template description is required")
-    .min(20, "Description should be at least 20 characters"),
-  topic: yup.string().required("Topic is required"),
+  title: yup.string().optional(),
+  description: yup.string().optional(),
+  topic: yup.string().optional(),
   image: yup.string().nullable(),
   tags: yup.array().of(yup.string()).nullable(),
   questions: yup.array().of(
