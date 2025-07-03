@@ -1,0 +1,26 @@
+import React from "react";
+// path issue fixing
+import { Container, Row, Col } from "react-bootstrap";
+
+export const Footer: React.FC = () => {
+  return (
+    <footer className="bg-light py-4 mt-auto border-top">
+      <Container>
+        <Row>
+          <Col md={6}>
+            <h5 className="fw-bold">DoogleTorm</h5>
+            <p className="text-muted">
+              Create beautiful forms, surveys, and questionnaires with ease.
+            </p>
+          </Col>
+          <Col md={6} className="text-md-end">
+            <p className="text-muted mb-0">
+              © {new Date().getFullYear()} DoogleTorm. Built with React &
+              Express.
+            </p>
+          </Col>
+        </Row>
+      </Container>
+    </footer>
+  );
+};

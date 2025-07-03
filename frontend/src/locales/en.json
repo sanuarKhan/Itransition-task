@@ -1,0 +1,328 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "copy": "Copy",
+    "share": "Share",
+    "download": "Download",
+    "upload": "Upload",
+    "required": "Required",
+    "optional": "Optional",
+    "all": "All",
+    "none": "None",
+    "select": "Select",
+    "confirm": "Confirm",
+    "actions": "Actions"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "templates": "Templates",
+    "forms": "Forms",
+    "search": "Search",
+    "profile": "Profile",
+    "admin": "Admin",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Welcome back! Please sign in to your account.",
+      "email": "Email Address",
+      "password": "Password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one here"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join FormCraft to create amazing forms!",
+      "name": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in here"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "personalInfo": "Personal Information",
+      "preferences": "Preferences",
+      "name": "Name",
+      "email": "Email",
+      "language": "Language",
+      "theme": "Theme",
+      "avatar": "Profile Picture",
+      "changeAvatar": "Change Avatar",
+      "updateSuccess": "Profile updated successfully",
+      "updateError": "Failed to update profile"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Create Beautiful Forms with Ease",
+      "subtitle": "Build custom surveys, questionnaires, and forms. Analyze responses and gain insights from your audience.",
+      "getStarted": "Get Started",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose FormCraft?",
+      "create": {
+        "title": "Easy Creation",
+        "description": "Drag and drop interface to build forms quickly"
+      },
+      "customize": {
+        "title": "Full Customization",
+        "description": "Customize everything from questions to design"
+      },
+      "analyze": {
+        "title": "Smart Analytics",
+        "description": "Get insights from responses with built-in analytics"
+      },
+      "share": {
+        "title": "Easy Sharing",
+        "description": "Share forms with specific users or make them public"
+      }
+    },
+    "latest": {
+      "title": "Latest Templates",
+      "viewAll": "View All Templates"
+    },
+    "popular": {
+      "title": "Most Popular",
+      "responses": "{{count}} responses"
+    },
+    "tagCloud": {
+      "title": "Explore Topics"
+    }
+  },
+  "templates": {
+    "title": "Templates",
+    "myTemplates": "My Templates",
+    "createNew": "Create New Template",
+    "noTemplates": "No templates found",
+    "createFirst": "Create your first template",
+    "filters": {
+      "topic": "Topic",
+      "tags": "Tags",
+      "sort": "Sort by"
+    },
+    "create": {
+      "title": "Create New Template",
+      "basicInfo": "Basic Information",
+      "questions": "Questions",
+      "settings": "Settings",
+      "name": "Template Name",
+      "description": "Description",
+      "topic": "Topic",
+      "tags": "Tags",
+      "image": "Cover Image",
+      "access": "Access Control",
+      "public": "Public (anyone can fill)",
+      "restricted": "Restricted (specific users only)",
+      "allowedUsers": "Allowed Users",
+      "markdownSupport": "Markdown formatting supported",
+      "tagPlaceholder": "Add tags...",
+      "userPlaceholder": "Search users...",
+      "createSuccess": "Template created successfully",
+      "createError": "Failed to create template"
+    },
+    "view": {
+      "tabs": {
+        "info": "Information",
+        "questions": "Questions",
+        "results": "Results",
+        "analytics": "Analytics"
+      },
+      "info": {
+        "owner": "Created by",
+        "created": "Created on",
+        "topic": "Topic",
+        "tags": "Tags",
+        "access": "Access",
+        "responses": "{{count}} responses",
+        "likes": "{{count}} likes",
+        "comments": "{{count}} comments"
+      },
+      "actions": {
+        "fill": "Fill Form",
+        "edit": "Edit Template",
+        "like": "Like",
+        "unlike": "Unlike",
+        "share": "Share",
+        "delete": "Delete"
+      }
+    },
+    "questions": {
+      "title": "Questions",
+      "add": "Add Question",
+      "reorder": "Drag to reorder",
+      "types": {
+        "SINGLE_LINE": "Single Line Text",
+        "MULTI_LINE": "Multi Line Text",
+        "INTEGER": "Number",
+        "CHECKBOX": "Checkbox"
+      },
+      "form": {
+        "title": "Question Title",
+        "description": "Description",
+        "type": "Question Type",
+        "required": "Required",
+        "showInTable": "Show in results table"
+      },
+      "limit": "You can add up to 4 questions of each type"
+    }
+  },
+  "forms": {
+    "title": "Forms",
+    "myForms": "My Form Submissions",
+    "noForms": "No forms submitted yet",
+    "fillFirst": "Fill out some templates to see them here",
+    "fill": {
+      "title": "Fill Form",
+      "submit": "Submit Form",
+      "update": "Update Form",
+      "required": "This field is required",
+      "submitSuccess": "Form submitted successfully",
+      "updateSuccess": "Form updated successfully",
+      "submitError": "Failed to submit form",
+      "alreadySubmitted": "You have already submitted this form",
+      "canEdit": "You can edit your submission"
+    },
+    "view": {
+      "submittedBy": "Submitted by",
+      "submittedOn": "Submitted on",
+      "answers": "Answers",
+      "edit": "Edit Answers",
+      "delete": "Delete Submission"
+    }
+  },
+  "search": {
+    "title": "Search Results",
+    "query": "Search for templates...",
+    "results": "{{count}} results for \"{{query}}\"",
+    "noResults": "No templates found",
+    "tryDifferent": "Try different keywords or filters",
+    "suggestions": "Search Suggestions",
+    "filters": {
+      "topic": "Topic",
+      "tags": "Tags"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}!",
+    "stats": {
+      "templates": "Templates Created",
+      "forms": "Forms Submitted",
+      "comments": "Comments Made",
+      "likes": "Likes Given"
+    },
+    "recent": {
+      "templates": "Recent Templates",
+      "forms": "Recent Forms"
+    },
+    "quick": {
+      "createTemplate": "Create Template",
+      "viewTemplates": "View Templates",
+      "viewForms": "View Forms"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "users": {
+      "title": "User Management",
+      "total": "Total Users",
+      "active": "Active Users",
+      "blocked": "Blocked Users",
+      "admins": "Administrators",
+      "actions": {
+        "block": "Block",
+        "unblock": "Unblock",
+        "makeAdmin": "Make Admin",
+        "removeAdmin": "Remove Admin",
+        "delete": "Delete"
+      },
+      "confirm": {
+        "block": "Are you sure you want to block this user?",
+        "unblock": "Are you sure you want to unblock this user?",
+        "makeAdmin": "Are you sure you want to make this user an admin?",
+        "removeAdmin": "Are you sure you want to remove admin privileges?",
+        "delete": "Are you sure you want to delete this user? This action cannot be undone."
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "userGrowth": "User Growth",
+      "popularTemplates": "Popular Templates",
+      "recentActivity": "Recent Activity"
+    }
+  },
+  "comments": {
+    "title": "Comments",
+    "add": "Add Comment",
+    "placeholder": "Write your comment...",
+    "post": "Post Comment",
+    "noComments": "No comments yet",
+    "beFirst": "Be the first to comment!",
+    "addSuccess": "Comment added successfully",
+    "addError": "Failed to add comment",
+    "autoUpdate": "Comments update automatically"
+  },
+  "topics": {
+    "EDUCATION": "Education",
+    "BUSINESS": "Business",
+    "QUIZ": "Quiz",
+    "SURVEY": "Survey",
+    "RESEARCH": "Research",
+    "POLL": "Poll",
+    "OTHER": "Other"
+  },
+  "languages": {
+    "EN": "English",
+    "RU": "Русский",
+    "BN": "বাংলা"
+  },
+  "themes": {
+    "LIGHT": "Light",
+    "DARK": "Dark"
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action",
+    "forbidden": "Access denied",
+    "notFound": "The requested resource was not found",
+    "serverError": "Server error. Please try again later.",
+    "validation": "Please check your input and try again"
+  },
+  "success": {
+    "saved": "Changes saved successfully",
+    "deleted": "Deleted successfully",
+    "created": "Created successfully",
+    "updated": "Updated successfully",
+    "uploaded": "Uploaded successfully"
+  }
+}
