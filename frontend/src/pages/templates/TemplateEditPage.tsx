@@ -35,7 +35,7 @@ import {
   searchUsers,
   uploadImage,
 } from "../../services/api";
-import type { UpdateTemplateData, Topic, CreateQuestionData } from "../../types/index";
+import type { UpdateTemplateData, Topic } from "../../types/index";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { toast } from "react-toastify";
@@ -118,7 +118,7 @@ export const TemplateEditPage: React.FC = () => {
         topic: template.topic,
         image: template.thumbnail || "",
         tags: template.tags.map((t) => t.tag.name),
-        questions: template.questions.map((q) => ({
+        questions: template.questions?.map((q) => ({
           id: q.id,
           title: q.title,
           description: q.description || "",
@@ -217,6 +217,7 @@ export const TemplateEditPage: React.FC = () => {
       const response = await uploadImage(file);
       setValue("image", response.url);
       toast.success("Image uploaded successfully");
+      //eslint-disable-next-line
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to upload image");
     } finally {
@@ -232,9 +233,13 @@ export const TemplateEditPage: React.FC = () => {
         order: index + 1,
       }));
 
-      await updateTemplate(template.id, { ...data, questions: questionsWithOrder });
+      await updateTemplate(template.id, {
+        ...data,
+        questions: questionsWithOrder,
+      });
       toast.success("Template updated successfully!");
       navigate(`/templates/${template.id}`);
+      //eslint-disable-next-line
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to update template");
     }
@@ -337,7 +342,9 @@ export const TemplateEditPage: React.FC = () => {
                     </Card.Header>
                     <Card.Body className="py-3">
                       <div className="prose small">
-                        <ReactMarkdown>{watchedValues.description}</ReactMarkdown>
+                        <ReactMarkdown>
+                          {watchedValues.description}
+                        </ReactMarkdown>
                       </div>
                     </Card.Body>
                   </Card>
@@ -524,7 +531,8 @@ export const TemplateEditPage: React.FC = () => {
                             <div>
                               <div>Restricted</div>
                               <small className="text-muted">
-                                Only specific users can view and fill this template
+                                Only specific users can view and fill this
+                                template
                               </small>
                             </div>
                           </div>
@@ -552,15 +560,26 @@ export const TemplateEditPage: React.FC = () => {
                           options={userOptions}
                           value={field.value
                             ?.map((id) => {
-                              const user = availableUsers.find((u) => u.id === id) || template.allowedUsers?.find((au) => au.user.id === id)?.user;
+                              const user =
+                                availableUsers.find((u) => u.id === id) ||
+                                template.allowedUsers?.find(
+                                  (au) => au.user.id === id
+                                )?.user;
                               return user
-                                ? { value: user.id, label: `${user.name} (${user.email})` }
+                                ? {
+                                    value: user.id,
+                                    label: `${user.name} (${user.email})`,
+                                  }
                                 : null;
                             })
-                            .filter(Boolean)}
+                            .filter(
+                              (s): s is { value: string; label: string } =>
+                                s !== null
+                            )}
                           onChange={(selected) =>
                             field.onChange(
-                              selected?.filter(Boolean).map((s) => s.value) || []
+                              selected?.filter(Boolean).map((s) => s.value) ||
+                                []
                             )
                           }
                           onInputChange={setUserSearchQuery}

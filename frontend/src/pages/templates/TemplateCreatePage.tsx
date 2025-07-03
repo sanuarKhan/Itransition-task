@@ -265,7 +265,7 @@ export const TemplateCreatePage: React.FC = () => {
                 <Controller
                   name="questions"
                   control={control}
-                  render={({ field }) => (
+                  render={() => (
                     <QuestionEditor
                       control={control}
                       name="questions"

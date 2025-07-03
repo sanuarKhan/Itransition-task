@@ -44,7 +44,7 @@ export const TemplatesPage: React.FC = () => {
   }, [searchQuery]);
 
   // Fetch public templates
-  const { data: publicTemplatesData, isLoading: loadingPublic, error: publicError } = useQuery({
+  const { data: publicTemplatesData, isLoading: loadingPublic } = useQuery({
     queryKey: ["publicTemplates", debouncedSearchQuery, topicFilter],
     queryFn: () =>
       getTemplates({
@@ -57,7 +57,7 @@ export const TemplatesPage: React.FC = () => {
   });
 
   // Fetch my templates
-  const { data: myTemplatesData, isLoading: loadingMy, error: myError } = useQuery({
+  const { data: myTemplatesData, isLoading: loadingMy } = useQuery({
     queryKey: ["myTemplates", debouncedSearchQuery],
     queryFn: () => getMyTemplates({ q: debouncedSearchQuery }),
     enabled: activeTab === "my" && !!user,

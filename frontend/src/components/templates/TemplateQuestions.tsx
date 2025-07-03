@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-// path issue fixing
+import React, { useState, useEffect } from "react";
+
 import { Card, Button, Alert, Badge, Row, Col } from "react-bootstrap";
 import { Plus, Edit, GripVertical, Settings, Eye } from "lucide-react";
-import type { Template, Question } from "../../types/index";
+import type { Template, Question, CreateQuestionData } from "../../types/index";
 import { QuestionEditor } from "./QuestionEditor";
+import { useForm } from "react-hook-form";
+import { useTemplatesStore } from "../../store/index";
+import { toast } from "react-toastify";
+import { Form } from "react-router-dom";
 
 interface TemplateQuestionsProps {
   template: Template;
@@ -17,6 +21,41 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
   onUpdate = () => {},
 }) => {
   const [editingQuestions, setEditingQuestions] = useState(false);
+  const { updateTemplateQuestions } = useTemplatesStore();
+
+  const { control, handleSubmit, reset } = useForm<{
+    questions: CreateQuestionData[];
+  }>({
+    defaultValues: {
+      questions: template.questions || [],
+    },
+  });
+
+  useEffect(() => {
+    reset({ questions: template.questions || [] });
+  }, [template, reset]);
+
+  const handleSaveQuestions = async (data: {
+    questions: CreateQuestionData[];
+  }) => {
+    try {
+      const questionsWithOrder = data.questions.map((q, index) => ({
+        ...q,
+        order: index + 1,
+      }));
+      await updateTemplateQuestions(template.id, questionsWithOrder);
+      toast.success("Questions updated successfully!");
+      setEditingQuestions(false);
+      onUpdate();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Failed to update questions");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    reset({ questions: template.questions || [] }); // Reset form to original template questions
+    setEditingQuestions(false);
+  };
 
   const getQuestionTypeIcon = (type: string) => {
     switch (type) {
@@ -84,14 +123,21 @@ export const TemplateQuestions: React.FC<TemplateQuestionsProps> = ({
   // Show QuestionEditor when editing
   if (editingQuestions) {
     return (
-      <QuestionEditor
-        template={template}
-        onSave={() => {
-          setEditingQuestions(false);
-          onUpdate();
-        }}
-        onCancel={() => setEditingQuestions(false)}
-      />
+      <Form onSubmit={handleSubmit(handleSaveQuestions)}>
+        <QuestionEditor
+          control={control}
+          name="questions"
+          templateTitle={template.title}
+        />
+        <div className="d-flex justify-content-end gap-2 mt-3">
+          <Button variant="secondary" onClick={handleCancelEdit}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary">
+            Save Questions
+          </Button>
+        </div>
+      </Form>
     );
   }
 

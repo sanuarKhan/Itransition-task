@@ -38,9 +38,9 @@ export const DashboardPage: React.FC = () => {
   });
 
   // Fetch my templates
-  const { isLoading: loadingTemplates } = useQuery({
+  const { data: myTemplatesData, isLoading: loadingTemplates } = useQuery({
     queryKey: ["myTemplates"],
-    queryFn: getMyTemplates,
+    queryFn: () => getMyTemplates({}),
     enabled: !!user,
   });
 

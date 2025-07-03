@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Card, Button, Form, Row, Col, Alert, Badge } from "react-bootstrap";
 import { useFieldArray, Controller, useWatch } from "react-hook-form";
 import type { Control } from "react-hook-form";
@@ -158,17 +158,16 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     placeholder="Enter question title"
                     isInvalid={
                       !!(
-                        control._formState.errors.questions &&
-                        control._formState.errors.questions[index]?.title
+                        !!(control._formState.errors.questions?.[index] as any)?.title
                       )
                     }
                   />
                 )}
               />
-              {control._formState.errors.questions &&
-                control._formState.errors.questions[index]?.title && (
+              {control._formState.errors.questions?.[index] &&
+                (control._formState.errors.questions[index] as any)?.title && (
                   <Form.Control.Feedback type="invalid" className="d-block">
-                    {control._formState.errors.questions[index]?.title?.message}
+                    {(control._formState.errors.questions[index] as any)?.title?.message}
                   </Form.Control.Feedback>
                 )}
             </Form.Group>
@@ -419,7 +418,7 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 <QuestionItem
                   key={field.id}
                   index={index}
-                  question={field as CreateQuestionData}
+                  question={field as unknown as CreateQuestionData}
                   control={control}
                   remove={remove}
                   move={move}

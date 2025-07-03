@@ -46,8 +46,6 @@ export const TemplateViewPage: React.FC = () => {
     enabled: !!id,
   });
 
-  console.log(templateData, "templateData");
-
   const template = templateData?.template;
 
   // Check if current user can edit/delete
@@ -66,7 +64,6 @@ export const TemplateViewPage: React.FC = () => {
 
   const handleLike = async () => {
     if (!user) {
-      // FIXED: Use toast instead of addNotification
       toast.error("Please login to like templates");
       return;
     }
@@ -222,7 +219,7 @@ export const TemplateViewPage: React.FC = () => {
           {/* Fill Form Button */}
           {template.isPublic ||
             (user &&
-              (template.allowedUsers?.some((au) => au.userId === user.id) ||
+              (template.allowedUsers?.some((au) => au.user.id === user.id) ||
                 canEdit) && (
                 <Button
                   onClick={() => navigate(`/templates/${template.id}/fill`)}
