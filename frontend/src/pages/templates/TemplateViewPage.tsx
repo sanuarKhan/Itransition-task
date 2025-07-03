@@ -58,7 +58,7 @@ export const TemplateViewPage: React.FC = () => {
   // Initialize like status
   useEffect(() => {
     if (template && user) {
-      setIsLiked(template._count.likes > 0 && user !== null);
+      setIsLiked(!!template._count.likes && user !== null);
     }
   }, [template, user]);
 

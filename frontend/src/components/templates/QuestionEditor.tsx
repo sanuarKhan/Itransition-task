@@ -156,13 +156,13 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     {...field}
                     type="text"
                     placeholder="Enter question title"
-                    isInvalid={!!(control._formState.errors as any)[`questions.${index}.title`]}
+                    isInvalid={!!((control._formState.errors as any).questions?.[index] as any)?.title}
                   />
                 )}
               />
-              {(control._formState.errors as any)[`questions.${index}.title`] && (
+              {((control._formState.errors as any).questions?.[index] as any)?.title && (
                 <Form.Control.Feedback type="invalid" className="d-block">
-                  {(control._formState.errors as any)[`questions.${index}.title`]?.message}
+                  {((control._formState.errors as any).questions?.[index] as any)?.title?.message}
                 </Form.Control.Feedback>
               )}
             </Form.Group>

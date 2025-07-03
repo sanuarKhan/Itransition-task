@@ -189,5 +189,18 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
     }
   },
 
-  
+  updateTemplateQuestions: async (
+    templateId: string,
+    questions: CreateQuestionData[]
+  ) => {
+    const response = await updateTemplateQuestions(templateId, questions);
+
+    // Refresh current template if it's the same
+    const { currentTemplate } = get();
+    if (currentTemplate?.id === templateId) {
+      get().fetchTemplate(templateId);
+    }
+
+    return response;
+  },
 }));
