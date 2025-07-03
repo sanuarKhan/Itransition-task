@@ -15,8 +15,6 @@ import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Save,
   ArrowLeft,
@@ -40,29 +38,6 @@ import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import ReactMarkdown from "react-markdown";
 import { toast } from "react-toastify";
 import { QuestionEditor } from "../../components/templates/QuestionEditor";
-
-const schema = yup.object().shape({
-  title: yup.string().optional(),
-  description: yup.string().optional(),
-  topic: yup.string().optional(),
-  image: yup.string().nullable().optional(),
-  tags: yup.array().of(yup.string().required()).optional(),
-  questions: yup
-    .array()
-    .of(
-      yup.object().shape({
-        title: yup.string().required("Question title is required"),
-        description: yup.string().optional(),
-        type: yup.string().required("Question type is required"),
-        isRequired: yup.boolean().optional(),
-        showInTable: yup.boolean().optional(),
-        order: yup.number().optional(),
-      })
-    )
-    .optional(),
-  isPublic: yup.boolean().optional(),
-  allowedUserIds: yup.array().of(yup.string().required()).optional(),
-});
 
 export const TemplateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -94,12 +69,12 @@ export const TemplateEditPage: React.FC = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<UpdateTemplateData>({
-    resolver: yupResolver(schema),
+    // No resolver
     defaultValues: {
-      title: undefined,
-      description: undefined,
-      topic: undefined,
-      image: undefined,
+      title: "",
+      description: "",
+      topic: "OTHER",
+      image: "",
       tags: [],
       questions: [],
       isPublic: false,
@@ -114,33 +89,32 @@ export const TemplateEditPage: React.FC = () => {
   useEffect(() => {
     if (template) {
       reset({
-        title: template.title || undefined,
-        description: template.description || undefined,
-        topic: template.topic || undefined,
-        image: template.thumbnail || undefined,
+        title: template.title || "",
+        description: template.description || "",
+        topic: template.topic,
+        image: template.thumbnail || "",
         tags: template.tags.map((t) => t.tag.name),
-        questions: template.questions?.map((q) => ({
-          id: q.id,
-          title: q.title,
-          description: q.description || undefined,
-          type: q.type,
-          isRequired: q.isRequired,
-          showInTable: q.showInTable,
-          order: q.order,
-        })),
-        isPublic: template.isPublic,
+        questions:
+          template.questions?.map((q) => ({
+            id: q.id,
+            title: q.title,
+            description: q.description || "",
+            type: q.type,
+            isRequired: q.isRequired,
+            showInTable: q.showInTable,
+            order: q.order,
+          })) || [],
+        isPublic: template.isPublic ?? false,
         allowedUserIds: template.allowedUsers?.map((au) => au.user.id) || [],
       });
     }
   }, [template, reset]);
 
-  // Fetch available tags
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: () => getTags(),
   });
 
-  // Fetch users for access control
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const { data: usersData } = useQuery({
     queryKey: ["searchUsers", userSearchQuery],
@@ -183,7 +157,6 @@ export const TemplateEditPage: React.FC = () => {
     );
   }
 
-  // Check permissions
   const canEdit = user.id === template.ownerId || user.role === "ADMIN";
   if (!canEdit) {
     return (
@@ -228,7 +201,6 @@ export const TemplateEditPage: React.FC = () => {
 
   const onSubmit = async (data: UpdateTemplateData) => {
     try {
-      // Ensure questions have an order before submitting
       const questionsWithOrder = (data.questions || []).map((q, index) => ({
         ...q,
         order: index + 1,
