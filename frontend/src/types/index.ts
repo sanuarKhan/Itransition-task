@@ -210,7 +210,6 @@ export interface CreateQuestionData {
   type: QuestionType;
   showInTable: boolean;
   isRequired: boolean;
-  order: number;
 }
 
 export interface SubmitFormData {

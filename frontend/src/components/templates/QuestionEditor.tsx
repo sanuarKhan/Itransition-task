@@ -9,15 +9,17 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface QuestionEditorProps {
-  control: Control<any>; // Control from the parent form
-  name: string; // The name of the field array (e.g., "questions")
-  templateTitle?: string; // Optional title for display
-  onCancel?: () => void; // Optional cancel handler
+  //eslint-disable-next-line
+  control: Control<any>;
+  name: string;
+  templateTitle?: string;
+  onCancel?: () => void;
 }
 
 interface QuestionItemProps {
   question: CreateQuestionData;
   index: number;
+  //eslint-disable-next-line
   control: Control<any>;
   remove: (index: number) => void;
   move: (dragIndex: number, hoverIndex: number) => void;
@@ -156,13 +158,29 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     {...field}
                     type="text"
                     placeholder="Enter question title"
-                    isInvalid={!!((control._formState.errors as any).questions?.[index] as any)?.title}
+                    isInvalid={
+                      !!(
+                        (control._formState.errors as any).questions?.[
+                          index
+                          //eslint-disable-next-line
+                        ] as any
+                      )?.title
+                    }
                   />
                 )}
               />
-              {((control._formState.errors as any).questions?.[index] as any)?.title && (
+              {/* eslint-disable-next-line */}
+              {((control._formState.errors as any).questions?.[index] as any)
+                ?.title && (
                 <Form.Control.Feedback type="invalid" className="d-block">
-                  {((control._formState.errors as any).questions?.[index] as any)?.title?.message}
+                  {
+                    (
+                      (control._formState.errors as any).questions?.[
+                        index
+                        //eslint-disable-next-line
+                      ] as any
+                    )?.title?.message
+                  }
                 </Form.Control.Feedback>
               )}
             </Form.Group>
