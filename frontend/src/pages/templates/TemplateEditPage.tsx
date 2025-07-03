@@ -42,22 +42,22 @@ import { toast } from "react-toastify";
 import { QuestionEditor } from "../../components/templates/QuestionEditor";
 
 const schema = yup.object().shape({
-  title: yup.string().optional(),
-  description: yup.string().optional(),
-  topic: yup.string().optional(),
-  image: yup.string().nullable(),
-  tags: yup.array().of(yup.string()).nullable(),
+  title: yup.string().transform(value => value === '' ? null : value).nullable().optional(),
+  description: yup.string().transform(value => value === '' ? null : value).nullable().optional(),
+  topic: yup.string().nullable().optional(),
+  image: yup.string().nullable().optional(),
+  tags: yup.array().of(yup.string().required()).nullable().optional(),
   questions: yup.array().of(
     yup.object().shape({
       title: yup.string().required("Question title is required"),
-      description: yup.string().nullable(),
+      description: yup.string().nullable().optional(),
       type: yup.string().required("Question type is required"),
-      isRequired: yup.boolean(),
-      showInTable: yup.boolean(),
+      isRequired: yup.boolean().optional(),
+      showInTable: yup.boolean().optional(),
     })
-  ),
-  isPublic: yup.boolean().required(),
-  allowedUserIds: yup.array().of(yup.string()).nullable(),
+  ).optional(),
+  isPublic: yup.boolean().optional(),
+  allowedUserIds: yup.array().of(yup.string().required()).nullable().optional(),
 });
 
 export const TemplateEditPage: React.FC = () => {
@@ -92,15 +92,15 @@ export const TemplateEditPage: React.FC = () => {
   } = useForm<UpdateTemplateData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      title: "",
-      description: "",
-      topic: "OTHER",
-      image: "",
+      title: null,
+      description: null,
+      topic: null,
+      image: null,
       tags: [],
       questions: [],
-      isPublic: true,
+      isPublic: false,
       allowedUserIds: [],
-    },
+    } as UpdateTemplateData,
   });
 
   const watchedValues = watch();

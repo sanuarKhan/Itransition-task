@@ -14,6 +14,7 @@ import {
   addQuestion,
   updateQuestion,
   deleteQuestion,
+  updateTemplateQuestions,
 } from "../services/api";
 
 interface TemplatesState {

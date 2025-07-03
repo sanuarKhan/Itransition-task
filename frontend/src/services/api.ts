@@ -103,6 +103,7 @@ export const getTemplates = async (params?: {
   limit?: number;
   topic?: string;
   tags?: string;
+  q?: string;
 }): Promise<SearchResponse> => {
   const res = await api.get("/api/search/templates", { params });
   return res.data;

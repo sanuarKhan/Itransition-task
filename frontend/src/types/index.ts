@@ -192,7 +192,16 @@ export interface CreateTemplateData {
   allowedUserIds: string[];
 }
 
-export type UpdateTemplateData = Partial<CreateTemplateData>;
+export interface UpdateTemplateData {
+  title?: string;
+  description?: string;
+  topic?: Topic;
+  image?: string | null;
+  tags?: string[];
+  questions?: CreateQuestionData[];
+  isPublic?: boolean;
+  allowedUserIds?: string[];
+}
 
 export interface CreateQuestionData {
   title: string;
