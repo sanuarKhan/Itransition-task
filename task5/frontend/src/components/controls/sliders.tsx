@@ -14,8 +14,8 @@ export function Sliders({
   onReviewsChange,
 }: SlidersProps) {
   return (
-    <div className=" flex gap-3 w-2/4">
-      <div className="  w-1/2">
+    <div className=" flex flex-col md:flex-row gap-3 w-full md:w-2/4">
+      <div className="w-full md:w-1/2">
         <label className="text-sm front-medium">
           Likes: {likesAvg.toFixed(1)}
         </label>

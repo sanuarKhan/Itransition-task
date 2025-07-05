@@ -9,10 +9,10 @@ interface Props {
 export default function BookDetalils({ book }: Props) {
   return (
     <div className=" text-blue-400 p-4  mx-auto">
-      <div className=" flex gap-10">
-        <div className="relative">
+      <div className=" flex flex-col md:flex-row gap-10">
+        <div className="relative w-full md:w-auto">
           <img
-            className="w-100 h-100 rounded-2xl shadow-lg"
+            className="w-full md:w-100 h-auto md:h-100 rounded-2xl shadow-lg"
             src={book.coverImage}
             alt={book.title}
           />

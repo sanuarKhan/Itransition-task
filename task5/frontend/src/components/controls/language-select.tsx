@@ -13,7 +13,7 @@ interface LanguageSelectProps {
 
 export function LanguageSelect({ value, onChange }: LanguageSelectProps) {
   return (
-    <div className="space-y-2 w-1/4 ">
+    <div className="space-y-2 w-full md:w-1/4">
       <label className="test-sm front-medium">Language</label>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-full">

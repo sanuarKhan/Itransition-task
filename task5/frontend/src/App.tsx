@@ -15,7 +15,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="container mx-auto px-4 py-8 bg-emerald-500 h-full">
-        <div className="flex gap-10 mb-4 w-full bg-cyan-950 text-blue-300 rounded-2xl p-5">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-10 mb-4 w-full bg-cyan-950 text-blue-300 rounded-2xl p-5">
           <LanguageSelect value={langCode} onChange={setLangCode} />
           <SeedInput value={seed} onChange={setSeed} />
           <Sliders

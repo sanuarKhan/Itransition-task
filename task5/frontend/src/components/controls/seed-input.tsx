@@ -14,7 +14,7 @@ export function SeedInput({ value, onChange }: SeedInputProps) {
 
 
   return (
-    <div className="space-y-2 w-1/4">
+    <div className="space-y-2 w-full md:w-1/4">
       <label className="test-sm front-medium">Seed</label>
       <div className="flex gap-2">
         <Input

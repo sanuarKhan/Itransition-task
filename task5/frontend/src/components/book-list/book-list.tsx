@@ -116,8 +116,8 @@ const BookList = ({
             <tr className="text-amber-100">
               <th className="p-3 text-left">ISBN</th>
               <th className="p-3 text-left">Title</th>
-              <th className="p-3 text-left">Author(s)</th>
-              <th className="p-3 text-left" colSpan={2}>
+              <th className="p-3 text-left hidden md:table-cell">Author(s)</th>
+              <th className="p-3 text-left hidden md:table-cell" colSpan={2}>
                 Publisher
               </th>
             </tr>
@@ -137,8 +137,8 @@ const BookList = ({
                 >
                   <td className="p-3">{book.isbn}</td>
                   <td className="p-3">{book.title}</td>
-                  <td className="p-3">{book.authors.join(", ")}</td>
-                  <td className="p-3">{book.publisher}</td>
+                  <td className="p-3 hidden md:table-cell">{book.authors.join(", ")}</td>
+                  <td className="p-3 hidden md:table-cell">{book.publisher}</td>
                   <td className="p-3">
                     <ChevronDown
                       className={`transition-transform duration-200 ${
