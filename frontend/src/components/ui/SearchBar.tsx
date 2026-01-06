@@ -76,7 +76,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="position-relative">
+    <div className="position-relative w-100">
       <InputGroup>
         <Form.Control
           type="text"

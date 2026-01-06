@@ -47,7 +47,7 @@ function App() {
   }, [theme, language, i18n, user, refreshUser]);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-bs-theme", theme.toLowerCase());
+    const toastTheme = theme === "DARK" ? "dark" : "light";
   }, [theme]);
 
   return (

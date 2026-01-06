@@ -32,6 +32,28 @@ const api = axios.create({
   },
 });
 
+const handleApiError = (error: any) => {
+  if (error.response) {
+    // Server responded with error
+    const message =
+      error.response.data?.error ||
+      error.response.data?.message ||
+      "Something went wrong";
+    console.error("API Error:", message);
+    return Promise.reject(new Error(message));
+  } else if (error.request) {
+    // Request made but no response
+    console.error("Network Error:", error.message);
+    return Promise.reject(
+      new Error("Network error. Please check your connection.")
+    );
+  } else {
+    // Something else happened
+    console.error("Error:", error.message);
+    return Promise.reject(error);
+  }
+};
+
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
@@ -45,17 +67,22 @@ api.interceptors.request.use(
 );
 
 // Response interceptor for error handling
+
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
+  (error) => handleApiError(error)
 );
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("user");
+//       window.location.href = "/login";
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 // Export the main api instance (for apiService usage)
 export const apiService = api;
@@ -221,7 +248,6 @@ export const deleteQuestion = async (
 ): Promise<void> => {
   await api.delete(`/api/templates/${templateId}/questions/${questionId}`);
 };
-
 
 // Comments APIs
 export const getComments = async (

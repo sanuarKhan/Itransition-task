@@ -8,7 +8,17 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, User, Settings, LogOut, Moon, Sun, Globe } from "lucide-react";
+import {
+  Search,
+  User,
+  Settings,
+  LogOut,
+  Moon,
+  Sun,
+  Globe,
+  DoorClosed,
+  X,
+} from "lucide-react";
 import { useAuthStore, useUIStore } from "../../store/index";
 import { SearchBar } from "../ui/SearchBar";
 import type { Language, Theme } from "../../types/index";
@@ -41,8 +51,15 @@ export const Navbar: React.FC = () => {
   return (
     <BSNavbar
       expand="lg"
-      bg={theme === "DARK" ? "dark" : "light"}
-      variant={theme === "DARK" ? "dark" : "light"}
+      className="navbar-modern d-flex flex-column"
+      style={{
+        background:
+          theme === "DARK"
+            ? "rgba(15, 23, 42, 0.95)"
+            : "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
+        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+      }}
       sticky="top"
     >
       <Container>
@@ -124,7 +141,7 @@ export const Navbar: React.FC = () => {
             <NavDropdown
               title={<Globe size={16} />}
               id="language-dropdown"
-              className="me-2"
+              className="me-2 no-caret-dropdown"
             >
               <NavDropdown.Item
                 onClick={() => handleLanguageChange("EN")}
@@ -155,6 +172,7 @@ export const Navbar: React.FC = () => {
                     {user.name}
                   </div>
                 }
+                className="no-caret-dropdown"
                 id="user-dropdown"
               >
                 {/* eslint-disable-next-line */}
@@ -184,8 +202,12 @@ export const Navbar: React.FC = () => {
 
       {/* Search Bar */}
       {showSearch && (
-        <Container className="py-2 border-top">
+        <Container className="py-2 border-top w-100 ">
           <SearchBar onSearch={() => setShowSearch(false)} />
+          <X
+            className="mx-5 bg-danger-subtle text-black text-2xl cursor-pointer"
+            onClick={() => setShowSearch(false)}
+          />
         </Container>
       )}
     </BSNavbar>
